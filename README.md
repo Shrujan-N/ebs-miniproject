@@ -1,4 +1,4 @@
-### note to myself : update  everyones srn in `backend/seed_data.py` (lines 19–48) and `templates/nexora.html` 
+note to myself : update  everyones srn in `backend/seed_data.py` (lines 19–48) and `templates/nexora.html` 
 
 # UE24CS343AB8 — EBS Mini Project (`ebs_project`)
 
