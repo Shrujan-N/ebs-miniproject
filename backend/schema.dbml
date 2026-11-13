@@ -1,0 +1,118 @@
+// Paste this file into https://dbdiagram.io to export high-res PNG/PDF ER diagrams if needed
+// Project: VoltEdge Energy Systems Pvt. Ltd. (ERPNext Relational Schema)
+
+Table employee {
+  employee_id varchar(20) [pk]
+  employee_name varchar(100) [not null]
+  srn varchar(20) [not null, unique]
+  designation varchar(80)
+  department varchar(60)
+  email varchar(100)
+  status varchar(20)
+}
+
+Table payment_term {
+  term_id varchar(20) [pk]
+  term_name varchar(60) [not null]
+  credit_days int
+  advance_pct float
+  description varchar(200)
+}
+
+Table customer {
+  customer_id varchar(20) [pk]
+  customer_name varchar(120) [not null]
+  customer_group varchar(60)
+  territory varchar(60)
+  gstin varchar(20)
+  contact_email varchar(100)
+  account_manager_id varchar(20) [ref: > employee.employee_id]
+  srn_tag varchar(60)
+}
+
+Table supplier {
+  supplier_id varchar(20) [pk]
+  supplier_name varchar(120) [not null]
+  supplier_group varchar(60)
+  city varchar(60)
+  gstin varchar(20)
+  lead_time_days int
+  procurement_officer_id varchar(20) [ref: > employee.employee_id]
+  srn_tag varchar(60)
+}
+
+Table item {
+  item_code varchar(25) [pk]
+  item_name varchar(120) [not null]
+  item_group varchar(60)
+  uom varchar(20)
+  standard_selling_rate float
+  valuation_rate float
+  safety_stock int
+  created_by_srn varchar(60)
+}
+
+Table warehouse {
+  warehouse_id varchar(25) [pk]
+  warehouse_name varchar(100) [not null]
+  warehouse_type varchar(50)
+  location varchar(80)
+  capacity_units int
+  incharge_id varchar(20) [ref: > employee.employee_id]
+}
+
+Table sales_order {
+  so_id varchar(25) [pk]
+  customer_id varchar(20) [ref: > customer.customer_id]
+  employee_id varchar(20) [ref: > employee.employee_id]
+  term_id varchar(20) [ref: > payment_term.term_id]
+  order_date date
+  delivery_date date
+  workflow_stage varchar(40)
+  status varchar(30)
+  total_amount float
+  srn_reference varchar(80)
+}
+
+Table sales_order_item {
+  so_item_id int [pk, increment]
+  so_id varchar(25) [ref: > sales_order.so_id]
+  item_code varchar(25) [ref: > item.item_code]
+  warehouse_id varchar(25) [ref: > warehouse.warehouse_id]
+  qty int
+  rate float
+  amount float
+}
+
+Table purchase_order {
+  po_id varchar(25) [pk]
+  supplier_id varchar(20) [ref: > supplier.supplier_id]
+  employee_id varchar(20) [ref: > employee.employee_id]
+  term_id varchar(20) [ref: > payment_term.term_id]
+  order_date date
+  expected_date date
+  workflow_stage varchar(40)
+  status varchar(30)
+  total_amount float
+  srn_reference varchar(80)
+}
+
+Table purchase_order_item {
+  po_item_id int [pk, increment]
+  po_id varchar(25) [ref: > purchase_order.po_id]
+  item_code varchar(25) [ref: > item.item_code]
+  warehouse_id varchar(25) [ref: > warehouse.warehouse_id]
+  qty int
+  rate float
+  amount float
+}
+
+Table stock_ledger {
+  entry_id int [pk, increment]
+  item_code varchar(25) [ref: > item.item_code]
+  warehouse_id varchar(25) [ref: > warehouse.warehouse_id]
+  available_qty int
+  valuation_rate float
+  stock_value float
+  last_updated date
+}

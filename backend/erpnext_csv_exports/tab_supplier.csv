@@ -1,0 +1,7 @@
+supplier_id,supplier_name,supplier_group,city,gstin,lead_time_days,procurement_officer_id,srn_tag
+SUP-2026-01,Texas Instruments India Distributor,Semiconductors,Bengaluru (Bagmane),29AAACT4011T1Z6,5,HR-EMP-0003,Verified by Abhay [PES1UG24CS003]
+SUP-2026-02,ElectroParts Peenya Pvt. Ltd.,Passive Components,Bengaluru (Peenya),29AABCE7812E1Z1,3,HR-EMP-0001,Verified by Srujan [PES1UG24CS001]
+SUP-2026-03,Bharat Power Semiconductors Ltd.,Power Modules,Pune / Bengaluru,27AAACB9921B1Z4,7,HR-EMP-0002,Verified by Eshaan [PES1UG24CS002]
+SUP-2026-04,Delta Magnetics & Toroid Coils,Transformers & Coils,Chennai,33AABCD5102M1Z8,6,HR-EMP-0004,Verified by Siri [PES1UG24CS004]
+SUP-2026-05,Hosur Precision SheetMetal Works,IP65 Enclosures,Hosur Industrial,33AAACH6634H1Z2,4,HR-EMP-0003,Verified by Abhay [PES1UG24CS003]
+SUP-2026-06,LFP CellTech Solutions India,Battery Subsystems,Hyderabad,36AADCL8190C1Z5,8,HR-EMP-0001,Verified by Srujan [PES1UG24CS001]

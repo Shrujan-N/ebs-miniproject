@@ -1,0 +1,5 @@
+term_id,term_name,credit_days,advance_pct,description
+TERM-NET15,Net 15 Days,15,0.0,Full invoice settlement within 15 days of delivery
+TERM-NET30,Net 30 Days,30,0.0,Standard B2B 30-day credit cycle after invoice generation
+TERM-ADV50,50% Advance Payment,15,50.0,"50% advance on order confirmation, balance on dispatch"
+TERM-IMMED,Immediate on Delivery,0,100.0,100% RTGS/NEFT payment upon goods receipt inspection

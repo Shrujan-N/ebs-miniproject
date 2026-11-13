@@ -1,0 +1,5 @@
+warehouse_id,warehouse_name,warehouse_type,location,capacity_units,incharge_id
+WH-PEENYA-RAW,Peenya Raw Material Store - BLR,Raw Material,"Peenya Phase II, Bengaluru",2500,HR-EMP-0003
+WH-WHITEFIELD-FG,Whitefield Finished Goods Hub - BLR,Finished Goods,"Whitefield EPIP, Bengaluru",1200,HR-EMP-0001
+WH-ECITY-ASSY,Electronic City Work-in-Progress Floor,WIP Store,"Electronic City Ph I, Bengaluru",800,HR-EMP-0002
+WH-BOMMA-QA,Bommasandra Quality Inspection Store,QA & Quarantine,"Bommasandra Ind. Area, Bengaluru",600,HR-EMP-0004

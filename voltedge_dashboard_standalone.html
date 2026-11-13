@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltEdge Energy Systems Pvt. Ltd. — ERPNext &amp; SQL Executive Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+        .nav-tab.active {
+            background-color: #0D2638;
+            color: #FFFFFF;
+            border-color: #0D2638;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: #FFFFFF !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top ERP Header Bar (Palette 1: Deep Navy #0D2638 + Teal #16697A + Light Slate) -->
+    <header class="bg-[#0D2638] text-white border-b border-slate-800 sticky top-0 z-30 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded bg-[#16697A] flex items-center justify-center font-bold text-sm tracking-wider border border-[#82C0CC]/40">
+                    VE
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-semibold text-sm tracking-tight">VoltEdge Energy Systems Pvt. Ltd.</span>
+                        <span class="text-[11px] bg-[#16697A] text-[#EDE7E3] px-2 py-0.5 rounded font-medium">ERPNext v15.x / SQLite Backend</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300">UE24CS343AB8 EBS Project (Part A) &bull; Peenya &amp; Whitefield, Bengaluru</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 text-xs">
+                <span class="hidden md:inline-block text-slate-300">
+                    Team: <strong class="text-white">Srujan, Eshaan, Abhay, Siri</strong>
+                </span>
+                <button onclick="resetDatabase()" class="px-2.5 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition">
+                    Reset Sample Data
+                </button>
+                <a href="nexora_brochure_standalone.html" id="nexoraLink" class="px-3 py-1.5 rounded bg-[#FBA17E] text-[#0D2638] font-semibold hover:opacity-90 transition">
+                    Open Part B (NEXORA Brochure) &rarr;
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub-Navigation Tabs -->
+    <div class="bg-white border-b border-slate-200 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap gap-2 items-center justify-between">
+            <div class="flex flex-wrap gap-1.5">
+                <button onclick="switchTab('tab-dashboard', this)" class="nav-tab active px-3.5 py-1.5 rounded text-xs font-medium border border-slate-300 text-slate-700 hover:bg-slate-100 transition">
+                    1. Executive Dashboard (4 KPIs &amp; 2 Charts)
+                </button>
+                <button onclick="switchTab('tab-reports', this)" class="nav-tab px-3.5 py-1.5 rounded text-xs font-medium border border-slate-300 text-slate-700 hover:bg-slate-100 transition">
+                    2. Management Reports (3 Reports)
+                </button>
+                <button onclick="switchTab('tab-workflows', this)" class="nav-tab px-3.5 py-1.5 rounded text-xs font-medium border border-slate-300 text-slate-700 hover:bg-slate-100 transition">
+                    3. Business Cycles &amp; Transactions (O2C &amp; P2P)
+                </button>
+                <button onclick="switchTab('tab-master', this)" class="nav-tab px-3.5 py-1.5 rounded text-xs font-medium border border-slate-300 text-slate-700 hover:bg-slate-100 transition">
+                    4. Master Data (6 Entities + SRNs)
+                </button>
+                <button onclick="switchTab('tab-schema', this)" class="nav-tab px-3.5 py-1.5 rounded text-xs font-medium border border-slate-300 text-slate-700 hover:bg-slate-100 transition">
+                    5. Relational Schema &amp; ERPNext Profile
+                </button>
+            </div>
+            <div class="text-xs text-slate-500">
+                Fiscal Year: <span class="font-medium text-slate-800">2026-27 (INR ₹)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- ================================================================ -->
+        <!-- TAB 1: EXECUTIVE DASHBOARD (4 KPIs + 2 CHARTS + SUMMARY TABLES)  -->
+        <!-- ================================================================ -->
+        <section id="tab-dashboard" class="tab-panel active space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-[#16697A]">ERPNext Selling, Buying &amp; Stock Workspace</span>
+                        <span class="text-xs text-slate-400">|</span>
+                        <span class="text-xs text-slate-500 mono">DB: voltedge_ebs.db</span>
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-900 mt-0.5">VoltEdge Energy Systems — Executive Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        Live SQLite Data Connected
+                    </span>
+                    <button onclick="window.print()" class="no-print px-3 py-1 rounded text-xs font-medium bg-white border border-slate-300 text-slate-700 hover:bg-slate-50">
+                        Print / Screenshot View
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4 REQUIRED KPIs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Total Sales Revenue</span>
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">Order-to-Cash</span>
+                    </div>
+                    <div class="mt-2 flex items-baseline space-x-2">
+                        <span id="kpiSalesLakhs" class="text-2xl font-bold text-slate-900">₹0.00 Lakh</span>
+                    </div>
+                    <p id="kpiSalesSub" class="mt-1 text-xs text-slate-500"></p>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Purchase Expenditure</span>
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Procure-to-Pay</span>
+                    </div>
+                    <div class="mt-2 flex items-baseline space-x-2">
+                        <span id="kpiPurchaseLakhs" class="text-2xl font-bold text-slate-900">₹0.00 Lakh</span>
+                    </div>
+                    <p id="kpiPurchaseSub" class="mt-1 text-xs text-slate-500"></p>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Orders Fulfilled</span>
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">SLA Metric</span>
+                    </div>
+                    <div class="mt-2 flex items-baseline space-x-2">
+                        <span id="kpiFulfillment" class="text-2xl font-bold text-slate-900">0%</span>
+                    </div>
+                    <p id="kpiFulfillmentSub" class="mt-1 text-xs text-slate-500"></p>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">Inventory Valuation</span>
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">4 Warehouses</span>
+                    </div>
+                    <div class="mt-2 flex items-baseline space-x-2">
+                        <span id="kpiInventoryLakhs" class="text-2xl font-bold text-slate-900">₹0.00 Lakh</span>
+                    </div>
+                    <p id="kpiInventorySub" class="mt-1 text-xs text-slate-500"></p>
+                </div>
+            </div>
+
+            <!-- 2 REQUIRED CHARTS -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900">Chart 1: Monthly Sales Analysis (Column Graph)</h2>
+                            <p class="text-xs text-slate-500">Aggregated revenue from <code class="mono text-[11px] bg-slate-100 px-1 rounded">sales_order</code> table (May – Nov 2026, in ₹ Lakhs)</p>
+                        </div>
+                        <span class="text-xs font-mono text-slate-500">GROUP BY strftime('%Y-%m', order_date)</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="monthlySalesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900">Chart 2: Purchase Distribution by Supplier</h2>
+                            <p class="text-xs text-slate-500">Procurement spend breakdown across 6 active vendors (₹ Lakhs)</p>
+                        </div>
+                    </div>
+                    <div class="h-64 flex items-center justify-center">
+                        <canvas id="purchaseDistChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master & Transaction Visibility on Dashboard (Required by Step 8) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5 bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-slate-900">Configured Team Officers (Employee Master)</h3>
+                        <span class="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium">Rule #6: SRNs Embedded</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50">
+                                    <th class="py-2 px-2.5 font-semibold">Emp ID</th>
+                                    <th class="py-2 px-2.5 font-semibold">Name &amp; SRN</th>
+                                    <th class="py-2 px-2.5 font-semibold">Department</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashEmployeeTable" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-slate-900">Recent Order-to-Cash &amp; Procure-to-Pay Transactions</h3>
+                        <span class="text-xs text-slate-500">Showing latest 6 of 24 transactions</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50">
+                                    <th class="py-2 px-2.5 font-semibold">Document ID</th>
+                                    <th class="py-2 px-2.5 font-semibold">Counterparty (Master Entity)</th>
+                                    <th class="py-2 px-2.5 font-semibold">Stage</th>
+                                    <th class="py-2 px-2.5 font-semibold text-right">Amount (₹)</th>
+                                    <th class="py-2 px-2.5 font-semibold">SRN Audit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashRecentTxns" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- TAB 2: THREE MANAGEMENT REPORTS (STEP 7 REQUIREMENT)             -->
+        <!-- ================================================================ -->
+        <section id="tab-reports" class="tab-panel space-y-8">
+            <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#16697A]">Part A — Step 7 Deliverable</span>
+                    <h1 class="text-xl font-bold text-slate-900">Built-In ERP Management Reports (3 Reports)</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">Generated directly from live SQLite relational joins across Master and Transaction entities.</p>
+                </div>
+                <button onclick="window.print()" class="no-print px-3 py-1.5 rounded text-xs font-medium bg-[#0D2638] text-white hover:opacity-90">
+                    Export / Print Reports
+                </button>
+            </div>
+
+            <!-- REPORT 1: Monthly Sales Analysis -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">Report #1 &bull; Selling Module</span>
+                        <h2 class="text-base font-bold text-slate-900 mt-1">Monthly Sales Revenue &amp; Order Volume Analysis</h2>
+                    </div>
+                    <code class="text-[11px] mono text-slate-600 bg-white px-2.5 py-1 rounded border border-slate-200">
+                        SELECT strftime('%Y-%m', order_date), COUNT(so_id), SUM(total_amount) FROM sales_order GROUP BY 1
+                    </code>
+                </div>
+                <div class="p-5 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 text-slate-600 bg-slate-50">
+                                <th class="py-2.5 px-3 font-semibold">Billing Period</th>
+                                <th class="py-2.5 px-3 font-semibold">Month Key</th>
+                                <th class="py-2.5 px-3 font-semibold text-center">Sales Orders Count</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Gross Revenue (INR ₹)</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Revenue (₹ Lakhs)</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Avg. Order Value (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report1Body" class="divide-y divide-slate-200"></tbody>
+                        <tfoot id="report1Foot"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- REPORT 2: Supplier Purchase Analysis -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">Report #2 &bull; Buying Module</span>
+                        <h2 class="text-base font-bold text-slate-900 mt-1">Supplier-Wise Procurement Spend &amp; Lead-Time Report</h2>
+                    </div>
+                    <code class="text-[11px] mono text-slate-600 bg-white px-2.5 py-1 rounded border border-slate-200">
+                        SELECT s.supplier_name, COUNT(p.po_id), SUM(p.total_amount) FROM purchase_order p JOIN supplier s
+                    </code>
+                </div>
+                <div class="p-5 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 text-slate-600 bg-slate-50">
+                                <th class="py-2.5 px-3 font-semibold">Supplier ID</th>
+                                <th class="py-2.5 px-3 font-semibold">Supplier Name</th>
+                                <th class="py-2.5 px-3 font-semibold">Category</th>
+                                <th class="py-2.5 px-3 font-semibold">Location</th>
+                                <th class="py-2.5 px-3 font-semibold text-center">PO Count</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Total Spend (₹)</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Spend (₹ Lakhs)</th>
+                                <th class="py-2.5 px-3 font-semibold">Team Verification (SRN)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report2Body" class="divide-y divide-slate-200"></tbody>
+                        <tfoot id="report2Foot"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- REPORT 3: Inventory Stock & Valuation Report -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider text-teal-800 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">Report #3 &bull; Stock &amp; Warehouse Module</span>
+                        <h2 class="text-base font-bold text-slate-900 mt-1">Warehouse Stock Balance &amp; FIFO Valuation Report</h2>
+                    </div>
+                    <code class="text-[11px] mono text-slate-600 bg-white px-2.5 py-1 rounded border border-slate-200">
+                        SELECT i.item_code, w.warehouse_name, sl.available_qty, sl.stock_value FROM stock_ledger sl
+                    </code>
+                </div>
+                <div class="p-5 overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 text-slate-600 bg-slate-50">
+                                <th class="py-2.5 px-3 font-semibold">Item Code</th>
+                                <th class="py-2.5 px-3 font-semibold">Item / Product Description</th>
+                                <th class="py-2.5 px-3 font-semibold">Warehouse Location</th>
+                                <th class="py-2.5 px-3 font-semibold text-center">Available Qty</th>
+                                <th class="py-2.5 px-3 font-semibold text-center">Safety Stock</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Unit Valuation (₹)</th>
+                                <th class="py-2.5 px-3 font-semibold text-right">Total Stock Value (₹)</th>
+                                <th class="py-2.5 px-3 font-semibold">Item Owner (SRN)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report3Body" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- TAB 3: TWO BUSINESS PROCESS CYCLES & 24 TRANSACTIONS             -->
+        <!-- ================================================================ -->
+        <section id="tab-workflows" class="tab-panel space-y-8">
+            <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#16697A]">Part A — Steps 3, 4, 5, 6 &amp; 12 Deliverable</span>
+                    <h1 class="text-xl font-bold text-slate-900">End-to-End Business Process Workflows &amp; Transaction Tables</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">Click <strong>"Edit / Advance"</strong> on any order during your presentation to modify the SQLite record and regenerate reports live.</p>
+                </div>
+            </div>
+
+            <!-- CYCLE 1: ORDER-TO-CASH -->
+            <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">Business Process Cycle 1</span>
+                        <h2 class="text-base font-bold text-slate-900 mt-1">Order-to-Cash (O2C) Sales Workflow — 5 Progressive Stages</h2>
+                    </div>
+                    <span class="text-xs text-slate-500">12 Realistic Records in <code class="mono bg-slate-100 px-1 rounded">sales_order</code></span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-blue-700 uppercase">Stage 1</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">1. Quotation</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Customer enquiry logged with pricing &amp; payment terms (<code class="mono">SAL-ORD-2026-0012</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-blue-700 uppercase">Stage 2</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">2. Sales Order</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Confirmed customer PO reserves stock at Whitefield FG Hub (<code class="mono">SAL-ORD-2026-0011</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-blue-700 uppercase">Stage 3</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">3. Delivery Note</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Inverters/converters dispatched; stock ledger debited (<code class="mono">SAL-ORD-2026-0010</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-blue-700 uppercase">Stage 4</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">4. Sales Invoice</div>
+                        <p class="text-[11px] text-slate-500 mt-1">GST tax invoice posted to Accounts Receivable (<code class="mono">SAL-ORD-2026-0009</code>)</p>
+                    </div>
+                    <div class="bg-emerald-50/70 p-3 rounded border border-emerald-200">
+                        <div class="text-[11px] font-bold text-emerald-800 uppercase">Stage 5</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">5. Payment Received</div>
+                        <p class="text-[11px] text-slate-600 mt-1">NEFT/RTGS receipt reconciled; order closed (<code class="mono">0001</code> to <code class="mono">0008</code>)</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 text-slate-600 bg-slate-50">
+                                <th class="py-2.5 px-2.5 font-semibold">Sales Order ID</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Customer Name</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Order Date</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Payment Term</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Workflow Stage</th>
+                                <th class="py-2.5 px-2.5 font-semibold">ERP Status</th>
+                                <th class="py-2.5 px-2.5 font-semibold text-right">Order Total (₹)</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Team Member &amp; SRN</th>
+                                <th class="py-2.5 px-2.5 font-semibold text-center no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="soTableBody" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CYCLE 2: PROCURE-TO-PAY -->
+            <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Business Process Cycle 2</span>
+                        <h2 class="text-base font-bold text-slate-900 mt-1">Procure-to-Pay (P2P) Purchasing Workflow — 5 Progressive Stages</h2>
+                    </div>
+                    <span class="text-xs text-slate-500">12 Realistic Records in <code class="mono bg-slate-100 px-1 rounded">purchase_order</code></span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-amber-800 uppercase">Stage 1</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">1. Material Request</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Safety-stock trigger raises internal purchase requisition (<code class="mono">PUR-ORD-2026-0012</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-amber-800 uppercase">Stage 2</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">2. Purchase Order</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Official vendor PO issued with negotiated rate &amp; lead time (<code class="mono">PUR-ORD-2026-0011</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-amber-800 uppercase">Stage 3</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">3. Goods Receipt</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Raw components received &amp; inspected at Peenya Store (<code class="mono">PUR-ORD-2026-0010</code>)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-slate-200">
+                        <div class="text-[11px] font-bold text-amber-800 uppercase">Stage 4</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">4. Supplier Invoice</div>
+                        <p class="text-[11px] text-slate-500 mt-1">3-way matched vendor bill recorded in Accounts Payable (<code class="mono">PUR-ORD-2026-0009</code>)</p>
+                    </div>
+                    <div class="bg-emerald-50/70 p-3 rounded border border-emerald-200">
+                        <div class="text-[11px] font-bold text-emerald-800 uppercase">Stage 5</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">5. Payment Sent</div>
+                        <p class="text-[11px] text-slate-600 mt-1">Bank settlement voucher posted; liability cleared (<code class="mono">0001</code> to <code class="mono">0008</code>)</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b-2 border-slate-200 text-slate-600 bg-slate-50">
+                                <th class="py-2.5 px-2.5 font-semibold">Purchase Order ID</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Supplier Name</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Order Date</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Payment Term</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Workflow Stage</th>
+                                <th class="py-2.5 px-2.5 font-semibold">ERP Status</th>
+                                <th class="py-2.5 px-2.5 font-semibold text-right">Order Total (₹)</th>
+                                <th class="py-2.5 px-2.5 font-semibold">Team Member &amp; SRN</th>
+                                <th class="py-2.5 px-2.5 font-semibold text-center no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="poTableBody" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- TAB 4: SIX MASTER DATA ENTITIES (STEP 2 & 6 REQUIREMENT)         -->
+        <!-- ================================================================ -->
+        <section id="tab-master" class="tab-panel space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#16697A]">Part A — Step 2 &amp; Step 6 Deliverable</span>
+                <h1 class="text-xl font-bold text-slate-900">6 Populated Master Data Entities (With Embedded Team Names &amp; SRNs)</h1>
+                <p class="text-xs text-slate-500 mt-0.5">All records use realistic Indian industrial entity names and embed team member ownership.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <h2 class="text-sm font-bold text-slate-900 mb-2">1. Customer Master (<code class="mono text-xs">customer</code> — 8 Entities)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-2 px-2">ID</th>
+                                    <th class="py-2 px-2">Customer Name</th>
+                                    <th class="py-2 px-2">Territory</th>
+                                    <th class="py-2 px-2">SRN Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterCustomerBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <h2 class="text-sm font-bold text-slate-900 mb-2">2. Supplier Master (<code class="mono text-xs">supplier</code> — 6 Entities)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-2 px-2">ID</th>
+                                    <th class="py-2 px-2">Supplier Name</th>
+                                    <th class="py-2 px-2">Group</th>
+                                    <th class="py-2 px-2">SRN Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterSupplierBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm lg:col-span-2">
+                    <h2 class="text-sm font-bold text-slate-900 mb-2">3. Item / Product Master (<code class="mono text-xs">item</code> — 9 Products &amp; Raw Materials)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-2 px-2">Item Code</th>
+                                    <th class="py-2 px-2">Item Name</th>
+                                    <th class="py-2 px-2">Item Group</th>
+                                    <th class="py-2 px-2 text-right">Selling Rate (₹)</th>
+                                    <th class="py-2 px-2 text-right">Valuation Rate (₹)</th>
+                                    <th class="py-2 px-2">Created By (SRN)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterItemBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
+                    <h2 class="text-sm font-bold text-slate-900 mb-2">4. Warehouse Master (<code class="mono text-xs">warehouse</code> — 4 Hubs)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-2 px-2">Warehouse ID</th>
+                                    <th class="py-2 px-2">Warehouse Name</th>
+                                    <th class="py-2 px-2">Incharge (SRN)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterWarehouseBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-4">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 mb-2">5. Employee Master (<code class="mono text-xs">employee</code> — Team Officers)</h2>
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-1.5 px-2">ID</th>
+                                    <th class="py-1.5 px-2">Employee &amp; SRN</th>
+                                    <th class="py-1.5 px-2">Designation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterEmployeeBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 mb-2">6. Payment Terms Master (<code class="mono text-xs">payment_term</code>)</h2>
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-600">
+                                    <th class="py-1.5 px-2">Term ID</th>
+                                    <th class="py-1.5 px-2">Name</th>
+                                    <th class="py-1.5 px-2">Credit Days</th>
+                                    <th class="py-1.5 px-2">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterPaymentTermBody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <!-- TAB 5: RELATIONAL DATABASE SCHEMA & ERPNEXT RESEARCH (STEPS 8-9) -->
+        <!-- ================================================================ -->
+        <section id="tab-schema" class="tab-panel space-y-6">
+            <div class="border-b border-slate-200 pb-4">
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#16697A]">Part A — Steps 8 &amp; 9 Deliverable</span>
+                <h1 class="text-xl font-bold text-slate-900">Underlying Relational Database Schema &amp; ERPNext Product Architecture</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Shows Primary Keys (PK), Foreign Keys (FK), data types, and how transaction records reference the 6 master entities.</p>
+            </div>
+
+            <!-- Visual Relational Schema Diagram (Light Theme for Screenshot) -->
+            <div class="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900">Relational Schema Diagram (voltedge_ebs.db / ERPNext MariaDB Structure)</h2>
+                        <p class="text-xs text-slate-500">Also exported to <code class="mono bg-slate-100 px-1 rounded">backend/schema.dbml</code> for dbdiagram.io / DBeaver inspection</p>
+                    </div>
+                    <span class="text-xs font-mono bg-slate-100 px-2.5 py-1 rounded border border-slate-300">11 Normalized Tables (3NF)</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <!-- Column 1: Master Entities (Parties & Governance) -->
+                    <div class="space-y-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-300 pb-1">Master Entities (Governance &amp; Parties)</div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>EMPLOYEE (tabEmployee)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #1</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">employee_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>employee_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span class="font-semibold text-emerald-700">srn</span><span class="text-slate-500">VARCHAR UQ</span></div>
+                                <div class="flex justify-between"><span>designation</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>department</span><span class="text-slate-500">VARCHAR</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>CUSTOMER (tabCustomer)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #2</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">customer_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>customer_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>territory / gstin</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">account_manager_id</span><span class="text-blue-700 font-bold">FK &rarr; employee</span></div>
+                                <div class="flex justify-between"><span>srn_tag</span><span class="text-slate-500">VARCHAR</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>SUPPLIER (tabSupplier)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #3</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">supplier_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>supplier_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>lead_time_days</span><span class="text-slate-500">INTEGER</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">procurement_officer_id</span><span class="text-blue-700 font-bold">FK &rarr; employee</span></div>
+                                <div class="flex justify-between"><span>srn_tag</span><span class="text-slate-500">VARCHAR</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>PAYMENT_TERM (tabPaymentTerms)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #4</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">term_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>term_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>credit_days / advance_pct</span><span class="text-slate-500">INT / REAL</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Transaction Tables (O2C & P2P) -->
+                    <div class="space-y-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-300 pb-1">Transaction Entities (O2C &amp; P2P)</div>
+
+                        <div class="bg-white rounded border-2 border-[#16697A] overflow-hidden shadow-sm">
+                            <div class="bg-[#16697A] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>SALES_ORDER (tabSalesOrder)</span>
+                                <span class="text-amber-200 mono">TXN #1 (12 Rows)</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">so_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">customer_id</span><span class="text-blue-700 font-bold">FK &rarr; customer</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">employee_id</span><span class="text-blue-700 font-bold">FK &rarr; employee</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">term_id</span><span class="text-blue-700 font-bold">FK &rarr; payment_term</span></div>
+                                <div class="flex justify-between"><span>order_date / delivery_date</span><span class="text-slate-500">DATE</span></div>
+                                <div class="flex justify-between"><span>workflow_stage / status</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>total_amount</span><span class="text-slate-500">REAL</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border border-slate-300 overflow-hidden shadow-sm">
+                            <div class="bg-slate-700 text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>SALES_ORDER_ITEM</span>
+                                <span class="text-slate-300 mono">CHILD TABLE</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">so_item_id</span><span class="text-amber-700 font-bold">INT PK</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">so_id</span><span class="text-blue-700 font-bold">FK &rarr; sales_order</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">item_code</span><span class="text-blue-700 font-bold">FK &rarr; item</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">warehouse_id</span><span class="text-blue-700 font-bold">FK &rarr; warehouse</span></div>
+                                <div class="flex justify-between"><span>qty / rate / amount</span><span class="text-slate-500">INT / REAL</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-[#16697A] overflow-hidden shadow-sm">
+                            <div class="bg-[#16697A] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>PURCHASE_ORDER (tabPurchaseOrder)</span>
+                                <span class="text-amber-200 mono">TXN #2 (12 Rows)</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">po_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">supplier_id</span><span class="text-blue-700 font-bold">FK &rarr; supplier</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">employee_id</span><span class="text-blue-700 font-bold">FK &rarr; employee</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">term_id</span><span class="text-blue-700 font-bold">FK &rarr; payment_term</span></div>
+                                <div class="flex justify-between"><span>order_date / expected_date</span><span class="text-slate-500">DATE</span></div>
+                                <div class="flex justify-between"><span>workflow_stage / status</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>total_amount</span><span class="text-slate-500">REAL</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border border-slate-300 overflow-hidden shadow-sm">
+                            <div class="bg-slate-700 text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>PURCHASE_ORDER_ITEM</span>
+                                <span class="text-slate-300 mono">CHILD TABLE</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">po_item_id</span><span class="text-amber-700 font-bold">INT PK</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">po_id</span><span class="text-blue-700 font-bold">FK &rarr; purchase_order</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">item_code</span><span class="text-blue-700 font-bold">FK &rarr; item</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">warehouse_id</span><span class="text-blue-700 font-bold">FK &rarr; warehouse</span></div>
+                                <div class="flex justify-between"><span>qty / rate / amount</span><span class="text-slate-500">INT / REAL</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Inventory Master & Ledger -->
+                    <div class="space-y-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-300 pb-1">Inventory Masters &amp; Stock Ledger</div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>ITEM (tabItem)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #5</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">item_code</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>item_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>item_group / uom</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>standard_selling_rate</span><span class="text-slate-500">REAL</span></div>
+                                <div class="flex justify-between"><span>valuation_rate</span><span class="text-slate-500">REAL</span></div>
+                                <div class="flex justify-between"><span>safety_stock</span><span class="text-slate-500">INTEGER</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-[#0D2638] overflow-hidden shadow-sm">
+                            <div class="bg-[#0D2638] text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>WAREHOUSE (tabWarehouse)</span>
+                                <span class="text-[#82C0CC] mono">MASTER #6</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">warehouse_id</span><span class="text-amber-700 font-bold">VARCHAR PK</span></div>
+                                <div class="flex justify-between"><span>warehouse_name</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span>warehouse_type / location</span><span class="text-slate-500">VARCHAR</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">incharge_id</span><span class="text-blue-700 font-bold">FK &rarr; employee</span></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded border-2 border-teal-700 overflow-hidden shadow-sm">
+                            <div class="bg-teal-700 text-white px-3 py-1.5 text-xs font-bold flex justify-between">
+                                <span>STOCK_LEDGER (tabStockLedgerEntry)</span>
+                                <span class="text-teal-100 mono">VALUATION</span>
+                            </div>
+                            <div class="p-2.5 text-xs mono space-y-1">
+                                <div class="flex justify-between"><span class="font-bold text-slate-900">entry_id</span><span class="text-amber-700 font-bold">INT PK</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">item_code</span><span class="text-blue-700 font-bold">FK &rarr; item</span></div>
+                                <div class="flex justify-between"><span class="text-blue-700">warehouse_id</span><span class="text-blue-700 font-bold">FK &rarr; warehouse</span></div>
+                                <div class="flex justify-between"><span>available_qty</span><span class="text-slate-500">INTEGER</span></div>
+                                <div class="flex justify-between"><span>valuation_rate / stock_value</span><span class="text-slate-500">REAL</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 8 Requirement: Installed EBS Product Profile (ERPNext / Frappe Technologies) -->
+            <div class="bg-white rounded-lg border border-slate-200 p-6 shadow-sm">
+                <h2 class="text-base font-bold text-slate-900 mb-3">Step 8 Deliverable: Installed EBS Product Overview — ERPNext (Frappe Technologies)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-700 leading-relaxed">
+                    <div class="space-y-2">
+                        <p><strong>Product Name &amp; Developer:</strong> ERPNext, developed and maintained by <strong>Frappe Technologies Pvt. Ltd.</strong></p>
+                        <p><strong>Headquarters &amp; Locations:</strong> Mumbai, Maharashtra, India (D-324, Neelkanth Business Park, Vidyavihar West, Mumbai 400086), with distributed engineering and partner teams in Bengaluru, Pune, and globally.</p>
+                        <p><strong>Origin Date &amp; Founders:</strong> Founded in <strong>2008</strong> (initial open-source release in 2010) by <strong>Rushabh Mehta</strong> (Founder &amp; CEO), alongside early core contributors Nabin Hait and Umair Sayed.</p>
+                        <p><strong>Product Versions &amp; Licensing:</strong> Currently on <strong>ERPNext Version 15.x</strong> (built on the Frappe Framework v15). Licensed under the <strong>GNU General Public License v3.0 (GPLv3)</strong>, making it 100% free and open-source software without proprietary user-seat lock-in.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p><strong>Technology Stack:</strong> Python 3.11+ backend (Frappe Framework), MariaDB / SQLite relational database, Redis for background job queueing (RQ) and caching, and JavaScript / Vue.js / Socket.io for real-time workspace UI.</p>
+                        <p><strong>Core ERP Modules:</strong> Financial Accounting, Order-to-Cash (Selling &amp; CRM), Procure-to-Pay (Buying), Stock &amp; Multi-Warehouse Inventory, Bill of Materials (BOM) &amp; Shop-Floor Manufacturing, Human Resources (Frappe HR), Asset Management, Quality Inspection, and Projects.</p>
+                        <p><strong>Documented Clients:</strong> Zerodha (India's largest stockbroker), ElasticRun, Mahindra &amp; Mahindra (farm division sub-units), Wipro Parigi, and over 10,000+ SMEs and manufacturing enterprises worldwide.</p>
+                        <p><strong>Source URLs:</strong> <a href="https://erpnext.com" target="_blank" class="text-blue-700 underline">https://erpnext.com</a> &bull; <a href="https://frappe.io" target="_blank" class="text-blue-700 underline">https://frappe.io</a> &bull; <a href="https://github.com/frappe/erpnext" target="_blank" class="text-blue-700 underline">https://github.com/frappe/erpnext</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Live Evaluation Edit Modal (Handbook Rule #12) -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg border border-slate-200 max-w-md w-full p-5 shadow-xl">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <h3 class="text-sm font-bold text-slate-900">Modify Transaction Record (Live Evaluation Demo)</h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 text-sm font-bold">&times;</button>
+            </div>
+            <div class="space-y-3 mt-4 text-xs">
+                <input type="hidden" id="modalRecordType">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Document ID</label>
+                    <input type="text" id="modalRecordId" readonly class="w-full px-3 py-1.5 rounded bg-slate-100 border border-slate-300 mono text-slate-700">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Workflow Stage</label>
+                    <select id="modalWorkflowStage" class="w-full px-3 py-1.5 rounded bg-white border border-slate-300 text-slate-800"></select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">ERP Document Status</label>
+                    <select id="modalStatus" class="w-full px-3 py-1.5 rounded bg-white border border-slate-300 text-slate-800">
+                        <option value="Completed">Completed</option>
+                        <option value="To Receive Payment">To Receive Payment</option>
+                        <option value="To Bill">To Bill</option>
+                        <option value="To Deliver and Bill">To Deliver and Bill</option>
+                        <option value="To Receive and Bill">To Receive and Bill</option>
+                        <option value="To Pay">To Pay</option>
+                        <option value="Draft / Quoted">Draft / Quoted</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Total Order Amount (INR ₹)</label>
+                    <input type="number" id="modalAmount" class="w-full px-3 py-1.5 rounded bg-white border border-slate-300 mono text-slate-900">
+                </div>
+            </div>
+            <div class="mt-5 flex justify-end space-x-2">
+                <button onclick="closeEditModal()" class="px-3 py-1.5 rounded border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50">Cancel</button>
+                <button onclick="saveRecordChanges()" class="px-3.5 py-1.5 rounded bg-[#0D2638] text-white text-xs font-semibold hover:opacity-90">Update SQLite &amp; Refresh KPIs</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.__EBS_DATA__ = {
+  "kpis": {
+    "sales_lakhs": 69.89,
+    "sales_raw": 6989000.0,
+    "so_count": 12,
+    "completed_so": 8,
+    "purchase_lakhs": 41.38,
+    "purchase_raw": 4137500.0,
+    "po_count": 12,
+    "fulfillment_pct": 66.7,
+    "inventory_lakhs": 53.27,
+    "inventory_units": 651
+  },
+  "monthly_sales": [
+    {
+      "month_key": "2026-05",
+      "month_label": "May 2026",
+      "order_count": 1,
+      "monthly_revenue": 493000.0,
+      "revenue_lakhs": 4.93
+    },
+    {
+      "month_key": "2026-06",
+      "month_label": "Jun 2026",
+      "order_count": 2,
+      "monthly_revenue": 1201000.0,
+      "revenue_lakhs": 12.01
+    },
+    {
+      "month_key": "2026-07",
+      "month_label": "Jul 2026",
+      "order_count": 2,
+      "monthly_revenue": 1066000.0,
+      "revenue_lakhs": 10.66
+    },
+    {
+      "month_key": "2026-08",
+      "month_label": "Aug 2026",
+      "order_count": 2,
+      "monthly_revenue": 1102000.0,
+      "revenue_lakhs": 11.02
+    },
+    {
+      "month_key": "2026-09",
+      "month_label": "Sep 2026",
+      "order_count": 2,
+      "monthly_revenue": 1365000.0,
+      "revenue_lakhs": 13.65
+    },
+    {
+      "month_key": "2026-10",
+      "month_label": "Oct 2026",
+      "order_count": 2,
+      "monthly_revenue": 1255000.0,
+      "revenue_lakhs": 12.55
+    },
+    {
+      "month_key": "2026-11",
+      "month_label": "Nov 2026",
+      "order_count": 1,
+      "monthly_revenue": 507000.0,
+      "revenue_lakhs": 5.07
+    }
+  ],
+  "supplier_spend": [
+    {
+      "supplier_id": "SUP-2026-03",
+      "supplier_name": "Bharat Power Semiconductors Ltd.",
+      "supplier_group": "Power Modules",
+      "city": "Pune / Bengaluru",
+      "po_count": 2,
+      "total_spend": 884000.0,
+      "spend_lakhs": 8.84,
+      "srn_tag": "Verified by Eshaan [PES1UG24CS002]"
+    },
+    {
+      "supplier_id": "SUP-2026-01",
+      "supplier_name": "Texas Instruments India Distributor",
+      "supplier_group": "Semiconductors",
+      "city": "Bengaluru (Bagmane)",
+      "po_count": 2,
+      "total_spend": 850000.0,
+      "spend_lakhs": 8.5,
+      "srn_tag": "Verified by Abhay [PES1UG24CS003]"
+    },
+    {
+      "supplier_id": "SUP-2026-04",
+      "supplier_name": "Delta Magnetics & Toroid Coils",
+      "supplier_group": "Transformers & Coils",
+      "city": "Chennai",
+      "po_count": 2,
+      "total_spend": 643500.0,
+      "spend_lakhs": 6.43,
+      "srn_tag": "Verified by Siri [PES1UG24CS004]"
+    },
+    {
+      "supplier_id": "SUP-2026-06",
+      "supplier_name": "LFP CellTech Solutions India",
+      "supplier_group": "Battery Subsystems",
+      "city": "Hyderabad",
+      "po_count": 2,
+      "total_spend": 637000.0,
+      "spend_lakhs": 6.37,
+      "srn_tag": "Verified by Srujan [PES1UG24CS001]"
+    },
+    {
+      "supplier_id": "SUP-2026-05",
+      "supplier_name": "Hosur Precision SheetMetal Works",
+      "supplier_group": "IP65 Enclosures",
+      "city": "Hosur Industrial",
+      "po_count": 2,
+      "total_spend": 580000.0,
+      "spend_lakhs": 5.8,
+      "srn_tag": "Verified by Abhay [PES1UG24CS003]"
+    },
+    {
+      "supplier_id": "SUP-2026-02",
+      "supplier_name": "ElectroParts Peenya Pvt. Ltd.",
+      "supplier_group": "Passive Components",
+      "city": "Bengaluru (Peenya)",
+      "po_count": 2,
+      "total_spend": 543000.0,
+      "spend_lakhs": 5.43,
+      "srn_tag": "Verified by Srujan [PES1UG24CS001]"
+    }
+  ],
+  "inventory_report": [
+    {
+      "entry_id": 2,
+      "item_code": "ITM-INV-10KW",
+      "item_name": "10kW Three-Phase String Inverter",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Whitefield Finished Goods Hub - BLR",
+      "warehouse_type": "Finished Goods",
+      "available_qty": 11,
+      "safety_stock": 10,
+      "valuation_rate": 86000.0,
+      "stock_value": 946000.0,
+      "value_lakhs": 9.46,
+      "created_by_srn": "Eshaan [PES1UG24CS002]"
+    },
+    {
+      "entry_id": 1,
+      "item_code": "ITM-INV-5KW",
+      "item_name": "5kW Hybrid Solar Inverter (IP65)",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Whitefield Finished Goods Hub - BLR",
+      "warehouse_type": "Finished Goods",
+      "available_qty": 18,
+      "safety_stock": 15,
+      "valuation_rate": 49500.0,
+      "stock_value": 891000.0,
+      "value_lakhs": 8.91,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    },
+    {
+      "entry_id": 7,
+      "item_code": "ITM-RAW-MOSFET",
+      "item_name": "1200V SiC MOSFET Half-Bridge Module",
+      "item_group": "Raw Material",
+      "warehouse_name": "Peenya Raw Material Store - BLR",
+      "warehouse_type": "Raw Material",
+      "available_qty": 240,
+      "safety_stock": 100,
+      "valuation_rate": 3400.0,
+      "stock_value": 816000.0,
+      "value_lakhs": 8.16,
+      "created_by_srn": "Abhay [PES1UG24CS003]"
+    },
+    {
+      "entry_id": 4,
+      "item_code": "ITM-CNV-25KVA",
+      "item_name": "25kVA Industrial AC-DC Power Converter",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Whitefield Finished Goods Hub - BLR",
+      "warehouse_type": "Finished Goods",
+      "available_qty": 6,
+      "safety_stock": 8,
+      "valuation_rate": 122000.0,
+      "stock_value": 732000.0,
+      "value_lakhs": 7.32,
+      "created_by_srn": "Abhay [PES1UG24CS003]"
+    },
+    {
+      "entry_id": 6,
+      "item_code": "ITM-PNL-LT400",
+      "item_name": "400V LT Distribution & Synchronization Panel",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Electronic City Work-in-Progress Floor",
+      "warehouse_type": "WIP Store",
+      "available_qty": 4,
+      "safety_stock": 5,
+      "valuation_rate": 154000.0,
+      "stock_value": 616000.0,
+      "value_lakhs": 6.16,
+      "created_by_srn": "Eshaan [PES1UG24CS002]"
+    },
+    {
+      "entry_id": 3,
+      "item_code": "ITM-BMS-48V",
+      "item_name": "48V 100A Smart LiFePO4 BMS Controller",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Whitefield Finished Goods Hub - BLR",
+      "warehouse_type": "Finished Goods",
+      "available_qty": 42,
+      "safety_stock": 30,
+      "valuation_rate": 9800.0,
+      "stock_value": 411600.0,
+      "value_lakhs": 4.12,
+      "created_by_srn": "Siri [PES1UG24CS004]"
+    },
+    {
+      "entry_id": 8,
+      "item_code": "ITM-RAW-COIL",
+      "item_name": "High-Frequency Toroidal Copper Inductor",
+      "item_group": "Raw Material",
+      "warehouse_name": "Peenya Raw Material Store - BLR",
+      "warehouse_type": "Raw Material",
+      "available_qty": 190,
+      "safety_stock": 80,
+      "valuation_rate": 1950.0,
+      "stock_value": 370500.0,
+      "value_lakhs": 3.71,
+      "created_by_srn": "Siri [PES1UG24CS004]"
+    },
+    {
+      "entry_id": 5,
+      "item_code": "ITM-SPD-1000V",
+      "item_name": "1000V DC Surge Protection Device Box",
+      "item_group": "Finished Goods",
+      "warehouse_name": "Bommasandra Quality Inspection Store",
+      "warehouse_type": "QA & Quarantine",
+      "available_qty": 55,
+      "safety_stock": 40,
+      "valuation_rate": 5400.0,
+      "stock_value": 297000.0,
+      "value_lakhs": 2.97,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    },
+    {
+      "entry_id": 9,
+      "item_code": "ITM-RAW-CHAS",
+      "item_name": "Powder-Coated Aluminum Inverter Chassis",
+      "item_group": "Raw Material",
+      "warehouse_name": "Peenya Raw Material Store - BLR",
+      "warehouse_type": "Raw Material",
+      "available_qty": 85,
+      "safety_stock": 50,
+      "valuation_rate": 2900.0,
+      "stock_value": 246500.0,
+      "value_lakhs": 2.46,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    }
+  ],
+  "employees": [
+    {
+      "employee_id": "HR-EMP-0001",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "srn": "PES1UG24CS001",
+      "designation": "Head of Database, Backend & Analytics",
+      "department": "IT & ERP Systems",
+      "email": "srujan@voltedge-energy.in",
+      "status": "Active"
+    },
+    {
+      "employee_id": "HR-EMP-0002",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "srn": "PES1UG24CS002",
+      "designation": "Operations & Sales Director",
+      "department": "Sales & Order Management",
+      "email": "eshaan@voltedge-energy.in",
+      "status": "Active"
+    },
+    {
+      "employee_id": "HR-EMP-0003",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "srn": "PES1UG24CS003",
+      "designation": "Supply Chain & Procurement Lead",
+      "department": "Procurement & Logistics",
+      "email": "abhay@voltedge-energy.in",
+      "status": "Active"
+    },
+    {
+      "employee_id": "HR-EMP-0004",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "srn": "PES1UG24CS004",
+      "designation": "Product Quality & Financial Controller",
+      "department": "Finance & Quality Control",
+      "email": "siri@voltedge-energy.in",
+      "status": "Active"
+    }
+  ],
+  "customers": [
+    {
+      "customer_id": "CUST-2026-01",
+      "customer_name": "Bengaluru Solar Solutions Pvt. Ltd.",
+      "customer_group": "Commercial EPC",
+      "territory": "Bengaluru Urban",
+      "gstin": "29AABCB1421B1Z5",
+      "contact_email": "procurement@blrsolar.in",
+      "account_manager_id": "HR-EMP-0002",
+      "srn_tag": "Managed by Eshaan [PES1UG24CS002]"
+    },
+    {
+      "customer_id": "CUST-2026-02",
+      "customer_name": "GreenGrid Energy Systems India",
+      "customer_group": "Utility Scale",
+      "territory": "Karnataka South",
+      "gstin": "29AAECG5519G1Z2",
+      "contact_email": "orders@greengrid.co.in",
+      "account_manager_id": "HR-EMP-0001",
+      "srn_tag": "Managed by Srujan [PES1UG24CS001]"
+    },
+    {
+      "customer_id": "CUST-2026-03",
+      "customer_name": "Deccan Power Infrastructure Ltd.",
+      "customer_group": "Industrial Grid",
+      "territory": "Hyderabad / South",
+      "gstin": "36AABCD8821D1Z8",
+      "contact_email": "supply@deccanpower.in",
+      "account_manager_id": "HR-EMP-0004",
+      "srn_tag": "Managed by Siri [PES1UG24CS004]"
+    },
+    {
+      "customer_id": "CUST-2026-04",
+      "customer_name": "Karnataka MicroGrid Corporation",
+      "customer_group": "Government PSU",
+      "territory": "Bengaluru Rural",
+      "gstin": "29AAACK9012M1Z1",
+      "contact_email": "tenders@kmgrid.kar.nic.in",
+      "account_manager_id": "HR-EMP-0003",
+      "srn_tag": "Managed by Abhay [PES1UG24CS003]"
+    },
+    {
+      "customer_id": "CUST-2026-05",
+      "customer_name": "Kaveri Industrial Renewables",
+      "customer_group": "Manufacturing",
+      "territory": "Mysuru Industrial",
+      "gstin": "29AABCK3340K1Z9",
+      "contact_email": "purchase@kaverirenew.in",
+      "account_manager_id": "HR-EMP-0002",
+      "srn_tag": "Managed by Eshaan [PES1UG24CS002]"
+    },
+    {
+      "customer_id": "CUST-2026-06",
+      "customer_name": "SunPeak Rooftop Engineering",
+      "customer_group": "Commercial EPC",
+      "territory": "Chennai / TN",
+      "gstin": "33AADCS7712P1Z4",
+      "contact_email": "ops@sunpeaksolar.in",
+      "account_manager_id": "HR-EMP-0001",
+      "srn_tag": "Managed by Srujan [PES1UG24CS001]"
+    },
+    {
+      "customer_id": "CUST-2026-07",
+      "customer_name": "Mysuru CleanTech Park Pvt. Ltd.",
+      "customer_group": "Tech Park Infra",
+      "territory": "Mysuru",
+      "gstin": "29AAFCM4109C1Z7",
+      "contact_email": "facilities@mysurucleantech.in",
+      "account_manager_id": "HR-EMP-0004",
+      "srn_tag": "Managed by Siri [PES1UG24CS004]"
+    },
+    {
+      "customer_id": "CUST-2026-08",
+      "customer_name": "Apex Substation Projects LLP",
+      "customer_group": "Industrial Grid",
+      "territory": "Hubballi-Dharwad",
+      "gstin": "29AAJFA2298A1Z3",
+      "contact_email": "projects@apexsubstation.in",
+      "account_manager_id": "HR-EMP-0003",
+      "srn_tag": "Managed by Abhay [PES1UG24CS003]"
+    }
+  ],
+  "suppliers": [
+    {
+      "supplier_id": "SUP-2026-01",
+      "supplier_name": "Texas Instruments India Distributor",
+      "supplier_group": "Semiconductors",
+      "city": "Bengaluru (Bagmane)",
+      "gstin": "29AAACT4011T1Z6",
+      "lead_time_days": 5,
+      "procurement_officer_id": "HR-EMP-0003",
+      "srn_tag": "Verified by Abhay [PES1UG24CS003]"
+    },
+    {
+      "supplier_id": "SUP-2026-02",
+      "supplier_name": "ElectroParts Peenya Pvt. Ltd.",
+      "supplier_group": "Passive Components",
+      "city": "Bengaluru (Peenya)",
+      "gstin": "29AABCE7812E1Z1",
+      "lead_time_days": 3,
+      "procurement_officer_id": "HR-EMP-0001",
+      "srn_tag": "Verified by Srujan [PES1UG24CS001]"
+    },
+    {
+      "supplier_id": "SUP-2026-03",
+      "supplier_name": "Bharat Power Semiconductors Ltd.",
+      "supplier_group": "Power Modules",
+      "city": "Pune / Bengaluru",
+      "gstin": "27AAACB9921B1Z4",
+      "lead_time_days": 7,
+      "procurement_officer_id": "HR-EMP-0002",
+      "srn_tag": "Verified by Eshaan [PES1UG24CS002]"
+    },
+    {
+      "supplier_id": "SUP-2026-04",
+      "supplier_name": "Delta Magnetics & Toroid Coils",
+      "supplier_group": "Transformers & Coils",
+      "city": "Chennai",
+      "gstin": "33AABCD5102M1Z8",
+      "lead_time_days": 6,
+      "procurement_officer_id": "HR-EMP-0004",
+      "srn_tag": "Verified by Siri [PES1UG24CS004]"
+    },
+    {
+      "supplier_id": "SUP-2026-05",
+      "supplier_name": "Hosur Precision SheetMetal Works",
+      "supplier_group": "IP65 Enclosures",
+      "city": "Hosur Industrial",
+      "gstin": "33AAACH6634H1Z2",
+      "lead_time_days": 4,
+      "procurement_officer_id": "HR-EMP-0003",
+      "srn_tag": "Verified by Abhay [PES1UG24CS003]"
+    },
+    {
+      "supplier_id": "SUP-2026-06",
+      "supplier_name": "LFP CellTech Solutions India",
+      "supplier_group": "Battery Subsystems",
+      "city": "Hyderabad",
+      "gstin": "36AADCL8190C1Z5",
+      "lead_time_days": 8,
+      "procurement_officer_id": "HR-EMP-0001",
+      "srn_tag": "Verified by Srujan [PES1UG24CS001]"
+    }
+  ],
+  "items": [
+    {
+      "item_code": "ITM-BMS-48V",
+      "item_name": "48V 100A Smart LiFePO4 BMS Controller",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 14500.0,
+      "valuation_rate": 9800.0,
+      "safety_stock": 30,
+      "created_by_srn": "Siri [PES1UG24CS004]"
+    },
+    {
+      "item_code": "ITM-CNV-25KVA",
+      "item_name": "25kVA Industrial AC-DC Power Converter",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 165000.0,
+      "valuation_rate": 122000.0,
+      "safety_stock": 8,
+      "created_by_srn": "Abhay [PES1UG24CS003]"
+    },
+    {
+      "item_code": "ITM-INV-10KW",
+      "item_name": "10kW Three-Phase String Inverter",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 118000.0,
+      "valuation_rate": 86000.0,
+      "safety_stock": 10,
+      "created_by_srn": "Eshaan [PES1UG24CS002]"
+    },
+    {
+      "item_code": "ITM-INV-5KW",
+      "item_name": "5kW Hybrid Solar Inverter (IP65)",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 68000.0,
+      "valuation_rate": 49500.0,
+      "safety_stock": 15,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    },
+    {
+      "item_code": "ITM-PNL-LT400",
+      "item_name": "400V LT Distribution & Synchronization Panel",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 210000.0,
+      "valuation_rate": 154000.0,
+      "safety_stock": 5,
+      "created_by_srn": "Eshaan [PES1UG24CS002]"
+    },
+    {
+      "item_code": "ITM-RAW-CHAS",
+      "item_name": "Powder-Coated Aluminum Inverter Chassis",
+      "item_group": "Raw Material",
+      "uom": "Nos",
+      "standard_selling_rate": 3800.0,
+      "valuation_rate": 2900.0,
+      "safety_stock": 50,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    },
+    {
+      "item_code": "ITM-RAW-COIL",
+      "item_name": "High-Frequency Toroidal Copper Inductor",
+      "item_group": "Raw Material",
+      "uom": "Nos",
+      "standard_selling_rate": 2600.0,
+      "valuation_rate": 1950.0,
+      "safety_stock": 80,
+      "created_by_srn": "Siri [PES1UG24CS004]"
+    },
+    {
+      "item_code": "ITM-RAW-MOSFET",
+      "item_name": "1200V SiC MOSFET Half-Bridge Module",
+      "item_group": "Raw Material",
+      "uom": "Nos",
+      "standard_selling_rate": 4200.0,
+      "valuation_rate": 3400.0,
+      "safety_stock": 100,
+      "created_by_srn": "Abhay [PES1UG24CS003]"
+    },
+    {
+      "item_code": "ITM-SPD-1000V",
+      "item_name": "1000V DC Surge Protection Device Box",
+      "item_group": "Finished Goods",
+      "uom": "Nos",
+      "standard_selling_rate": 8500.0,
+      "valuation_rate": 5400.0,
+      "safety_stock": 40,
+      "created_by_srn": "Srujan [PES1UG24CS001]"
+    }
+  ],
+  "warehouses": [
+    {
+      "warehouse_id": "WH-BOMMA-QA",
+      "warehouse_name": "Bommasandra Quality Inspection Store",
+      "warehouse_type": "QA & Quarantine",
+      "location": "Bommasandra Ind. Area, Bengaluru",
+      "capacity_units": 600,
+      "incharge_id": "HR-EMP-0004",
+      "incharge_name": "Siri (PES1UG24CS004)"
+    },
+    {
+      "warehouse_id": "WH-ECITY-ASSY",
+      "warehouse_name": "Electronic City Work-in-Progress Floor",
+      "warehouse_type": "WIP Store",
+      "location": "Electronic City Ph I, Bengaluru",
+      "capacity_units": 800,
+      "incharge_id": "HR-EMP-0002",
+      "incharge_name": "Eshaan (PES1UG24CS002)"
+    },
+    {
+      "warehouse_id": "WH-PEENYA-RAW",
+      "warehouse_name": "Peenya Raw Material Store - BLR",
+      "warehouse_type": "Raw Material",
+      "location": "Peenya Phase II, Bengaluru",
+      "capacity_units": 2500,
+      "incharge_id": "HR-EMP-0003",
+      "incharge_name": "Abhay (PES1UG24CS003)"
+    },
+    {
+      "warehouse_id": "WH-WHITEFIELD-FG",
+      "warehouse_name": "Whitefield Finished Goods Hub - BLR",
+      "warehouse_type": "Finished Goods",
+      "location": "Whitefield EPIP, Bengaluru",
+      "capacity_units": 1200,
+      "incharge_id": "HR-EMP-0001",
+      "incharge_name": "Srujan (PES1UG24CS001)"
+    }
+  ],
+  "payment_terms": [
+    {
+      "term_id": "TERM-ADV50",
+      "term_name": "50% Advance Payment",
+      "credit_days": 15,
+      "advance_pct": 50.0,
+      "description": "50% advance on order confirmation, balance on dispatch"
+    },
+    {
+      "term_id": "TERM-IMMED",
+      "term_name": "Immediate on Delivery",
+      "credit_days": 0,
+      "advance_pct": 100.0,
+      "description": "100% RTGS/NEFT payment upon goods receipt inspection"
+    },
+    {
+      "term_id": "TERM-NET15",
+      "term_name": "Net 15 Days",
+      "credit_days": 15,
+      "advance_pct": 0.0,
+      "description": "Full invoice settlement within 15 days of delivery"
+    },
+    {
+      "term_id": "TERM-NET30",
+      "term_name": "Net 30 Days",
+      "credit_days": 30,
+      "advance_pct": 0.0,
+      "description": "Standard B2B 30-day credit cycle after invoice generation"
+    }
+  ],
+  "sales_orders": [
+    {
+      "so_id": "SAL-ORD-2026-0001",
+      "customer_id": "CUST-2026-01",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-05-12",
+      "delivery_date": "2026-05-22",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 493000.0,
+      "srn_reference": "Processed by Eshaan (PES1UG24CS002)",
+      "customer_name": "Bengaluru Solar Solutions Pvt. Ltd.",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0002",
+      "customer_id": "CUST-2026-02",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-ADV50",
+      "order_date": "2026-06-08",
+      "delivery_date": "2026-06-19",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 706000.0,
+      "srn_reference": "Processed by Srujan (PES1UG24CS001)",
+      "customer_name": "GreenGrid Energy Systems India",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "50% Advance Payment"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0003",
+      "customer_id": "CUST-2026-03",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-06-24",
+      "delivery_date": "2026-07-05",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 495000.0,
+      "srn_reference": "Processed by Siri (PES1UG24CS004)",
+      "customer_name": "Deccan Power Infrastructure Ltd.",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0004",
+      "customer_id": "CUST-2026-04",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-07-11",
+      "delivery_date": "2026-07-24",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 522000.0,
+      "srn_reference": "Processed by Abhay (PES1UG24CS003)",
+      "customer_name": "Karnataka MicroGrid Corporation",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0005",
+      "customer_id": "CUST-2026-05",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-07-28",
+      "delivery_date": "2026-08-08",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 544000.0,
+      "srn_reference": "Processed by Eshaan (PES1UG24CS002)",
+      "customer_name": "Kaveri Industrial Renewables",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0006",
+      "customer_id": "CUST-2026-06",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-IMMED",
+      "order_date": "2026-08-14",
+      "delivery_date": "2026-08-23",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 562000.0,
+      "srn_reference": "Processed by Srujan (PES1UG24CS001)",
+      "customer_name": "SunPeak Rooftop Engineering",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "Immediate on Delivery"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0007",
+      "customer_id": "CUST-2026-07",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-08-29",
+      "delivery_date": "2026-09-10",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 540000.0,
+      "srn_reference": "Processed by Siri (PES1UG24CS004)",
+      "customer_name": "Mysuru CleanTech Park Pvt. Ltd.",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0008",
+      "customer_id": "CUST-2026-08",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-ADV50",
+      "order_date": "2026-09-09",
+      "delivery_date": "2026-09-21",
+      "workflow_stage": "Payment Received",
+      "status": "Completed",
+      "total_amount": 630000.0,
+      "srn_reference": "Processed by Abhay (PES1UG24CS003)",
+      "customer_name": "Apex Substation Projects LLP",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "50% Advance Payment"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0009",
+      "customer_id": "CUST-2026-01",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-09-25",
+      "delivery_date": "2026-10-06",
+      "workflow_stage": "Sales Invoice",
+      "status": "To Receive Payment",
+      "total_amount": 735000.0,
+      "srn_reference": "Processed by Srujan (PES1UG24CS001)",
+      "customer_name": "Bengaluru Solar Solutions Pvt. Ltd.",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0010",
+      "customer_id": "CUST-2026-02",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-10-07",
+      "delivery_date": "2026-10-18",
+      "workflow_stage": "Delivery Note",
+      "status": "To Bill",
+      "total_amount": 660000.0,
+      "srn_reference": "Processed by Eshaan (PES1UG24CS002)",
+      "customer_name": "GreenGrid Energy Systems India",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0011",
+      "customer_id": "CUST-2026-03",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-ADV50",
+      "order_date": "2026-10-21",
+      "delivery_date": "2026-11-04",
+      "workflow_stage": "Sales Order",
+      "status": "To Deliver and Bill",
+      "total_amount": 595000.0,
+      "srn_reference": "Processed by Siri (PES1UG24CS004)",
+      "customer_name": "Deccan Power Infrastructure Ltd.",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "50% Advance Payment"
+    },
+    {
+      "so_id": "SAL-ORD-2026-0012",
+      "customer_id": "CUST-2026-05",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-11-03",
+      "delivery_date": "2026-11-15",
+      "workflow_stage": "Quotation",
+      "status": "Draft / Quoted",
+      "total_amount": 507000.0,
+      "srn_reference": "Processed by Abhay (PES1UG24CS003)",
+      "customer_name": "Kaveri Industrial Renewables",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "Net 15 Days"
+    }
+  ],
+  "purchase_orders": [
+    {
+      "po_id": "PUR-ORD-2026-0001",
+      "supplier_id": "SUP-2026-01",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-05-05",
+      "expected_date": "2026-05-12",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 408000.0,
+      "srn_reference": "Approved by Abhay (PES1UG24CS003)",
+      "supplier_name": "Texas Instruments India Distributor",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0002",
+      "supplier_id": "SUP-2026-02",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-05-20",
+      "expected_date": "2026-05-25",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 273000.0,
+      "srn_reference": "Approved by Srujan (PES1UG24CS001)",
+      "supplier_name": "ElectroParts Peenya Pvt. Ltd.",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0003",
+      "supplier_id": "SUP-2026-05",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-06-10",
+      "expected_date": "2026-06-16",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 261000.0,
+      "srn_reference": "Approved by Eshaan (PES1UG24CS002)",
+      "supplier_name": "Hosur Precision SheetMetal Works",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0004",
+      "supplier_id": "SUP-2026-03",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-ADV50",
+      "order_date": "2026-06-27",
+      "expected_date": "2026-07-04",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 510000.0,
+      "srn_reference": "Approved by Siri (PES1UG24CS004)",
+      "supplier_name": "Bharat Power Semiconductors Ltd.",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "50% Advance Payment"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0005",
+      "supplier_id": "SUP-2026-04",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-07-15",
+      "expected_date": "2026-07-22",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 351000.0,
+      "srn_reference": "Approved by Abhay (PES1UG24CS003)",
+      "supplier_name": "Delta Magnetics & Toroid Coils",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0006",
+      "supplier_id": "SUP-2026-06",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-08-03",
+      "expected_date": "2026-08-11",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 343000.0,
+      "srn_reference": "Approved by Srujan (PES1UG24CS001)",
+      "supplier_name": "LFP CellTech Solutions India",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0007",
+      "supplier_id": "SUP-2026-01",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-08-21",
+      "expected_date": "2026-08-28",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 442000.0,
+      "srn_reference": "Approved by Eshaan (PES1UG24CS002)",
+      "supplier_name": "Texas Instruments India Distributor",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0008",
+      "supplier_id": "SUP-2026-05",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-IMMED",
+      "order_date": "2026-09-08",
+      "expected_date": "2026-09-13",
+      "workflow_stage": "Payment Sent",
+      "status": "Completed",
+      "total_amount": 319000.0,
+      "srn_reference": "Approved by Siri (PES1UG24CS004)",
+      "supplier_name": "Hosur Precision SheetMetal Works",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "Immediate on Delivery"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0009",
+      "supplier_id": "SUP-2026-02",
+      "employee_id": "HR-EMP-0001",
+      "term_id": "TERM-NET15",
+      "order_date": "2026-09-26",
+      "expected_date": "2026-10-01",
+      "workflow_stage": "Supplier Invoice",
+      "status": "To Pay",
+      "total_amount": 270000.0,
+      "srn_reference": "Approved by Srujan (PES1UG24CS001)",
+      "supplier_name": "ElectroParts Peenya Pvt. Ltd.",
+      "employee_name": "Srujan (PES1UG24CS001)",
+      "term_name": "Net 15 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0010",
+      "supplier_id": "SUP-2026-03",
+      "employee_id": "HR-EMP-0003",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-10-12",
+      "expected_date": "2026-10-19",
+      "workflow_stage": "Goods Receipt",
+      "status": "To Bill",
+      "total_amount": 374000.0,
+      "srn_reference": "Approved by Abhay (PES1UG24CS003)",
+      "supplier_name": "Bharat Power Semiconductors Ltd.",
+      "employee_name": "Abhay (PES1UG24CS003)",
+      "term_name": "Net 30 Days"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0011",
+      "supplier_id": "SUP-2026-04",
+      "employee_id": "HR-EMP-0002",
+      "term_id": "TERM-ADV50",
+      "order_date": "2026-10-25",
+      "expected_date": "2026-11-02",
+      "workflow_stage": "Purchase Order",
+      "status": "To Receive and Bill",
+      "total_amount": 292500.0,
+      "srn_reference": "Approved by Eshaan (PES1UG24CS002)",
+      "supplier_name": "Delta Magnetics & Toroid Coils",
+      "employee_name": "Eshaan (PES1UG24CS002)",
+      "term_name": "50% Advance Payment"
+    },
+    {
+      "po_id": "PUR-ORD-2026-0012",
+      "supplier_id": "SUP-2026-06",
+      "employee_id": "HR-EMP-0004",
+      "term_id": "TERM-NET30",
+      "order_date": "2026-11-05",
+      "expected_date": "2026-11-14",
+      "workflow_stage": "Material Request",
+      "status": "Requisition Approved",
+      "total_amount": 294000.0,
+      "srn_reference": "Approved by Siri (PES1UG24CS004)",
+      "supplier_name": "LFP CellTech Solutions India",
+      "employee_name": "Siri (PES1UG24CS004)",
+      "term_name": "Net 30 Days"
+    }
+  ]
+};
+    </script>
+    <script>
+        const fmtINR = n => Number(n).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        const fmtINR2 = n => Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        if (window.location.protocol.startsWith('http')) {
+            document.getElementById('nexoraLink').href = '/nexora';
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        let salesChartInstance = null;
+        let purchaseChartInstance = null;
+
+        function renderWorkspace(data) {
+            const kpis = data.kpis;
+            document.getElementById('kpiSalesLakhs').textContent = `₹${kpis.sales_lakhs.toFixed(2)} Lakh`;
+            document.getElementById('kpiSalesSub').innerHTML = `₹${fmtINR(kpis.sales_raw)} across <strong>${kpis.so_count} Sales Orders</strong>`;
+
+            document.getElementById('kpiPurchaseLakhs').textContent = `₹${kpis.purchase_lakhs.toFixed(2)} Lakh`;
+            document.getElementById('kpiPurchaseSub').innerHTML = `₹${fmtINR(kpis.purchase_raw)} across <strong>${kpis.po_count} Purchase Orders</strong>`;
+
+            document.getElementById('kpiFulfillment').textContent = `${kpis.fulfillment_pct}%`;
+            document.getElementById('kpiFulfillmentSub').innerHTML = `<strong>${kpis.completed_so} of ${kpis.so_count}</strong> orders delivered &amp; settled`;
+
+            document.getElementById('kpiInventoryLakhs').textContent = `₹${kpis.inventory_lakhs.toFixed(2)} Lakh`;
+            document.getElementById('kpiInventorySub').innerHTML = `<strong>${kpis.inventory_units} units</strong> in stock across Bengaluru hubs`;
+
+            // Dashboard Team Table
+            document.getElementById('dashEmployeeTable').innerHTML = data.employees.map(emp => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2 px-2.5 mono text-[11px] font-medium text-slate-700">${emp.employee_id}</td>
+                    <td class="py-2 px-2.5 font-semibold text-slate-900">${emp.employee_name}</td>
+                    <td class="py-2 px-2.5 text-slate-600">${emp.department}</td>
+                </tr>
+            `).join('');
+
+            // Dashboard Recent Transactions
+            const recentSO = data.sales_orders.slice(-3).map(so => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2 px-2.5 mono text-[11px] font-semibold text-[#16697A]">${so.so_id}</td>
+                    <td class="py-2 px-2.5 font-medium text-slate-800">${so.customer_name}</td>
+                    <td class="py-2 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">${so.workflow_stage}</span></td>
+                    <td class="py-2 px-2.5 text-right mono font-medium">₹${fmtINR(so.total_amount)}</td>
+                    <td class="py-2 px-2.5 text-[11px] text-slate-600">${so.srn_reference}</td>
+                </tr>
+            `).join('');
+            const recentPO = data.purchase_orders.slice(-3).map(po => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2 px-2.5 mono text-[11px] font-semibold text-amber-700">${po.po_id}</td>
+                    <td class="py-2 px-2.5 font-medium text-slate-800">${po.supplier_name}</td>
+                    <td class="py-2 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-200">${po.workflow_stage}</span></td>
+                    <td class="py-2 px-2.5 text-right mono font-medium">₹${fmtINR(po.total_amount)}</td>
+                    <td class="py-2 px-2.5 text-[11px] text-slate-600">${po.srn_reference}</td>
+                </tr>
+            `).join('');
+            document.getElementById('dashRecentTxns').innerHTML = recentSO + recentPO;
+
+            // Report 1: Monthly Sales Analysis
+            document.getElementById('report1Body').innerHTML = data.monthly_sales.map(row => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-3 font-semibold text-slate-900">${row.month_label}</td>
+                    <td class="py-2.5 px-3 mono text-slate-500">${row.month_key}</td>
+                    <td class="py-2.5 px-3 text-center font-medium">${row.order_count}</td>
+                    <td class="py-2.5 px-3 text-right mono font-medium">₹${fmtINR2(row.monthly_revenue)}</td>
+                    <td class="py-2.5 px-3 text-right mono font-bold text-[#16697A]">₹${row.revenue_lakhs.toFixed(2)} L</td>
+                    <td class="py-2.5 px-3 text-right mono text-slate-600">₹${fmtINR(row.monthly_revenue / row.order_count)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('report1Foot').innerHTML = `
+                <tr class="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
+                    <td class="py-2.5 px-3" colspan="2">Total (FY 2026-27 YTD)</td>
+                    <td class="py-2.5 px-3 text-center">${kpis.so_count}</td>
+                    <td class="py-2.5 px-3 text-right mono">₹${fmtINR2(kpis.sales_raw)}</td>
+                    <td class="py-2.5 px-3 text-right mono text-[#16697A]">₹${kpis.sales_lakhs.toFixed(2)} L</td>
+                    <td class="py-2.5 px-3 text-right mono">₹${fmtINR(kpis.sales_raw / kpis.so_count)}</td>
+                </tr>
+            `;
+
+            // Report 2: Supplier Spend
+            document.getElementById('report2Body').innerHTML = data.supplier_spend.map(s => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-3 mono font-medium text-slate-700">${s.supplier_id}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-900">${s.supplier_name}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${s.supplier_group}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${s.city}</td>
+                    <td class="py-2.5 px-3 text-center font-medium">${s.po_count}</td>
+                    <td class="py-2.5 px-3 text-right mono font-medium">₹${fmtINR2(s.total_spend)}</td>
+                    <td class="py-2.5 px-3 text-right mono font-bold text-amber-800">₹${s.spend_lakhs.toFixed(2)} L</td>
+                    <td class="py-2.5 px-3 text-[11px] text-slate-600">${s.srn_tag}</td>
+                </tr>
+            `).join('');
+            document.getElementById('report2Foot').innerHTML = `
+                <tr class="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
+                    <td class="py-2.5 px-3" colspan="4">Total Procurement Expenditure</td>
+                    <td class="py-2.5 px-3 text-center">${kpis.po_count}</td>
+                    <td class="py-2.5 px-3 text-right mono">₹${fmtINR2(kpis.purchase_raw)}</td>
+                    <td class="py-2.5 px-3 text-right mono text-amber-800">₹${kpis.purchase_lakhs.toFixed(2)} L</td>
+                    <td class="py-2.5 px-3"></td>
+                </tr>
+            `;
+
+            // Report 3: Inventory Report
+            document.getElementById('report3Body').innerHTML = data.inventory_report.map(item => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-3 mono font-semibold text-slate-800">${item.item_code}</td>
+                    <td class="py-2.5 px-3 font-medium text-slate-900">${item.item_name}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${item.warehouse_name}</td>
+                    <td class="py-2.5 px-3 text-center mono font-semibold">${item.available_qty} Nos</td>
+                    <td class="py-2.5 px-3 text-center mono text-slate-500">${item.safety_stock} Nos</td>
+                    <td class="py-2.5 px-3 text-right mono">₹${fmtINR(item.valuation_rate)}</td>
+                    <td class="py-2.5 px-3 text-right mono font-bold text-teal-800">₹${fmtINR(item.stock_value)}</td>
+                    <td class="py-2.5 px-3 text-[11px] text-slate-600">${item.created_by_srn}</td>
+                </tr>
+            `).join('');
+
+            // Tab 3: Sales Orders & Purchase Orders
+            document.getElementById('soTableBody').innerHTML = data.sales_orders.map(so => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-2.5 mono font-semibold text-[#16697A]">${so.so_id}</td>
+                    <td class="py-2.5 px-2.5 font-semibold text-slate-900">${so.customer_name}</td>
+                    <td class="py-2.5 px-2.5 mono text-slate-600">${so.order_date}</td>
+                    <td class="py-2.5 px-2.5 text-slate-600">${so.term_name}</td>
+                    <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200">${so.workflow_stage}</span></td>
+                    <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium ${so.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'}">${so.status}</span></td>
+                    <td class="py-2.5 px-2.5 text-right mono font-bold text-slate-900">₹${fmtINR(so.total_amount)}</td>
+                    <td class="py-2.5 px-2.5 text-[11px] text-slate-600">${so.srn_reference}</td>
+                    <td class="py-2.5 px-2.5 text-center no-print">
+                        <button onclick="openEditModal('SO', '${so.so_id}', '${so.workflow_stage}', '${so.status}', ${so.total_amount})" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium border border-slate-300">Edit / Advance</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('poTableBody').innerHTML = data.purchase_orders.map(po => `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2.5 px-2.5 mono font-semibold text-amber-800">${po.po_id}</td>
+                    <td class="py-2.5 px-2.5 font-semibold text-slate-900">${po.supplier_name}</td>
+                    <td class="py-2.5 px-2.5 mono text-slate-600">${po.order_date}</td>
+                    <td class="py-2.5 px-2.5 text-slate-600">${po.term_name}</td>
+                    <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-800 border border-amber-200">${po.workflow_stage}</span></td>
+                    <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-medium ${po.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}">${po.status}</span></td>
+                    <td class="py-2.5 px-2.5 text-right mono font-bold text-slate-900">₹${fmtINR(po.total_amount)}</td>
+                    <td class="py-2.5 px-2.5 text-[11px] text-slate-600">${po.srn_reference}</td>
+                    <td class="py-2.5 px-2.5 text-center no-print">
+                        <button onclick="openEditModal('PO', '${po.po_id}', '${po.workflow_stage}', '${po.status}', ${po.total_amount})" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium border border-slate-300">Edit / Advance</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Tab 4: Master Entities
+            document.getElementById('masterCustomerBody').innerHTML = data.customers.map(c => `
+                <tr>
+                    <td class="py-1.5 px-2 mono text-[11px]">${c.customer_id}</td>
+                    <td class="py-1.5 px-2 font-semibold">${c.customer_name}</td>
+                    <td class="py-1.5 px-2 text-slate-600">${c.territory}</td>
+                    <td class="py-1.5 px-2 text-[11px] text-slate-600">${c.srn_tag}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('masterSupplierBody').innerHTML = data.suppliers.map(s => `
+                <tr>
+                    <td class="py-1.5 px-2 mono text-[11px]">${s.supplier_id}</td>
+                    <td class="py-1.5 px-2 font-semibold">${s.supplier_name}</td>
+                    <td class="py-1.5 px-2 text-slate-600">${s.supplier_group}</td>
+                    <td class="py-1.5 px-2 text-[11px] text-slate-600">${s.srn_tag}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('masterItemBody').innerHTML = data.items.map(i => `
+                <tr>
+                    <td class="py-1.5 px-2 mono font-semibold text-slate-800">${i.item_code}</td>
+                    <td class="py-1.5 px-2 font-medium">${i.item_name}</td>
+                    <td class="py-1.5 px-2">${i.item_group}</td>
+                    <td class="py-1.5 px-2 text-right mono">₹${fmtINR(i.standard_selling_rate)}</td>
+                    <td class="py-1.5 px-2 text-right mono">₹${fmtINR(i.valuation_rate)}</td>
+                    <td class="py-1.5 px-2 text-[11px] text-slate-600">${i.created_by_srn}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('masterWarehouseBody').innerHTML = data.warehouses.map(w => `
+                <tr>
+                    <td class="py-1.5 px-2 mono text-[11px]">${w.warehouse_id}</td>
+                    <td class="py-1.5 px-2 font-semibold">${w.warehouse_name}</td>
+                    <td class="py-1.5 px-2 text-[11px] text-slate-700">${w.incharge_name}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('masterEmployeeBody').innerHTML = data.employees.map(e => `
+                <tr>
+                    <td class="py-1.5 px-2 mono text-[11px]">${e.employee_id}</td>
+                    <td class="py-1.5 px-2 font-semibold">${e.employee_name}</td>
+                    <td class="py-1.5 px-2 text-slate-600">${e.designation}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('masterPaymentTermBody').innerHTML = data.payment_terms.map(pt => `
+                <tr>
+                    <td class="py-1.5 px-2 mono text-[11px]">${pt.term_id}</td>
+                    <td class="py-1.5 px-2 font-semibold">${pt.term_name}</td>
+                    <td class="py-1.5 px-2 mono">${pt.credit_days}d</td>
+                    <td class="py-1.5 px-2 text-slate-600">${pt.description}</td>
+                </tr>
+            `).join('');
+
+            // Render Charts
+            const salesLabels = data.monthly_sales.map(m => m.month_label);
+            const salesDataLakhs = data.monthly_sales.map(m => m.revenue_lakhs);
+
+            if (salesChartInstance) salesChartInstance.destroy();
+            salesChartInstance = new Chart(document.getElementById('monthlySalesChart'), {
+                type: 'bar',
+                data: {
+                    labels: salesLabels,
+                    datasets: [{
+                        label: 'Monthly Sales Revenue (₹ Lakhs)',
+                        data: salesDataLakhs,
+                        backgroundColor: '#16697A',
+                        borderColor: '#0D2638',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ` ₹${ctx.parsed.y.toFixed(2)} Lakh` } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Revenue (₹ Lakhs)', font: { size: 11 } },
+                            ticks: { callback: val => '₹' + val + 'L' }
+                        }
+                    }
+                }
+            });
+
+            const supplierLabels = data.supplier_spend.map(s => s.supplier_name);
+            const supplierDataLakhs = data.supplier_spend.map(s => s.spend_lakhs);
+
+            if (purchaseChartInstance) purchaseChartInstance.destroy();
+            purchaseChartInstance = new Chart(document.getElementById('purchaseDistChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: supplierLabels,
+                    datasets: [{
+                        data: supplierDataLakhs,
+                        backgroundColor: ['#0D2638', '#16697A', '#489FB5', '#82C0CC', '#FBA17E', '#D97706'],
+                        borderWidth: 1,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ₹${ctx.parsed.toFixed(2)} Lakh` } }
+                    }
+                }
+            });
+        }
+
+        // Live Evaluation Modal Helpers
+        const o2cStages = ['Quotation', 'Sales Order', 'Delivery Note', 'Sales Invoice', 'Payment Received'];
+        const p2pStages = ['Material Request', 'Purchase Order', 'Goods Receipt', 'Supplier Invoice', 'Payment Sent'];
+
+        function openEditModal(type, id, currentStage, currentStatus, currentAmount) {
+            document.getElementById('modalRecordType').value = type;
+            document.getElementById('modalRecordId').value = id;
+            document.getElementById('modalAmount').value = currentAmount;
+            document.getElementById('modalStatus').value = currentStatus;
+
+            const stageSelect = document.getElementById('modalWorkflowStage');
+            stageSelect.innerHTML = '';
+            const stages = type === 'SO' ? o2cStages : p2pStages;
+            stages.forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = st;
+                if (st === currentStage) opt.selected = true;
+                stageSelect.appendChild(opt);
+            });
+
+            const modal = document.getElementById('editModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function saveRecordChanges() {
+            const payload = {
+                type: document.getElementById('modalRecordType').value,
+                id: document.getElementById('modalRecordId').value,
+                workflow_stage: document.getElementById('modalWorkflowStage').value,
+                status: document.getElementById('modalStatus').value,
+                total_amount: Number(document.getElementById('modalAmount').value)
+            };
+
+            if (window.location.protocol.startsWith('http')) {
+                await fetch('/api/update_record', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                window.location.reload();
+            } else {
+                // Local standalone mode fallback
+                const list = payload.type === 'SO' ? window.__EBS_DATA__.sales_orders : window.__EBS_DATA__.purchase_orders;
+                const rec = list.find(r => (r.so_id || r.po_id) === payload.id);
+                if (rec) {
+                    rec.workflow_stage = payload.workflow_stage;
+                    rec.status = payload.status;
+                    rec.total_amount = payload.total_amount;
+                }
+                closeEditModal();
+                renderWorkspace(window.__EBS_DATA__);
+            }
+        }
+
+        async function resetDatabase() {
+            if (window.location.protocol.startsWith('http')) {
+                await fetch('/api/reset_db', { method: 'POST' });
+            }
+            window.location.reload();
+        }
+
+        if (window.__EBS_DATA__) {
+            renderWorkspace(window.__EBS_DATA__);
+        }
+    </script>
+</body>
+</html>
