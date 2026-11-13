@@ -1,3 +1,5 @@
+### note to myself : update  everyones srn in `backend/seed_data.py` (lines 19–48) and `templates/nexora.html` 
+
 # UE24CS343AB8 — EBS Mini Project (`ebs_project`)
 
 ## Team Responsibilities
@@ -30,7 +32,3 @@ python "d:\university\sem 5\EBS\miniproject\ebs_project\backend\app.py"
 - [voltedge_dashboard_standalone.html](file:///d:/university/sem%205/EBS/miniproject/ebs_project/voltedge_dashboard_standalone.html) — Part A Dashboard, 3 Reports, 2 Business Cycles, 6 Master Tables, and Relational Schema.
 - [nexora_brochure_standalone.html](file:///d:/university/sem%205/EBS/miniproject/ebs_project/nexora_brochure_standalone.html) — Part B NEXORA Single-Page Website & Print-Ready Brochure.
 
----
-
-## Updating Team SRNs
-Open `backend/seed_data.py` (lines 19–48) and `templates/nexora.html` (Footer section) to replace `PES1UG24CS001`–`004` with your exact SRNs, then run `python backend\app.py` to regenerate the database, CSV exports, and standalone HTML files automatically.
