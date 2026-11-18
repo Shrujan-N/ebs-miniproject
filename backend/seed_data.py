@@ -19,21 +19,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, "voltedge_ebs.db")
 SCHEMA_PATH = os.path.join(BASE_DIR, "backend", "schema.sql")
 
-# Editable Project Team Hook — update placeholder SRNs before final submission
+# Project Team Members & Official PES University SRNs
 TEAM_MEMBERS = [
     {
         "employee_id": "HR-EMP-0001",
-        "employee_name": "Srujan S",
-        "srn": "PES1UG24CS001",
+        "employee_name": "SHRUJAN N",
+        "srn": "PES1UG24CS624",
         "designation": "Sales & CRM Manager",
         "department": "Sales & Operations",
-        "email": "srujan@voltedge-power.in",
+        "email": "shrujan@voltedge-power.in",
         "status": "Active",
     },
     {
         "employee_id": "HR-EMP-0002",
-        "employee_name": "Eshaan Menon",
-        "srn": "PES1UG24CS002",
+        "employee_name": "ESHAAN K",
+        "srn": "PES1UG24EE012",
         "designation": "Procurement & SCM Lead",
         "department": "Procurement & Logistics",
         "email": "eshaan@voltedge-power.in",
@@ -41,8 +41,8 @@ TEAM_MEMBERS = [
     },
     {
         "employee_id": "HR-EMP-0003",
-        "employee_name": "Abhay Verma",
-        "srn": "PES1UG24CS003",
+        "employee_name": "ABHAY A KATTI",
+        "srn": "PES1UG22EE001",
         "designation": "Manufacturing & Quality Lead",
         "department": "Production & QC",
         "email": "abhay@voltedge-power.in",
@@ -50,8 +50,8 @@ TEAM_MEMBERS = [
     },
     {
         "employee_id": "HR-EMP-0004",
-        "employee_name": "Siri Kulkarni",
-        "srn": "PES1UG24CS004",
+        "employee_name": "SIRI S S",
+        "srn": "PES1UG24CS627",
         "designation": "Finance & ERP Systems Admin",
         "department": "Finance & IT",
         "email": "siri@voltedge-power.in",

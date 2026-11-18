@@ -1,6 +1,6 @@
-# ============================================================================
+﻿# ============================================================================
 # UE24CS343AB8 - EBS Mini Project PowerShell Launcher (Zero External Dependencies)
-# Owner: Srujan (Database, Backend & Dashboard)
+# Owner: SHRUJAN N (PES1UG24CS624 — Database, Backend & Dashboard)
 # ============================================================================
 
 $ErrorActionPreference = "Stop"

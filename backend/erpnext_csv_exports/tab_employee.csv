@@ -1,5 +1,5 @@
 employee_id,employee_name,srn,designation,department,email,status
-HR-EMP-0001,Srujan S,PES1UG24CS001,Sales & CRM Manager,Sales & Operations,srujan@voltedge-power.in,Active
-HR-EMP-0002,Eshaan Menon,PES1UG24CS002,Procurement & SCM Lead,Procurement & Logistics,eshaan@voltedge-power.in,Active
-HR-EMP-0003,Abhay Verma,PES1UG24CS003,Manufacturing & Quality Lead,Production & QC,abhay@voltedge-power.in,Active
-HR-EMP-0004,Siri Kulkarni,PES1UG24CS004,Finance & ERP Systems Admin,Finance & IT,siri@voltedge-power.in,Active
+HR-EMP-0001,SHRUJAN N,PES1UG24CS624,Sales & CRM Manager,Sales & Operations,shrujan@voltedge-power.in,Active
+HR-EMP-0002,ESHAAN K,PES1UG24EE012,Procurement & SCM Lead,Procurement & Logistics,eshaan@voltedge-power.in,Active
+HR-EMP-0003,ABHAY A KATTI,PES1UG22EE001,Manufacturing & Quality Lead,Production & QC,abhay@voltedge-power.in,Active
+HR-EMP-0004,SIRI S S,PES1UG24CS627,Finance & ERP Systems Admin,Finance & IT,siri@voltedge-power.in,Active

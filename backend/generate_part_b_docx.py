@@ -293,6 +293,8 @@ def build_document_xml(data, assets):
     for emp in data["employees"]:
         nm = emp["employee_name"].split("(")[0].strip().lower()
         emp_by_name[nm] = emp["srn"]
+        if nm:
+            emp_by_name[nm.split()[0]] = emp["srn"]
 
     W_TOT = 10206
     parts = []
@@ -711,10 +713,10 @@ def build_document_xml(data, assets):
     parts.append(p_xml(run_xml("NEXORA is led by its four founding student officers overseeing product engineering, agentic AI research, enterprise database systems, and operational delivery:", sz_pt=9.6), after=75))
 
     officers = [
-        ("Eshaan", "Founder & Chief Executive Officer (CEO)", "Product strategy, customer partnerships & executive governance."),
-        ("Srujan", "Chief Technology Officer (CTO)", "Distributed ERP core, SQL databases, API security & telemetry pipelines."),
-        ("Abhay", "Chief AI Officer (CAIO)", "LSTM demand modeling, edge MQTT + CNN vision & VLM/GNN guardrails."),
-        ("Siri", "Chief Operating Officer (COO)", "Module architecture, client onboarding, QA compliance & finance workflows."),
+        ("ESHAAN K", "Founder & Chief Executive Officer (CEO)", "Product strategy, customer partnerships & executive governance."),
+        ("SHRUJAN N", "Chief Technology Officer (CTO)", "Distributed ERP core, SQL databases, API security & telemetry pipelines."),
+        ("ABHAY A KATTI", "Chief AI Officer (CAIO)", "LSTM demand modeling, edge MQTT + CNN vision & VLM/GNN guardrails."),
+        ("SIRI S S", "Chief Operating Officer (COO)", "Module architecture, client onboarding, QA compliance & finance workflows."),
     ]
     off_rows = [
         make_cell(p_xml(run_xml("Student Name", sz_pt=9.0, bold=True), after=0), 1500, fill="E6E6E6", pad_v=60, pad_h=85)
@@ -723,7 +725,7 @@ def build_document_xml(data, assets):
         + make_cell(p_xml(run_xml("Primary Focus", sz_pt=9.0, bold=True), after=0), 3906, fill="E6E6E6", pad_v=60, pad_h=85)
     ]
     for idx, (nm, role, bio) in enumerate(officers):
-        srn = emp_by_name.get(nm.lower(), "PES1UG24CS000")
+        srn = emp_by_name[nm.lower()]
         f_r = "F7F7F7" if idx % 2 == 1 else "FFFFFF"
         off_rows.append(
             make_cell(p_xml(run_xml(nm, sz_pt=9.2, bold=True), after=0), 1500, fill=f_r, pad_v=65, pad_h=85)
@@ -920,10 +922,13 @@ def generate_part_b_docx(data=None):
     assets = render_all_brochure_assets(browser)
 
     docx_name = "EBS24CS-P02 001-002-003-004 NEXORA.docx"
+    docx_srn_name = "EBS24CS-P02 624-012-001-627 NEXORA.docx"
     out_pdfs_docx = os.path.join(PDF_DIR, docx_name)
+    out_pdfs_srn_docx = os.path.join(PDF_DIR, docx_srn_name)
     out_root_docx = os.path.join(ROOT_SUBMISSION_DIR, docx_name)
+    out_root_srn_docx = os.path.join(ROOT_SUBMISSION_DIR, docx_srn_name)
 
-    with zipfile.ZipFile(out_pdfs_docx, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(out_pdfs_srn_docx, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         zf.writestr("[Content_Types].xml", build_content_types_xml())
         zf.writestr("_rels/.rels", build_root_rels_xml())
         zf.writestr("word/_rels/document.xml.rels", build_doc_rels_xml(assets))
@@ -934,10 +939,12 @@ def generate_part_b_docx(data=None):
         for info in assets.values():
             zf.write(info["path"], f"word/media/{info['fname']}")
 
+    shutil.copy2(out_pdfs_srn_docx, out_pdfs_docx)
+    shutil.copy2(out_pdfs_srn_docx, out_root_srn_docx)
     shutil.copy2(out_pdfs_docx, out_root_docx)
-    print(f"[OK] Part B B&W DOCX: {out_pdfs_docx} ({os.path.getsize(out_pdfs_docx)} bytes)")
-    print(f"[OK] Part B B&W DOCX copy: {out_root_docx}")
-    return out_pdfs_docx
+    print(f"[OK] Part B B&W DOCX: {out_pdfs_srn_docx} ({os.path.getsize(out_pdfs_srn_docx)} bytes)")
+    print(f"[OK] Part B B&W DOCX copies: {out_root_srn_docx}, {out_root_docx}")
+    return out_pdfs_srn_docx
 
 
 if __name__ == "__main__":

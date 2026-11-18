@@ -1,12 +1,10 @@
-note to myself : update  everyones srn in `backend/seed_data.py` (lines 19–48) and `templates/nexora.html` 
-
-# UE24CS343AB8 — EBS Mini Project (`ebs_project`)
+# UE24CS343AB8 / 22UECS352A — EBS Mini Project (`ebs miniproject`)
 
 ## Team Responsibilities
-- **Srujan**: Relational Database (`schema.sql`, `voltedge_ebs.db`, `schema.dbml`), Python Backend (`app.py`, `seed_data.py`, `erpnext_sync.py`), Executive Dashboard & 3 Management Reports (`templates/dashboard.html`).
-- **Eshaan**: Main Structure of Part A & Design of AI Agentic Models (LSTM, MQTT+CNN, VLM+GNN).
-- **Abhay**: Design & Visuals for Companies (`templates/nexora.html` & colour systems).
-- **Siri**: Product Modules, Report Analysis & Financial Governance.
+- **SHRUJAN N (`PES1UG24CS624`)**: Relational Database (`schema.sql`, `voltedge_ebs.db`, `schema.dbml`), Python Backend (`app.py`, `seed_data.py`, `erpnext_sync.py`), Executive Dashboard & 3 Management Reports (`templates/dashboard.html`).
+- **ESHAAN K (`PES1UG24EE012`)**: Main Structure of Part A, Procurement & SCM, and Design of AI Agentic Models (LSTM, MQTT+CNN, VLM+GNN).
+- **ABHAY A KATTI (`PES1UG22EE001`)**: Manufacturing Stock Entries, Quality Assurance & Brochure Visuals (`templates/nexora.html`).
+- **SIRI S S (`PES1UG24CS627`)**: Product Modules, Report Analysis & Financial Governance.
 
 ---
 
@@ -47,7 +45,7 @@ Regenerate directly from `voltedge_ebs.db` (e.g., after updating SRNs in `backen
 python "d:\university\sem 5\EBS\miniproject\ebs miniproject\backend\generate_pdfs.py"
 ```
 Outputs:
-- `pdfs/EBS24CS-P01 001-002-003-004 VoltEdge-ERPNext.pdf` & root copy (17-slide Part A Presentation & Visual Documentation Deck)
-- `pdfs/EBS24CS-P02 001-002-003-004 NEXORA.pdf` & root copy (8-page A4 Portrait Pure B&W Digital Sales Brochure)
-- `pdfs/EBS24CS-P02 001-002-003-004 NEXORA.docx` & root copy (Editable 8-page Microsoft Word version of Part B Brochure)
+- `pdfs/EBS24CS-P01 624-012-001-627 VoltEdge-ERPNext.pdf` & root copy (17-slide Part A Presentation & Visual Documentation Deck)
+- `pdfs/EBS24CS-P02 624-012-001-627 NEXORA.pdf` & root copy (8-page A4 Portrait Pure B&W Digital Sales Brochure)
+- `pdfs/EBS24CS-P02 624-012-001-627 NEXORA.docx` & root copy (Editable 8-page Microsoft Word version of Part B Brochure)
 

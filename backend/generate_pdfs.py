@@ -1,11 +1,11 @@
 """
 EBS Submission PDF Generator (Part A Capstone-PPT Deck & Part B Digital Sales Brochure)
 Course: UE24CS343AB8 Enterprise Business Systems
-Owner: Srujan (Database, Backend & Dashboard)
+Owner: SHRUJAN N (PES1UG24CS624 — Database, Backend & Dashboard)
 
 Generates two clean, light-background PDFs:
-1. pdfs/EBS24CS-P01 001-002-003-004 VoltEdge-ERPNext.pdf  (Part A: 17-slide 16:9 Capstone-PPT Deck)
-2. pdfs/EBS24CS-P02 001-002-003-004 NEXORA.pdf            (Part B: 8-page A4 Portrait Digital Sales Brochure)
+1. pdfs/EBS24CS-P01 624-012-001-627 VoltEdge-ERPNext.pdf  (Part A: 17-slide 16:9 Capstone-PPT Deck)
+2. pdfs/EBS24CS-P02 624-012-001-627 NEXORA.pdf            (Part B: 8-page A4 Portrait Digital Sales Brochure)
 """
 
 import base64
@@ -62,12 +62,12 @@ def get_team_footer_line(employees):
         if nm:
             names.append(nm)
     if not names:
-        names = ["SRUJAN", "ESHAAN", "ABHAY", "SIRI"]
+        names = ["SHRUJAN N", "ESHAAN K", "ABHAY A KATTI", "SIRI S S"]
     return "  &bull;  ".join(names)
 
 
 def short_emp(emp_label):
-    """Turn 'Eshaan (PES1UG24CS002)' or 'Processed by Eshaan (PES1UG24CS002)' into concise 'Eshaan (CS002)' or full SRN."""
+    """Strip prefixes like 'Processed by ' from employee SRN display label."""
     return str(emp_label).replace("Processed by ", "").replace("Approved by ", "")
 
 
@@ -1053,7 +1053,7 @@ def build_part_a_slides(raw_data, logo_uri):
             <tr><td class="cm-lbl">Project Team &amp; SRNs</td><td class="cm-sep">:</td>
                 <td class="cm-val">{esc(team_inline)}</td></tr>
             <tr><td class="cm-lbl">Role Split</td><td class="cm-sep">:</td>
-                <td class="cm-val">Srujan (Database &amp; Backend) | Eshaan (Procurement &amp; SCM) | Abhay (Mfg &amp; Visuals) | Siri (Reports &amp; Finance)</td></tr>
+                <td class="cm-val">SHRUJAN N (Database &amp; Backend) | ESHAAN K (Procurement &amp; SCM) | ABHAY A KATTI (Mfg &amp; Visuals) | SIRI S S (Reports &amp; Finance)</td></tr>
         </table>
     """
     slides.append(wrap_cover_slide(cover_inner, footer_names, 1, logo_uri))
@@ -1093,10 +1093,10 @@ def build_part_a_slides(raw_data, logo_uri):
             </ul>
             <div class="sub-blue" style="margin-top:6pt;">Team Responsibilities</div>
             <ul class="cap-list">
-                <li><span class="key-b">Srujan S (HR-EMP-0001):</span> Sales &amp; CRM, SQLite/MariaDB Schema &amp; Dashboard</li>
-                <li><span class="key-b">Eshaan Menon (HR-EMP-0002):</span> Procurement, Raw-Material P2P &amp; REST Sync</li>
-                <li><span class="key-b">Abhay Verma (HR-EMP-0003):</span> Manufacturing Stock Entries, QC &amp; Visuals</li>
-                <li><span class="key-b">Siri Kulkarni (HR-EMP-0004):</span> Finance, GST Registers &amp; MIS Reporting</li>
+                <li><span class="key-b">SHRUJAN N (HR-EMP-0001, PES1UG24CS624):</span> Sales &amp; CRM, SQLite/MariaDB Schema &amp; Dashboard</li>
+                <li><span class="key-b">ESHAAN K (HR-EMP-0002, PES1UG24EE012):</span> Procurement, Raw-Material P2P &amp; REST Sync</li>
+                <li><span class="key-b">ABHAY A KATTI (HR-EMP-0003, PES1UG22EE001):</span> Manufacturing Stock Entries, QC &amp; Visuals</li>
+                <li><span class="key-b">SIRI S S (HR-EMP-0004, PES1UG24CS627):</span> Finance, GST Registers &amp; MIS Reporting</li>
             </ul>
         </div>
         <div class="col-half">
@@ -1641,6 +1641,8 @@ def main():
 
     part_a_pdf = os.path.join(PDF_DIR, "EBS24CS-P01 001-002-003-004 VoltEdge-ERPNext.pdf")
     part_b_pdf = os.path.join(PDF_DIR, "EBS24CS-P02 001-002-003-004 NEXORA.pdf")
+    part_a_srn_pdf = os.path.join(PDF_DIR, "EBS24CS-P01 624-012-001-627 VoltEdge-ERPNext.pdf")
+    part_b_srn_pdf = os.path.join(PDF_DIR, "EBS24CS-P02 624-012-001-627 NEXORA.pdf")
 
     part_a_slides = build_part_a_slides(data, logo_uri)
     part_b_pages = build_part_b_brochure(data)
@@ -1650,14 +1652,18 @@ def main():
     with open(part_b_html, "w", encoding="utf-8") as fh:
         fh.write(wrap_html("EBS24CS-P02 NEXORA Digital Sales Brochure", part_b_css, part_b_pages))
 
-    html_to_pdf(browser, part_a_html, part_a_pdf)
-    html_to_pdf(browser, part_b_html, part_b_pdf)
+    html_to_pdf(browser, part_a_html, part_a_srn_pdf)
+    html_to_pdf(browser, part_b_html, part_b_srn_pdf)
+    shutil.copy2(part_a_srn_pdf, part_a_pdf)
+    shutil.copy2(part_b_srn_pdf, part_b_pdf)
+    shutil.copy2(part_a_srn_pdf, os.path.join(os.path.dirname(PROJECT_DIR), os.path.basename(part_a_srn_pdf)))
+    shutil.copy2(part_b_srn_pdf, os.path.join(os.path.dirname(PROJECT_DIR), os.path.basename(part_b_srn_pdf)))
     shutil.copy2(part_a_pdf, os.path.join(os.path.dirname(PROJECT_DIR), os.path.basename(part_a_pdf)))
     shutil.copy2(part_b_pdf, os.path.join(os.path.dirname(PROJECT_DIR), os.path.basename(part_b_pdf)))
     generate_part_b_docx(data)
 
-    print(f"[OK] Part A PDF ({len(part_a_slides)} slides): {part_a_pdf} ({os.path.getsize(part_a_pdf)} bytes)")
-    print(f"[OK] Part B PDF ({len(part_b_pages)}-page A4 brochure): {part_b_pdf} ({os.path.getsize(part_b_pdf)} bytes)")
+    print(f"[OK] Part A PDF ({len(part_a_slides)} slides): {part_a_srn_pdf} ({os.path.getsize(part_a_srn_pdf)} bytes)")
+    print(f"[OK] Part B PDF ({len(part_b_pages)}-page A4 brochure): {part_b_srn_pdf} ({os.path.getsize(part_b_srn_pdf)} bytes)")
 
 
 if __name__ == "__main__":

@@ -560,6 +560,8 @@ def build_part_b_brochure(data):
     for emp in data["employees"]:
         nm = emp["employee_name"].split("(")[0].strip().lower()
         emp_by_name[nm] = emp["srn"]
+        if nm:
+            emp_by_name[nm.split()[0]] = emp["srn"]
 
     # PAGE 1: Front Cover
     p1 = f"""
@@ -940,13 +942,13 @@ def build_part_b_brochure(data):
 
     # PAGE 8: Student Officers, Contacts & References
     officers = [
-        ("Eshaan", "Founder & Chief Executive Officer (CEO)", "Product strategy, customer partnerships & executive governance."),
-        ("Srujan", "Chief Technology Officer (CTO)", "Distributed ERP core, SQL databases, API security & telemetry pipelines."),
-        ("Abhay", "Chief AI Officer (CAIO)", "LSTM demand modeling, edge MQTT + CNN vision & VLM/GNN guardrails."),
-        ("Siri", "Chief Operating Officer (COO)", "Module architecture, client onboarding, QA compliance & finance workflows."),
+        ("ESHAAN K", "Founder & Chief Executive Officer (CEO)", "Product strategy, customer partnerships & executive governance."),
+        ("SHRUJAN N", "Chief Technology Officer (CTO)", "Distributed ERP core, SQL databases, API security & telemetry pipelines."),
+        ("ABHAY A KATTI", "Chief AI Officer (CAIO)", "LSTM demand modeling, edge MQTT + CNN vision & VLM/GNN guardrails."),
+        ("SIRI S S", "Chief Operating Officer (COO)", "Module architecture, client onboarding, QA compliance & finance workflows."),
     ]
     officer_rows = "".join(
-        f"<tr><td><b>{esc(nm)}</b></td><td class='mono'>{esc(emp_by_name.get(nm.lower(), 'PES1UG24CS000'))}</td>"
+        f"<tr><td><b>{esc(nm)}</b></td><td class='mono'>{esc(emp_by_name[nm.lower()])}</td>"
         f"<td>{esc(role)}</td><td>{esc(bio)}</td></tr>"
         for nm, role, bio in officers
     )
@@ -957,7 +959,7 @@ def build_part_b_brochure(data):
             NEXORA is led by its four founding student officers overseeing product engineering, agentic AI research, enterprise database systems, and operational delivery:
         </p>
         <table class="bro">
-            <tr><th style="width:15%;">Student Name</th><th style="width:18%;">SRN</th><th style="width:28%;">Executive Title</th><th>Primary Focus</th></tr>
+            <tr><th style="width:18%;">Student Name</th><th style="width:18%;">SRN</th><th style="width:27%;">Executive Title</th><th>Primary Focus</th></tr>
             {officer_rows}
         </table>
 
