@@ -1,0 +1,36 @@
+# Python bytecode & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# SQLite lock/journal files & stray backend copy (canonical DB stays at root)
+backend/voltedge_ebs.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Intermediate PDF/DOCX build scratch (final PDF/DOCX outputs in pdfs/ remain tracked)
+pdfs/_html_sources/
+
+# Microsoft Office temporary lock files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# ERPNext v16 Docker local volumes & environment secrets
+erpnext_v16_docker/db-data/
+erpnext_v16_docker/sites/
+.env
+*.local.json
+
+# OS, editor & temporary logs
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log
+*.tmp

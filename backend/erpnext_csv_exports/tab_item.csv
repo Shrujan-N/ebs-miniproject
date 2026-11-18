@@ -1,10 +1,13 @@
-item_code,item_name,item_group,uom,standard_selling_rate,valuation_rate,safety_stock,created_by_srn
-ITM-INV-5KW,5kW Hybrid Solar Inverter (IP65),Finished Goods,Nos,68000.0,49500.0,15,Srujan [PES1UG24CS001]
-ITM-INV-10KW,10kW Three-Phase String Inverter,Finished Goods,Nos,118000.0,86000.0,10,Eshaan [PES1UG24CS002]
-ITM-BMS-48V,48V 100A Smart LiFePO4 BMS Controller,Finished Goods,Nos,14500.0,9800.0,30,Siri [PES1UG24CS004]
-ITM-CNV-25KVA,25kVA Industrial AC-DC Power Converter,Finished Goods,Nos,165000.0,122000.0,8,Abhay [PES1UG24CS003]
-ITM-SPD-1000V,1000V DC Surge Protection Device Box,Finished Goods,Nos,8500.0,5400.0,40,Srujan [PES1UG24CS001]
-ITM-PNL-LT400,400V LT Distribution & Synchronization Panel,Finished Goods,Nos,210000.0,154000.0,5,Eshaan [PES1UG24CS002]
-ITM-RAW-MOSFET,1200V SiC MOSFET Half-Bridge Module,Raw Material,Nos,4200.0,3400.0,100,Abhay [PES1UG24CS003]
-ITM-RAW-COIL,High-Frequency Toroidal Copper Inductor,Raw Material,Nos,2600.0,1950.0,80,Siri [PES1UG24CS004]
-ITM-RAW-CHAS,Powder-Coated Aluminum Inverter Chassis,Raw Material,Nos,3800.0,2900.0,50,Srujan [PES1UG24CS001]
+item_code,item_name,item_group,uom,valuation_rate,selling_rate,reorder_level
+ITM-INV-5KW,5kW Hybrid Solar Inverter,Finished Goods,Nos,52000.0,78000.0,8
+ITM-INV-10KW,10kW Three-Phase Grid Inverter,Finished Goods,Nos,88000.0,128000.0,5
+ITM-BMS-48V,48V 200A Smart LiFePO4 BMS,Finished Goods,Nos,16500.0,25500.0,15
+ITM-CNV-25KVA,25kVA Industrial Power Converter,Finished Goods,Nos,140000.0,198000.0,4
+ITM-SPD-1000V,1000V DC Surge Protection Box,Finished Goods,Nos,6800.0,11200.0,20
+ITM-PNL-LT400,400A Three-Phase LT Switchgear Panel,Finished Goods,Nos,92000.0,138000.0,3
+ITM-RAW-MOSFET,SiC MOSFET Power Module,Raw Materials,Nos,4200.0,0.0,40
+ITM-RAW-COIL,Toroidal Copper Inductor Coil,Raw Materials,Nos,3100.0,0.0,35
+ITM-RAW-CHAS,IP65 Anodized Aluminium Chassis,Raw Materials,Nos,5500.0,0.0,25
+ITM-RAW-CELL,3.2V 280Ah Prismatic LiFePO4 Cell,Raw Materials,Nos,3800.0,0.0,50
+ITM-RAW-PCB,4-Layer Immersion Gold Control PCB,Raw Materials,Nos,2400.0,0.0,40
+ITM-RAW-BREAKER,400A MCCB Industrial Breaker Unit,Raw Materials,Nos,14500.0,0.0,12

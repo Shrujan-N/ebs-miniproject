@@ -1,0 +1,25 @@
+stock_entry_id,posting_date,purpose,item_code,warehouse_id,qty,valuation_rate,remarks,owner_emp_id
+STE-2026-0001,2026-05-05,Material Issue for Manufacture,ITM-RAW-MOSFET,WH-PEENYA-RAW,-90,4200.0,Batch-1 BOM issue for Inverter & Converter lines,HR-EMP-0003
+STE-2026-0002,2026-05-05,Material Issue for Manufacture,ITM-RAW-PCB,WH-PEENYA-RAW,-60,2400.0,Batch-1 BOM issue for BMS & Inverter control boards,HR-EMP-0003
+STE-2026-0003,2026-05-05,Material Issue for Manufacture,ITM-RAW-COIL,WH-PEENYA-RAW,-75,3100.0,Batch-1 BOM issue for choke & transformer assembly,HR-EMP-0003
+STE-2026-0004,2026-05-05,Material Issue for Manufacture,ITM-RAW-CHAS,WH-PEENYA-RAW,-55,5500.0,Batch-1 BOM issue for IP65 enclosures & SPD boxes,HR-EMP-0003
+STE-2026-0005,2026-05-05,Material Issue for Manufacture,ITM-RAW-CELL,WH-PEENYA-RAW,-100,3800.0,Batch-1 BOM issue for BMS test & pack validation,HR-EMP-0003
+STE-2026-0006,2026-05-05,Material Issue for Manufacture,ITM-RAW-BREAKER,WH-PEENYA-RAW,-14,14500.0,Batch-1 BOM issue for LT panels & converters,HR-EMP-0003
+STE-2026-0007,2026-05-05,Manufacture,ITM-INV-5KW,WH-WHITEFIELD-FG,24,52000.0,WO-2026-0001 Batch-1 5kW Inverter assembly complete,HR-EMP-0003
+STE-2026-0008,2026-05-05,Manufacture,ITM-INV-10KW,WH-WHITEFIELD-FG,15,88000.0,WO-2026-0002 Batch-1 10kW Inverter assembly complete,HR-EMP-0003
+STE-2026-0009,2026-05-05,Manufacture,ITM-BMS-48V,WH-WHITEFIELD-FG,50,16500.0,WO-2026-0003 Batch-1 Smart BMS SMT & burn-in complete,HR-EMP-0003
+STE-2026-0010,2026-05-05,Manufacture,ITM-CNV-25KVA,WH-WHITEFIELD-FG,8,140000.0,WO-2026-0004 Batch-1 25kVA Converter QC passed,HR-EMP-0003
+STE-2026-0011,2026-05-05,Manufacture,ITM-SPD-1000V,WH-WHITEFIELD-FG,55,6800.0,WO-2026-0005 Batch-1 DC Surge Box batch complete,HR-EMP-0003
+STE-2026-0012,2026-05-05,Manufacture,ITM-PNL-LT400,WH-WHITEFIELD-FG,6,92000.0,WO-2026-0006 Batch-1 LT Switchgear tested,HR-EMP-0003
+STE-2026-0013,2026-06-20,Material Issue for Manufacture,ITM-RAW-MOSFET,WH-PEENYA-RAW,-70,4200.0,Batch-2 BOM issue for Q2 replenishment,HR-EMP-0003
+STE-2026-0014,2026-06-20,Material Issue for Manufacture,ITM-RAW-PCB,WH-PEENYA-RAW,-60,2400.0,Batch-2 BOM issue for control logic boards,HR-EMP-0003
+STE-2026-0015,2026-06-20,Material Issue for Manufacture,ITM-RAW-COIL,WH-PEENYA-RAW,-50,3100.0,Batch-2 BOM issue for magnetic cores,HR-EMP-0003
+STE-2026-0016,2026-06-20,Material Issue for Manufacture,ITM-RAW-CHAS,WH-PEENYA-RAW,-40,5500.0,Batch-2 BOM issue for housings,HR-EMP-0003
+STE-2026-0017,2026-06-20,Material Issue for Manufacture,ITM-RAW-CELL,WH-PEENYA-RAW,-80,3800.0,Batch-2 BOM issue for BMS harness assembly,HR-EMP-0003
+STE-2026-0018,2026-06-20,Material Issue for Manufacture,ITM-RAW-BREAKER,WH-PEENYA-RAW,-12,14500.0,Batch-2 BOM issue for switchgear replenishment,HR-EMP-0003
+STE-2026-0019,2026-06-20,Manufacture,ITM-INV-5KW,WH-WHITEFIELD-FG,12,52000.0,WO-2026-0007 Batch-2 5kW Inverter replenishment,HR-EMP-0003
+STE-2026-0020,2026-06-20,Manufacture,ITM-INV-10KW,WH-WHITEFIELD-FG,10,88000.0,WO-2026-0008 Batch-2 10kW Inverter replenishment,HR-EMP-0003
+STE-2026-0021,2026-06-20,Manufacture,ITM-BMS-48V,WH-WHITEFIELD-FG,30,16500.0,WO-2026-0009 Batch-2 Smart BMS replenishment,HR-EMP-0003
+STE-2026-0022,2026-06-20,Manufacture,ITM-CNV-25KVA,WH-WHITEFIELD-FG,5,140000.0,WO-2026-0010 Batch-2 25kVA Converter replenishment,HR-EMP-0003
+STE-2026-0023,2026-06-20,Manufacture,ITM-SPD-1000V,WH-WHITEFIELD-FG,30,6800.0,WO-2026-0011 Batch-2 DC Surge Box replenishment,HR-EMP-0003
+STE-2026-0024,2026-06-20,Manufacture,ITM-PNL-LT400,WH-WHITEFIELD-FG,5,92000.0,WO-2026-0012 Batch-2 LT Switchgear replenishment,HR-EMP-0003

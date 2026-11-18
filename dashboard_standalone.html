@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VoltEdge Power Systems Pvt. Ltd. — ERPNext v16 Showcase</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Calibri, Arial, sans-serif;
+            background-color: #F7F9FC;
+            color: #111827;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+        a {
+            color: #1E3A8A;
+            text-decoration: none;
+        }
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12px;
+            text-transform: none;
+            background: #F1F5F9;
+            border: 1px solid #D0D7DE;
+            border-radius: 3px;
+            padding: 1px 5px;
+            color: #1E3A8A;
+        }
+
+        /* Clean Student Academic Header Bar */
+        .site-header {
+            background-color: #FFFFFF;
+            border-top: 4px solid #1E3A8A;
+            border-bottom: 1px solid #D0D7DE;
+        }
+        .header-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid #1E3A8A;
+            border-radius: 4px;
+            background: #EFF6FF;
+            color: #1E3A8A;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .header-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1E3A8A;
+        }
+        .header-sub {
+            margin: 2px 0 0 0;
+            font-size: 12.5px;
+            color: #4B5563;
+        }
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* Buttons & Badges */
+        .btn {
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #1F2937;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #F1F5F9;
+        }
+        .btn-primary {
+            background: #1E3A8A;
+            border-color: #1E3A8A;
+            color: #FFFFFF;
+        }
+        .btn-primary:hover {
+            background: #172E6E;
+        }
+        .btn-teal {
+            background: #FFFFFF;
+            border-color: #0F766E;
+            color: #0F766E;
+        }
+        .btn-teal:hover {
+            background: #E6F4F1;
+        }
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11.5px;
+            font-weight: 600;
+            border: 1px solid #CBD5E1;
+            background: #F8FAFC;
+            color: #334155;
+            white-space: nowrap;
+        }
+        .badge-navy {
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+            color: #1E3A8A;
+        }
+        .badge-teal {
+            background: #E6F4F1;
+            border-color: #99D5C9;
+            color: #0F766E;
+        }
+        .badge-amber {
+            background: #FEF7ED;
+            border-color: #FDE68A;
+            color: #B45309;
+        }
+
+        /* Tab Bar */
+        .tab-bar {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            border-top: 1px solid #E2E8F0;
+            background: #FAFBFD;
+        }
+        .tab-btn {
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 14px;
+            border: none;
+            border-bottom: 3px solid transparent;
+            background: transparent;
+            color: #4B5563;
+            cursor: pointer;
+        }
+        .tab-btn:hover {
+            color: #1E3A8A;
+        }
+        .tab-btn.active {
+            color: #1E3A8A;
+            background: #EFF6FF;
+            border-bottom-color: #1E3A8A;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1180px;
+            margin: 18px auto 36px auto;
+            padding: 0 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .section-gap {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* Card & Grid Helpers */
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #D0D7DE;
+            border-radius: 5px;
+            padding: 16px 18px;
+        }
+        .card-navy {
+            border-top: 3px solid #1E3A8A;
+        }
+        .card-teal {
+            border-top: 3px solid #0F766E;
+        }
+        .card-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .card-title {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1E3A8A;
+        }
+        .card-title.teal {
+            color: #0F766E;
+        }
+        .card-sub {
+            margin: 3px 0 0 0;
+            font-size: 12.5px;
+            color: #4B5563;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
+        }
+        .kpi-card {
+            background: #FFFFFF;
+            border: 1px solid #D0D7DE;
+            border-left: 4px solid #1E3A8A;
+            border-radius: 4px;
+            padding: 14px 16px;
+        }
+        .kpi-card.teal {
+            border-left-color: #0F766E;
+        }
+        .kpi-label {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #4B5563;
+        }
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+            margin: 4px 0;
+        }
+        .kpi-sub {
+            font-size: 12px;
+            color: #4B5563;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 16px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        /* Single-Order 5-Stage Chain Tracer */
+        .chain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .chain-step {
+            border: 1px solid #CBD5E1;
+            border-radius: 4px;
+            padding: 10px 12px;
+            background: #F8FAFC;
+        }
+        .chain-step.completed {
+            border-color: #0F766E;
+            background: #F0F9F7;
+        }
+        .chain-step.current {
+            border-color: #1E3A8A;
+            background: #EFF6FF;
+        }
+        .chain-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 9px 12px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+            font-size: 12.5px;
+        }
+
+        /* Tables */
+        .table-wrap {
+            overflow-x: auto;
+        }
+        .table-scroll {
+            max-height: 330px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
+        th {
+            background-color: #EDF2F9;
+            color: #1E3A8A;
+            font-weight: 700;
+            text-align: left;
+            padding: 8px 10px;
+            border-bottom: 1.5px solid #BFDBFE;
+            white-space: nowrap;
+        }
+        .th-teal th {
+            background-color: #EBF5F3;
+            color: #0F766E;
+            border-bottom-color: #99D5C9;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #E5E7EB;
+            vertical-align: middle;
+        }
+        tbody tr:nth-child(even) td {
+            background-color: #FAFBFC;
+        }
+        tbody tr:hover td {
+            background-color: #EFF6FF;
+        }
+        .mono {
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        /* Charts */
+        .chart-box {
+            height: 245px;
+            position: relative;
+        }
+        .fallback-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .fallback-bar-track {
+            flex: 1;
+            background: #E2E8F0;
+            height: 16px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .fallback-bar-fill {
+            height: 100%;
+            background: #1E3A8A;
+        }
+
+        /* Team & Schema Mini Cards */
+        .team-card {
+            border: 1px solid #CBD5E1;
+            border-top: 3px solid #1E3A8A;
+            border-radius: 4px;
+            padding: 10px 12px;
+            background: #FAFBFD;
+        }
+        .schema-card {
+            border: 1px solid #CBD5E1;
+            border-radius: 4px;
+            padding: 10px 12px;
+            background: #FAFBFD;
+            font-size: 12px;
+        }
+        .schema-card-head {
+            display: flex;
+            justify-content: space-between;
+            font-family: Consolas, monospace;
+            font-weight: 700;
+            color: #1E3A8A;
+            border-bottom: 1px solid #D0D7DE;
+            padding-bottom: 5px;
+            margin-bottom: 6px;
+        }
+        .schema-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-family: Consolas, monospace;
+            font-size: 11.5px;
+            color: #334155;
+            line-height: 1.55;
+        }
+
+        /* Form Inputs & Modals */
+        select, input[type="text"], input[type="number"] {
+            font-family: inherit;
+            font-size: 12.5px;
+            padding: 6px 9px;
+            border: 1px solid #CBD5E1;
+            border-radius: 4px;
+            background: #FFFFFF;
+            color: #111827;
+        }
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-box {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-top: 4px solid #1E3A8A;
+            border-radius: 5px;
+            max-width: 440px;
+            width: 100%;
+            padding: 18px 20px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+        }
+
+        /* Banner & Footer */
+        .toast {
+            padding: 10px 14px;
+            border-radius: 4px;
+            border: 1px solid #99D5C9;
+            background: #E6F4F1;
+            color: #0F766E;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .toast.error {
+            border-color: #FCA5A5;
+            background: #FEF2F2;
+            color: #B91C1C;
+        }
+        .site-footer {
+            background: #FFFFFF;
+            border-top: 1px solid #D0D7DE;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #4B5563;
+        }
+        .info-box {
+            padding: 12px 14px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-left: 3px solid #1E3A8A;
+            border-radius: 4px;
+            font-size: 12.5px;
+            line-height: 1.55;
+        }
+        .info-box.teal {
+            border-left-color: #0F766E;
+        }
+        .mis-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #F1F5F9;
+            font-size: 12.5px;
+        }
+        .text-teal { color: #0F766E; font-weight: 700; }
+        .text-navy { color: #1E3A8A; font-weight: 700; }
+        .text-amber { color: #B45309; font-weight: 700; }
+        .text-red { color: #B91C1C; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand-row">
+                <div class="logo-box">VE</div>
+                <div>
+                    <h1 class="header-title">VoltEdge Power Systems Pvt. Ltd. — ERPNext v16 Prototype</h1>
+                    <p class="header-sub">
+                        22UECS352A / UE24CS343AB8 Enterprise Business Systems · Group EBS24CS-P02 · O2C, Raw-Material P2P &amp; Calculated Stock Ledger
+                    </p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button onclick="openCreateModal('SO')" class="btn btn-primary">+ New Sales Order</button>
+                <button onclick="openCreateModal('PO')" class="btn btn-teal">+ New Purchase Order (RM)</button>
+                <button onclick="resetDatabase()" class="btn">Reset Demo Data</button>
+                <a href="/nexora" class="btn">Open Part B Brochure →</a>
+            </div>
+        </div>
+
+        <nav class="tab-bar">
+            <button id="btn-tab1" onclick="switchTab('tab1')" class="tab-btn active">1. Overview &amp; 5-Doc Chain</button>
+            <button id="btn-tab2" onclick="switchTab('tab2')" class="tab-btn">2. O2C &amp; P2P Transactions</button>
+            <button id="btn-tab3" onclick="switchTab('tab3')" class="tab-btn">3. Master Data (12 SKUs, Parties)</button>
+            <button id="btn-tab4" onclick="switchTab('tab4')" class="tab-btn">4. Calculated Stock &amp; MIS Reports</button>
+            <button id="btn-tab5" onclick="switchTab('tab5')" class="tab-btn">5. ERPNext v16 Info &amp; MariaDB Schema</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div id="toastBanner" class="toast hidden">
+            <span id="toastMessage"></span>
+            <button onclick="document.getElementById('toastBanner').classList.add('hidden')" class="btn btn-sm">✕</button>
+        </div>
+
+        <!-- TAB 1: OVERVIEW & 5-STAGE CHAIN TRACER -->
+        <section id="tab1" class="section-gap">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total B2B Sales Revenue (O2C)</div>
+                    <div id="kpiRevenue" class="kpi-value">₹0.00L</div>
+                    <div id="kpiRevenueSub" class="kpi-sub">Loading...</div>
+                </div>
+                <div class="kpi-card teal">
+                    <div class="kpi-label">Raw Material Spend (P2P)</div>
+                    <div id="kpiProcurement" class="kpi-value">₹0.00L</div>
+                    <div id="kpiProcurementSub" class="kpi-sub">Loading...</div>
+                </div>
+                <div class="kpi-card teal">
+                    <div class="kpi-label">Calculated Stock Value (<code>tabBin</code>)</div>
+                    <div id="kpiInventory" class="kpi-value">₹0.00L</div>
+                    <div id="kpiInventorySub" class="kpi-sub">Loading...</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Stock Ledger Audit Integrity</div>
+                    <div id="kpiLedgerCount" class="kpi-value">0 SLE</div>
+                    <div id="kpiIntegritySub" class="kpi-sub text-teal">Checking rule...</div>
+                </div>
+            </div>
+
+            <!-- Single Document 5-Stage Tracer -->
+            <div class="card card-navy">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Single-Document 5-Stage Lifecycle Tracer</h2>
+                        <p class="card-sub">Select any order to trace one document end-to-end across all 5 ERPNext stages (<code>QTN → SO → DN → SINV → PAY</code> or <code>MR → PO → PR → PINV → PAY</code>).</p>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <select id="chainTypeSelect" onchange="populateChainSelector()">
+                            <option value="SO">Order-to-Cash (O2C)</option>
+                            <option value="PO">Procure-to-Pay (P2P)</option>
+                        </select>
+                        <select id="chainDocSelect" onchange="renderChainTracer()" class="mono"></select>
+                        <button onclick="advanceSelectedChain()" class="btn btn-primary btn-sm">Advance 1 Stage →</button>
+                    </div>
+                </div>
+
+                <div id="chainSummaryMeta" class="chain-meta"></div>
+                <div id="chainStepsGrid" class="chain-grid"></div>
+                <div id="chainItemsDetail" class="info-box"></div>
+            </div>
+
+            <!-- Two Analytical Charts -->
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Monthly O2C Sales Revenue (₹ Lakhs)</h3>
+                    </div>
+                    <div class="chart-box" id="salesChartWrap">
+                        <canvas id="salesTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title teal">Raw Material Spend by Supplier (₹ Lakhs)</h3>
+                    </div>
+                    <div class="chart-box" id="purchaseChartWrap">
+                        <canvas id="purchaseDistChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Team Officers -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Project Team Ownership (Editable SRNs in <code>backend/seed_data.py</code>)</h3>
+                    <span class="badge badge-navy">4 PES University Project Officers</span>
+                </div>
+                <div id="teamCards" class="grid-4"></div>
+            </div>
+        </section>
+
+        <!-- TAB 2: O2C & P2P TRANSACTIONS -->
+        <section id="tab2" class="section-gap hidden">
+            <div class="card card-navy">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Order-to-Cash (O2C) Sales Orders (<code>tabSales Order</code>)</h2>
+                        <p class="card-sub">Finished Goods customer pipeline with linked Quotation, Delivery Note, Sales Invoice, and Payment Entry IDs.</p>
+                    </div>
+                    <button onclick="openCreateModal('SO')" class="btn btn-primary btn-sm">+ Create Sales Order</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sales Order</th>
+                                <th>Customer</th>
+                                <th>Dates</th>
+                                <th>Ordered Items</th>
+                                <th>5-Document Chain</th>
+                                <th>Stage / Status</th>
+                                <th>Grand Total (18% GST)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="soTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-teal">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title teal">Procure-to-Pay (P2P) Purchase Orders (<code>tabPurchase Order</code>)</h2>
+                        <p class="card-sub text-teal">Rule Enforced: 100% of POs procure Raw Materials (<code>ITM-RAW-*</code>) only; Finished Goods are manufactured via Stock Entry.</p>
+                    </div>
+                    <button onclick="openCreateModal('PO')" class="btn btn-teal btn-sm">+ Create PO (Raw Materials)</button>
+                </div>
+                <div class="table-wrap th-teal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Purchase Order</th>
+                                <th>Supplier</th>
+                                <th>Dates</th>
+                                <th>Raw Material Items Only</th>
+                                <th>5-Document Chain</th>
+                                <th>Stage / Status</th>
+                                <th>Grand Total (18% GST)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="poTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: MASTER DATA DIRECTORY -->
+        <section id="tab3" class="section-gap hidden">
+            <div class="card card-navy">
+                <div class="card-header">
+                    <h2 class="card-title">Item Master (<code>tabItem</code> — 6 Finished Goods &amp; 6 Raw Materials)</h2>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Code</th>
+                                <th>Item Name</th>
+                                <th>Item Group</th>
+                                <th>UOM</th>
+                                <th>Valuation Rate</th>
+                                <th>Selling Rate</th>
+                                <th>Reorder Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Customers (<code>tabCustomer</code> — 8 Accounts)</h2>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer Name</th>
+                                    <th>State</th>
+                                    <th>GSTIN</th>
+                                    <th>Credit Limit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="custTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title teal">Suppliers (<code>tabSupplier</code> — 6 RM Vendors)</h2>
+                    </div>
+                    <div class="table-wrap th-teal">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Supplier Name</th>
+                                    <th>Specialty</th>
+                                    <th>GSTIN</th>
+                                    <th>Terms</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Warehouses (<code>tabWarehouse</code> — 4 Locations)</h2>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Warehouse ID</th>
+                                <th>Warehouse Name</th>
+                                <th>Type</th>
+                                <th>City</th>
+                                <th>Custodian</th>
+                            </tr>
+                        </thead>
+                        <tbody id="whTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: CALCULATED STOCK & MIS REPORTS -->
+        <section id="tab4" class="section-gap hidden">
+            <div class="grid-2">
+                <div class="card card-navy">
+                    <div class="card-header">
+                        <h2 class="card-title">MIS Report 1: Sales &amp; Receivables Breakdown</h2>
+                    </div>
+                    <div id="misSalesBox"></div>
+                </div>
+                <div class="card card-teal">
+                    <div class="card-header">
+                        <h2 class="card-title teal">MIS Report 2: Raw Material Procurement Summary</h2>
+                    </div>
+                    <div id="misProcBox"></div>
+                </div>
+            </div>
+
+            <div class="card card-teal">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title teal">MIS Report 3: Calculated Stock Ledger (<code>tabBin</code>) — <code>SUM(Stock Ledger Entry)</code></h2>
+                        <p class="card-sub">Every Actual Qty, Reserved Qty (open SOs), and Available Qty recalculates mathematically via SQL queries.</p>
+                    </div>
+                    <span class="badge badge-teal">Auto-Calculated via SQL</span>
+                </div>
+                <div class="table-wrap th-teal">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Code</th>
+                                <th>Item Name</th>
+                                <th>Group</th>
+                                <th>Warehouse</th>
+                                <th>Actual Qty</th>
+                                <th>Reserved (SO)</th>
+                                <th>Available Qty</th>
+                                <th>Reorder Lvl</th>
+                                <th>Stock Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title teal">Manufacturing &amp; BOM Vouchers (<code>tabStock Entry</code> — 24)</h2>
+                    </div>
+                    <div class="table-wrap table-scroll th-teal">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Entry ID</th>
+                                    <th>Date</th>
+                                    <th>Purpose</th>
+                                    <th>Item</th>
+                                    <th>Qty Δ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="steTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Audit Trail (<code>tabStock Ledger Entry</code>)</h2>
+                    </div>
+                    <div class="table-wrap table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SLE ID</th>
+                                    <th>Date</th>
+                                    <th>Voucher</th>
+                                    <th>Item</th>
+                                    <th>Δ Qty</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sleTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: ERPNEXT V16 FACTS & MARIADB SCHEMA -->
+        <section id="tab5" class="section-gap hidden">
+            <div class="card card-navy">
+                <div class="card-header">
+                    <h2 class="card-title">Verified ERPNext v16 Architecture &amp; Product Facts (2026)</h2>
+                </div>
+                <div class="grid-2">
+                    <div class="info-box">
+                        <div class="text-navy" style="margin-bottom:6px;">1. Release Version &amp; Database Stack</div>
+                        <p style="margin:4px 0;"><strong>Latest Release:</strong> <strong>ERPNext v16</strong> (<code>v16.0.0</code>, released <strong>12 January 2026</strong> on Frappe Framework v16, alongside v15 LTS). License: GNU GPL v3.</p>
+                        <p style="margin:4px 0;"><strong>Production Stack:</strong> <strong>MariaDB 10.6+ (InnoDB, UTF8MB4)</strong> with <code>tab*</code> DocType tables (<code>backend/erpnext_mariadb_schema.sql</code>), Python 3.12+, Redis, and Vue 3 Desk.</p>
+                        <p style="margin:4px 0;"><strong>Local Prototype vs. Live Container:</strong> <code>voltedge_ebs.db</code> (SQLite) powers this offline showcase; <code>erpnext_v16_docker/docker-compose.yml</code> runs real <code>frappe/erpnext:v16.0.0</code> + MariaDB 10.6 on port <code>8080</code>.</p>
+                    </div>
+                    <div class="info-box teal">
+                        <div class="text-teal" style="margin-bottom:6px;">2. Verified Frappe / ERPNext Client Deployments (<code>frappe.io/blog</code>)</div>
+                        <p style="margin:4px 0;"><strong>Verified Companies:</strong> <strong>Precihole Sports</strong> (precision engineering), <strong>Banaraswala Wire Mesh</strong> (wire manufacturing), <strong>Multicolor Steels</strong> (roll-forming steel), <strong>Rangsutra</strong> (retail &amp; craft supply chain), and <strong>Shizuoka General Hospital</strong>.</p>
+                        <p style="margin:4px 0;"><strong>Attribution Note:</strong> <strong>Zerodha (Rainmatter)</strong> is an equity investor in Frappe Technologies, <em>not</em> a documented ERP customer implementation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Authentic ERPNext v16 MariaDB Schema (13 <code>tab*</code> DocType Tables)</h2>
+                        <p class="card-sub">Matches <code>backend/erpnext_mariadb_schema.sql</code> &amp; <code>backend/schema.dbml</code> with Frappe primary key (<code>name</code>), <code>docstatus</code>, and <code>parent</code> links.</p>
+                    </div>
+                    <span class="badge badge-navy">MariaDB 10.6+ InnoDB</span>
+                </div>
+                <div id="schemaCardsGrid" class="grid-3"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        VoltEdge Power Systems Pvt. Ltd. · Enterprise Business Systems (22UECS352A / UE24CS343AB8) · Group EBS24CS-P02
+    </footer>
+
+    <!-- Edit Record Modal -->
+    <div id="editModal" class="modal-backdrop hidden">
+        <div class="modal-box">
+            <div class="card-header">
+                <h3 class="card-title">Advance / Edit ERPNext Document</h3>
+                <button onclick="closeEditModal()" class="btn btn-sm">✕</button>
+            </div>
+            <input type="hidden" id="modalRecordType" />
+            <div class="form-group">
+                <label>Document ID</label>
+                <input id="modalRecordId" type="text" readonly style="background:#F1F5F9;" class="mono" />
+            </div>
+            <div class="form-group">
+                <label>ERPNext Workflow Stage</label>
+                <select id="modalWorkflowStage"></select>
+            </div>
+            <div class="form-group">
+                <label>Document Status</label>
+                <input id="modalStatus" type="text" />
+            </div>
+            <div class="form-group">
+                <label>Grand Total (₹ incl. 18% GST)</label>
+                <input id="modalAmount" type="number" step="0.01" />
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:8px; border-top:1px solid #E2E8F0;">
+                <button onclick="closeEditModal()" class="btn">Cancel</button>
+                <button onclick="submitEditModal()" class="btn btn-primary">Save &amp; Recalculate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Order Modal -->
+    <div id="createModal" class="modal-backdrop hidden">
+        <div class="modal-box">
+            <div class="card-header">
+                <h3 id="createModalTitle" class="card-title">Create New Order</h3>
+                <button onclick="closeCreateModal()" class="btn btn-sm">✕</button>
+            </div>
+            <input type="hidden" id="createType" />
+            <div class="form-group">
+                <label id="createPartyLabel">Party</label>
+                <select id="createPartyId"></select>
+            </div>
+            <div class="form-group">
+                <label id="createItemLabel">Item</label>
+                <select id="createItemCode"></select>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input id="createQty" type="number" min="1" value="5" />
+                </div>
+                <div class="form-group">
+                    <label>Workflow Stage</label>
+                    <select id="createStage"></select>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; padding-top:8px; border-top:1px solid #E2E8F0;">
+                <button onclick="closeCreateModal()" class="btn">Cancel</button>
+                <button onclick="submitCreateModal()" class="btn btn-primary">Submit Document</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let appData = {"team": [{"employee_id": "HR-EMP-0001", "employee_name": "Srujan S", "srn": "PES1UG24CS001", "designation": "Sales & CRM Manager", "department": "Sales & Operations", "email": "srujan@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0002", "employee_name": "Eshaan Menon", "srn": "PES1UG24CS002", "designation": "Procurement & SCM Lead", "department": "Procurement & Logistics", "email": "eshaan@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0003", "employee_name": "Abhay Verma", "srn": "PES1UG24CS003", "designation": "Manufacturing & Quality Lead", "department": "Production & QC", "email": "abhay@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0004", "employee_name": "Siri Kulkarni", "srn": "PES1UG24CS004", "designation": "Finance & ERP Systems Admin", "department": "Finance & IT", "email": "siri@voltedge-power.in", "status": "Active"}], "employees": [{"employee_id": "HR-EMP-0001", "employee_name": "Srujan S", "srn": "PES1UG24CS001", "designation": "Sales & CRM Manager", "department": "Sales & Operations", "email": "srujan@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0002", "employee_name": "Eshaan Menon", "srn": "PES1UG24CS002", "designation": "Procurement & SCM Lead", "department": "Procurement & Logistics", "email": "eshaan@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0003", "employee_name": "Abhay Verma", "srn": "PES1UG24CS003", "designation": "Manufacturing & Quality Lead", "department": "Production & QC", "email": "abhay@voltedge-power.in", "status": "Active"}, {"employee_id": "HR-EMP-0004", "employee_name": "Siri Kulkarni", "srn": "PES1UG24CS004", "designation": "Finance & ERP Systems Admin", "department": "Finance & IT", "email": "siri@voltedge-power.in", "status": "Active"}], "payment_terms": [{"payment_term_id": "PT-ADV", "term_name": "100% Advance", "credit_days": 0, "description": "Full payment prior to warehouse dispatch"}, {"payment_term_id": "PT-NET15", "term_name": "Net 15 Days", "credit_days": 15, "description": "Due 15 days from Tax Invoice date"}, {"payment_term_id": "PT-NET30", "term_name": "Net 30 Days", "credit_days": 30, "description": "Standard B2B industrial 30-day credit"}, {"payment_term_id": "PT-NET45", "term_name": "Net 45 Days", "credit_days": 45, "description": "Utility and Tier-1 EPC contractor terms"}], "customers": [{"customer_id": "CUS-2026-0001", "customer_name": "Apex Industrial Drives Pvt Ltd", "customer_group": "Industrial Manufacturing", "territory": "Karnataka", "gstin": "29AABCA4812K1Z5", "credit_limit": 2500000.0, "default_payment_term": "PT-NET30", "account_manager_id": "HR-EMP-0001", "term_name": "Net 30 Days", "manager_name": "Srujan S"}, {"customer_id": "CUS-2026-0002", "customer_name": "Deccan Solar Grid Corp", "customer_group": "Utility & Solar EPC", "territory": "Telangana", "gstin": "36AABCD9012M1Z2", "credit_limit": 3500000.0, "default_payment_term": "PT-NET45", "account_manager_id": "HR-EMP-0001", "term_name": "Net 45 Days", "manager_name": "Srujan S"}, {"customer_id": "CUS-2026-0003", "customer_name": "Kaveri Precision Robotics", "customer_group": "Industrial Manufacturing", "territory": "Tamil Nadu", "gstin": "33AABCK3319P1Z8", "credit_limit": 1800000.0, "default_payment_term": "PT-NET30", "account_manager_id": "HR-EMP-0001", "term_name": "Net 30 Days", "manager_name": "Srujan S"}, {"customer_id": "CUS-2026-0004", "customer_name": "Sahyadri Green Microgrids", "customer_group": "Utility & Solar EPC", "territory": "Maharashtra", "gstin": "27AABCS7741L1Z1", "credit_limit": 2800000.0, "default_payment_term": "PT-NET45", "account_manager_id": "HR-EMP-0001", "term_name": "Net 45 Days", "manager_name": "Srujan S"}, {"customer_id": "CUS-2026-0005", "customer_name": "Nandi Metro Rail Contracting", "customer_group": "Infrastructure", "territory": "Karnataka", "gstin": "29AABCN1122R1Z9", "credit_limit": 4000000.0, "default_payment_term": "PT-NET30", "account_manager_id": "HR-EMP-0004", "term_name": "Net 30 Days", "manager_name": "Siri Kulkarni"}, {"customer_id": "CUS-2026-0006", "customer_name": "Bharat ColdChain Logistics", "customer_group": "Commercial Cold Storage", "territory": "Gujarat", "gstin": "24AABCB6620E1Z4", "credit_limit": 2000000.0, "default_payment_term": "PT-NET15", "account_manager_id": "HR-EMP-0001", "term_name": "Net 15 Days", "manager_name": "Srujan S"}, {"customer_id": "CUS-2026-0007", "customer_name": "Vindhya Telecom Towers Ltd", "customer_group": "Telecom Infrastructure", "territory": "Madhya Pradesh", "gstin": "23AABCV8832F1Z7", "credit_limit": 2200000.0, "default_payment_term": "PT-NET30", "account_manager_id": "HR-EMP-0004", "term_name": "Net 30 Days", "manager_name": "Siri Kulkarni"}, {"customer_id": "CUS-2026-0008", "customer_name": "Malabar Agro Processing Co", "customer_group": "Commercial Manufacturing", "territory": "Kerala", "gstin": "32AABCM5518G1Z3", "credit_limit": 1200000.0, "default_payment_term": "PT-ADV", "account_manager_id": "HR-EMP-0001", "term_name": "100% Advance", "manager_name": "Srujan S"}], "suppliers": [{"supplier_id": "SUP-2026-0001", "supplier_name": "SemiCore Components India", "supplier_group": "Power Semiconductors", "country": "India", "gstin": "29AABCS1001A1Z1", "default_payment_term": "PT-NET30", "buyer_id": "HR-EMP-0002", "term_name": "Net 30 Days", "buyer_name": "Eshaan Menon"}, {"supplier_id": "SUP-2026-0002", "supplier_name": "Vayu Magnetics & Coils", "supplier_group": "Inductive Components", "country": "India", "gstin": "27AABCV2002B1Z2", "default_payment_term": "PT-NET30", "buyer_id": "HR-EMP-0002", "term_name": "Net 30 Days", "buyer_name": "Eshaan Menon"}, {"supplier_id": "SUP-2026-0003", "supplier_name": "CellVolt Energy Cells LLP", "supplier_group": "Battery Cells", "country": "India", "gstin": "33AABCC3003C1Z3", "default_payment_term": "PT-NET15", "buyer_id": "HR-EMP-0002", "term_name": "Net 15 Days", "buyer_name": "Eshaan Menon"}, {"supplier_id": "SUP-2026-0004", "supplier_name": "CircuitCraft EMS Pvt Ltd", "supplier_group": "Control PCBs", "country": "India", "gstin": "29AABCC4004D1Z4", "default_payment_term": "PT-NET30", "buyer_id": "HR-EMP-0003", "term_name": "Net 30 Days", "buyer_name": "Abhay Verma"}, {"supplier_id": "SUP-2026-0005", "supplier_name": "AluCast Enclosures Ltd", "supplier_group": "Sheet Metal & Chassis", "country": "India", "gstin": "24AABCA5005E1Z5", "default_payment_term": "PT-NET45", "buyer_id": "HR-EMP-0002", "term_name": "Net 45 Days", "buyer_name": "Eshaan Menon"}, {"supplier_id": "SUP-2026-0006", "supplier_name": "SwitchGear Controls India", "supplier_group": "Electrical Breakers", "country": "India", "gstin": "27AABCS6006F1Z6", "default_payment_term": "PT-NET30", "buyer_id": "HR-EMP-0003", "term_name": "Net 30 Days", "buyer_name": "Abhay Verma"}], "items": [{"item_code": "ITM-BMS-48V", "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 16500.0, "selling_rate": 25500.0, "reorder_level": 15}, {"item_code": "ITM-CNV-25KVA", "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 140000.0, "selling_rate": 198000.0, "reorder_level": 4}, {"item_code": "ITM-INV-10KW", "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 88000.0, "selling_rate": 128000.0, "reorder_level": 5}, {"item_code": "ITM-INV-5KW", "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 52000.0, "selling_rate": 78000.0, "reorder_level": 8}, {"item_code": "ITM-PNL-LT400", "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 92000.0, "selling_rate": 138000.0, "reorder_level": 3}, {"item_code": "ITM-SPD-1000V", "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "uom": "Nos", "valuation_rate": 6800.0, "selling_rate": 11200.0, "reorder_level": 20}, {"item_code": "ITM-RAW-BREAKER", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 14500.0, "selling_rate": 0.0, "reorder_level": 12}, {"item_code": "ITM-RAW-CELL", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 3800.0, "selling_rate": 0.0, "reorder_level": 50}, {"item_code": "ITM-RAW-CHAS", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 5500.0, "selling_rate": 0.0, "reorder_level": 25}, {"item_code": "ITM-RAW-COIL", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 3100.0, "selling_rate": 0.0, "reorder_level": 35}, {"item_code": "ITM-RAW-MOSFET", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 4200.0, "selling_rate": 0.0, "reorder_level": 40}, {"item_code": "ITM-RAW-PCB", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "uom": "Nos", "valuation_rate": 2400.0, "selling_rate": 0.0, "reorder_level": 40}], "warehouses": [{"warehouse_id": "WH-ELECTRONIC-WIP", "warehouse_name": "Bommasandra Assembly WIP", "warehouse_type": "Work In Progress", "city": "Bengaluru", "manager_id": "HR-EMP-0003", "manager_name": "Abhay Verma"}, {"warehouse_id": "WH-PEENYA-RAW", "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material", "city": "Bengaluru", "manager_id": "HR-EMP-0002", "manager_name": "Eshaan Menon"}, {"warehouse_id": "WH-QA-QUARANTINE", "warehouse_name": "QC Hold & Inspection Store", "warehouse_type": "Inspection", "city": "Bengaluru", "manager_id": "HR-EMP-0003", "manager_name": "Abhay Verma"}, {"warehouse_id": "WH-WHITEFIELD-FG", "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods", "city": "Bengaluru", "manager_id": "HR-EMP-0001", "manager_name": "Srujan S"}], "sales_orders": [{"so_id": "SAL-ORD-2026-0001", "customer_id": "CUS-2026-0001", "order_date": "2026-05-06", "delivery_date": "2026-05-14", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0001", "delivery_note_id": "MAT-DN-2026-0001", "sales_invoice_id": "ACC-SINV-2026-0001", "payment_entry_id": "ACC-PAY-2026-0001", "net_total": 672000.0, "gst_amount": 120960.0, "total_amount": 792960.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Apex Industrial Drives Pvt Ltd", "owner_name": "Srujan S", "items_summary": "48V 200A Smart LiFePO4 BMS (x8), 5kW Hybrid Solar Inverter (x6)", "line_items": [{"so_id": "SAL-ORD-2026-0001", "item_code": "ITM-INV-5KW", "item_name": "5kW Hybrid Solar Inverter", "qty": 6, "rate": 78000.0, "amount": 468000.0}, {"so_id": "SAL-ORD-2026-0001", "item_code": "ITM-BMS-48V", "item_name": "48V 200A Smart LiFePO4 BMS", "qty": 8, "rate": 25500.0, "amount": 204000.0}]}, {"so_id": "SAL-ORD-2026-0002", "customer_id": "CUS-2026-0002", "order_date": "2026-05-10", "delivery_date": "2026-05-18", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0002", "delivery_note_id": "MAT-DN-2026-0002", "sales_invoice_id": "ACC-SINV-2026-0002", "payment_entry_id": "ACC-PAY-2026-0002", "net_total": 752000.0, "gst_amount": 135360.0, "total_amount": 887360.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Deccan Solar Grid Corp", "owner_name": "Srujan S", "items_summary": "10kW Three-Phase Grid Inverter (x5), 1000V DC Surge Protection Box (x10)", "line_items": [{"so_id": "SAL-ORD-2026-0002", "item_code": "ITM-INV-10KW", "item_name": "10kW Three-Phase Grid Inverter", "qty": 5, "rate": 128000.0, "amount": 640000.0}, {"so_id": "SAL-ORD-2026-0002", "item_code": "ITM-SPD-1000V", "item_name": "1000V DC Surge Protection Box", "qty": 10, "rate": 11200.0, "amount": 112000.0}]}, {"so_id": "SAL-ORD-2026-0003", "customer_id": "CUS-2026-0003", "order_date": "2026-05-15", "delivery_date": "2026-05-24", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0003", "delivery_note_id": "MAT-DN-2026-0003", "sales_invoice_id": "ACC-SINV-2026-0003", "payment_entry_id": "ACC-PAY-2026-0003", "net_total": 870000.0, "gst_amount": 156600.0, "total_amount": 1026600.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Kaveri Precision Robotics", "owner_name": "Srujan S", "items_summary": "25kVA Industrial Power Converter (x3), 400A Three-Phase LT Switchgear Panel (x2)", "line_items": [{"so_id": "SAL-ORD-2026-0003", "item_code": "ITM-CNV-25KVA", "item_name": "25kVA Industrial Power Converter", "qty": 3, "rate": 198000.0, "amount": 594000.0}, {"so_id": "SAL-ORD-2026-0003", "item_code": "ITM-PNL-LT400", "item_name": "400A Three-Phase LT Switchgear Panel", "qty": 2, "rate": 138000.0, "amount": 276000.0}]}, {"so_id": "SAL-ORD-2026-0004", "customer_id": "CUS-2026-0004", "order_date": "2026-06-02", "delivery_date": "2026-06-11", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0004", "delivery_note_id": "MAT-DN-2026-0004", "sales_invoice_id": "ACC-SINV-2026-0004", "payment_entry_id": "ACC-PAY-2026-0004", "net_total": 758400.0, "gst_amount": 136512.0, "total_amount": 894912.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Sahyadri Green Microgrids", "owner_name": "Srujan S", "items_summary": "5kW Hybrid Solar Inverter (x8), 1000V DC Surge Protection Box (x12)", "line_items": [{"so_id": "SAL-ORD-2026-0004", "item_code": "ITM-INV-5KW", "item_name": "5kW Hybrid Solar Inverter", "qty": 8, "rate": 78000.0, "amount": 624000.0}, {"so_id": "SAL-ORD-2026-0004", "item_code": "ITM-SPD-1000V", "item_name": "1000V DC Surge Protection Box", "qty": 12, "rate": 11200.0, "amount": 134400.0}]}, {"so_id": "SAL-ORD-2026-0005", "customer_id": "CUS-2026-0005", "order_date": "2026-06-09", "delivery_date": "2026-06-19", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0005", "delivery_note_id": "MAT-DN-2026-0005", "sales_invoice_id": "ACC-SINV-2026-0005", "payment_entry_id": "ACC-PAY-2026-0005", "net_total": 510000.0, "gst_amount": 91800.0, "total_amount": 601800.0, "owner_emp_id": "HR-EMP-0004", "customer_name": "Nandi Metro Rail Contracting", "owner_name": "Siri Kulkarni", "items_summary": "48V 200A Smart LiFePO4 BMS (x20)", "line_items": [{"so_id": "SAL-ORD-2026-0005", "item_code": "ITM-BMS-48V", "item_name": "48V 200A Smart LiFePO4 BMS", "qty": 20, "rate": 25500.0, "amount": 510000.0}]}, {"so_id": "SAL-ORD-2026-0006", "customer_id": "CUS-2026-0006", "order_date": "2026-06-16", "delivery_date": "2026-06-26", "workflow_stage": "Payment Received", "status": "Completed", "quotation_id": "QTN-2026-0006", "delivery_note_id": "MAT-DN-2026-0006", "sales_invoice_id": "ACC-SINV-2026-0006", "payment_entry_id": "ACC-PAY-2026-0006", "net_total": 926000.0, "gst_amount": 166680.0, "total_amount": 1092680.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Bharat ColdChain Logistics", "owner_name": "Srujan S", "items_summary": "10kW Three-Phase Grid Inverter (x4), 400A Three-Phase LT Switchgear Panel (x3)", "line_items": [{"so_id": "SAL-ORD-2026-0006", "item_code": "ITM-INV-10KW", "item_name": "10kW Three-Phase Grid Inverter", "qty": 4, "rate": 128000.0, "amount": 512000.0}, {"so_id": "SAL-ORD-2026-0006", "item_code": "ITM-PNL-LT400", "item_name": "400A Three-Phase LT Switchgear Panel", "qty": 3, "rate": 138000.0, "amount": 414000.0}]}, {"so_id": "SAL-ORD-2026-0007", "customer_id": "CUS-2026-0007", "order_date": "2026-07-04", "delivery_date": "2026-07-14", "workflow_stage": "Sales Invoice", "status": "To Bill", "quotation_id": "QTN-2026-0007", "delivery_note_id": "MAT-DN-2026-0007", "sales_invoice_id": "ACC-SINV-2026-0007", "payment_entry_id": null, "net_total": 881600.0, "gst_amount": 158688.0, "total_amount": 1040288.0, "owner_emp_id": "HR-EMP-0004", "customer_name": "Vindhya Telecom Towers Ltd", "owner_name": "Siri Kulkarni", "items_summary": "25kVA Industrial Power Converter (x4), 1000V DC Surge Protection Box (x8)", "line_items": [{"so_id": "SAL-ORD-2026-0007", "item_code": "ITM-CNV-25KVA", "item_name": "25kVA Industrial Power Converter", "qty": 4, "rate": 198000.0, "amount": 792000.0}, {"so_id": "SAL-ORD-2026-0007", "item_code": "ITM-SPD-1000V", "item_name": "1000V DC Surge Protection Box", "qty": 8, "rate": 11200.0, "amount": 89600.0}]}, {"so_id": "SAL-ORD-2026-0008", "customer_id": "CUS-2026-0008", "order_date": "2026-07-12", "delivery_date": "2026-07-22", "workflow_stage": "Sales Invoice", "status": "To Bill", "quotation_id": "QTN-2026-0008", "delivery_note_id": "MAT-DN-2026-0008", "sales_invoice_id": "ACC-SINV-2026-0008", "payment_entry_id": null, "net_total": 567000.0, "gst_amount": 102060.0, "total_amount": 669060.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Malabar Agro Processing Co", "owner_name": "Srujan S", "items_summary": "48V 200A Smart LiFePO4 BMS (x10), 5kW Hybrid Solar Inverter (x4)", "line_items": [{"so_id": "SAL-ORD-2026-0008", "item_code": "ITM-INV-5KW", "item_name": "5kW Hybrid Solar Inverter", "qty": 4, "rate": 78000.0, "amount": 312000.0}, {"so_id": "SAL-ORD-2026-0008", "item_code": "ITM-BMS-48V", "item_name": "48V 200A Smart LiFePO4 BMS", "qty": 10, "rate": 25500.0, "amount": 255000.0}]}, {"so_id": "SAL-ORD-2026-0009", "customer_id": "CUS-2026-0001", "order_date": "2026-07-18", "delivery_date": "2026-07-28", "workflow_stage": "Delivery Note", "status": "To Bill", "quotation_id": "QTN-2026-0009", "delivery_note_id": "MAT-DN-2026-0009", "sales_invoice_id": null, "payment_entry_id": null, "net_total": 640000.0, "gst_amount": 115200.0, "total_amount": 755200.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Apex Industrial Drives Pvt Ltd", "owner_name": "Srujan S", "items_summary": "10kW Three-Phase Grid Inverter (x5)", "line_items": [{"so_id": "SAL-ORD-2026-0009", "item_code": "ITM-INV-10KW", "item_name": "10kW Three-Phase Grid Inverter", "qty": 5, "rate": 128000.0, "amount": 640000.0}]}, {"so_id": "SAL-ORD-2026-0010", "customer_id": "CUS-2026-0002", "order_date": "2026-07-24", "delivery_date": "2026-08-03", "workflow_stage": "Sales Order", "status": "To Deliver & Bill", "quotation_id": "QTN-2026-0010", "delivery_note_id": null, "sales_invoice_id": null, "payment_entry_id": null, "net_total": 702800.0, "gst_amount": 126504.0, "total_amount": 829304.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Deccan Solar Grid Corp", "owner_name": "Srujan S", "items_summary": "5kW Hybrid Solar Inverter (x7), 1000V DC Surge Protection Box (x14)", "line_items": [{"so_id": "SAL-ORD-2026-0010", "item_code": "ITM-INV-5KW", "item_name": "5kW Hybrid Solar Inverter", "qty": 7, "rate": 78000.0, "amount": 546000.0}, {"so_id": "SAL-ORD-2026-0010", "item_code": "ITM-SPD-1000V", "item_name": "1000V DC Surge Protection Box", "qty": 14, "rate": 11200.0, "amount": 156800.0}]}, {"so_id": "SAL-ORD-2026-0011", "customer_id": "CUS-2026-0004", "order_date": "2026-07-29", "delivery_date": "2026-08-08", "workflow_stage": "Sales Order", "status": "To Deliver & Bill", "quotation_id": "QTN-2026-0011", "delivery_note_id": null, "sales_invoice_id": null, "payment_entry_id": null, "net_total": 429000.0, "gst_amount": 77220.0, "total_amount": 506220.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Sahyadri Green Microgrids", "owner_name": "Srujan S", "items_summary": "48V 200A Smart LiFePO4 BMS (x6), 400A Three-Phase LT Switchgear Panel (x2)", "line_items": [{"so_id": "SAL-ORD-2026-0011", "item_code": "ITM-BMS-48V", "item_name": "48V 200A Smart LiFePO4 BMS", "qty": 6, "rate": 25500.0, "amount": 153000.0}, {"so_id": "SAL-ORD-2026-0011", "item_code": "ITM-PNL-LT400", "item_name": "400A Three-Phase LT Switchgear Panel", "qty": 2, "rate": 138000.0, "amount": 276000.0}]}, {"so_id": "SAL-ORD-2026-0012", "customer_id": "CUS-2026-0006", "order_date": "2026-08-02", "delivery_date": "2026-08-12", "workflow_stage": "Quotation", "status": "Open Quotation", "quotation_id": "QTN-2026-0012", "delivery_note_id": null, "sales_invoice_id": null, "payment_entry_id": null, "net_total": 780000.0, "gst_amount": 140400.0, "total_amount": 920400.0, "owner_emp_id": "HR-EMP-0001", "customer_name": "Bharat ColdChain Logistics", "owner_name": "Srujan S", "items_summary": "25kVA Industrial Power Converter (x2), 10kW Three-Phase Grid Inverter (x3)", "line_items": [{"so_id": "SAL-ORD-2026-0012", "item_code": "ITM-CNV-25KVA", "item_name": "25kVA Industrial Power Converter", "qty": 2, "rate": 198000.0, "amount": 396000.0}, {"so_id": "SAL-ORD-2026-0012", "item_code": "ITM-INV-10KW", "item_name": "10kW Three-Phase Grid Inverter", "qty": 3, "rate": 128000.0, "amount": 384000.0}]}], "purchase_orders": [{"po_id": "PUR-ORD-2026-0001", "supplier_id": "SUP-2026-0001", "order_date": "2026-05-01", "schedule_date": "2026-05-03", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0001", "purchase_receipt_id": "MAT-PR-2026-0001", "purchase_invoice_id": "ACC-PINV-2026-0001", "payment_entry_id": "ACC-PAY-2026-0101", "net_total": 804000.0, "gst_amount": 144720.0, "total_amount": 948720.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "SemiCore Components India", "buyer_name": "Eshaan Menon", "items_summary": "SiC MOSFET Power Module (x140), 4-Layer Immersion Gold Control PCB (x90)", "line_items": [{"po_id": "PUR-ORD-2026-0001", "item_code": "ITM-RAW-MOSFET", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "qty": 140, "rate": 4200.0, "amount": 588000.0}, {"po_id": "PUR-ORD-2026-0001", "item_code": "ITM-RAW-PCB", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "qty": 90, "rate": 2400.0, "amount": 216000.0}]}, {"po_id": "PUR-ORD-2026-0002", "supplier_id": "SUP-2026-0002", "order_date": "2026-05-02", "schedule_date": "2026-05-04", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0002", "purchase_receipt_id": "MAT-PR-2026-0002", "purchase_invoice_id": "ACC-PINV-2026-0002", "payment_entry_id": "ACC-PAY-2026-0102", "net_total": 781000.0, "gst_amount": 140580.0, "total_amount": 921580.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "Vayu Magnetics & Coils", "buyer_name": "Eshaan Menon", "items_summary": "IP65 Anodized Aluminium Chassis (x80), Toroidal Copper Inductor Coil (x110)", "line_items": [{"po_id": "PUR-ORD-2026-0002", "item_code": "ITM-RAW-COIL", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "qty": 110, "rate": 3100.0, "amount": 341000.0}, {"po_id": "PUR-ORD-2026-0002", "item_code": "ITM-RAW-CHAS", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "qty": 80, "rate": 5500.0, "amount": 440000.0}]}, {"po_id": "PUR-ORD-2026-0003", "supplier_id": "SUP-2026-0003", "order_date": "2026-05-03", "schedule_date": "2026-05-05", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0003", "purchase_receipt_id": "MAT-PR-2026-0003", "purchase_invoice_id": "ACC-PINV-2026-0003", "payment_entry_id": "ACC-PAY-2026-0103", "net_total": 956000.0, "gst_amount": 172080.0, "total_amount": 1128080.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "CellVolt Energy Cells LLP", "buyer_name": "Eshaan Menon", "items_summary": "400A MCCB Industrial Breaker Unit (x24), 3.2V 280Ah Prismatic LiFePO4 Cell (x160)", "line_items": [{"po_id": "PUR-ORD-2026-0003", "item_code": "ITM-RAW-CELL", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "qty": 160, "rate": 3800.0, "amount": 608000.0}, {"po_id": "PUR-ORD-2026-0003", "item_code": "ITM-RAW-BREAKER", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "qty": 24, "rate": 14500.0, "amount": 348000.0}]}, {"po_id": "PUR-ORD-2026-0004", "supplier_id": "SUP-2026-0004", "order_date": "2026-05-18", "schedule_date": "2026-05-24", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0004", "purchase_receipt_id": "MAT-PR-2026-0004", "purchase_invoice_id": "ACC-PINV-2026-0004", "payment_entry_id": "ACC-PAY-2026-0104", "net_total": 522000.0, "gst_amount": 93960.0, "total_amount": 615960.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "CircuitCraft EMS Pvt Ltd", "buyer_name": "Eshaan Menon", "items_summary": "Toroidal Copper Inductor Coil (x60), SiC MOSFET Power Module (x80)", "line_items": [{"po_id": "PUR-ORD-2026-0004", "item_code": "ITM-RAW-COIL", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "qty": 60, "rate": 3100.0, "amount": 186000.0}, {"po_id": "PUR-ORD-2026-0004", "item_code": "ITM-RAW-MOSFET", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "qty": 80, "rate": 4200.0, "amount": 336000.0}]}, {"po_id": "PUR-ORD-2026-0005", "supplier_id": "SUP-2026-0005", "order_date": "2026-06-04", "schedule_date": "2026-06-10", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0005", "purchase_receipt_id": "MAT-PR-2026-0005", "purchase_invoice_id": "ACC-PINV-2026-0005", "payment_entry_id": "ACC-PAY-2026-0105", "net_total": 443000.0, "gst_amount": 79740.0, "total_amount": 522740.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "AluCast Enclosures Ltd", "buyer_name": "Eshaan Menon", "items_summary": "IP65 Anodized Aluminium Chassis (x50), 4-Layer Immersion Gold Control PCB (x70)", "line_items": [{"po_id": "PUR-ORD-2026-0005", "item_code": "ITM-RAW-CHAS", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "qty": 50, "rate": 5500.0, "amount": 275000.0}, {"po_id": "PUR-ORD-2026-0005", "item_code": "ITM-RAW-PCB", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "qty": 70, "rate": 2400.0, "amount": 168000.0}]}, {"po_id": "PUR-ORD-2026-0006", "supplier_id": "SUP-2026-0006", "order_date": "2026-06-12", "schedule_date": "2026-06-18", "workflow_stage": "Payment Settled", "status": "Completed", "material_request_id": "MAT-MR-2026-0006", "purchase_receipt_id": "MAT-PR-2026-0006", "purchase_invoice_id": "ACC-PINV-2026-0006", "payment_entry_id": "ACC-PAY-2026-0106", "net_total": 565000.0, "gst_amount": 101700.0, "total_amount": 666700.0, "buyer_emp_id": "HR-EMP-0003", "supplier_name": "SwitchGear Controls India", "buyer_name": "Abhay Verma", "items_summary": "400A MCCB Industrial Breaker Unit (x18), 3.2V 280Ah Prismatic LiFePO4 Cell (x80)", "line_items": [{"po_id": "PUR-ORD-2026-0006", "item_code": "ITM-RAW-BREAKER", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "qty": 18, "rate": 14500.0, "amount": 261000.0}, {"po_id": "PUR-ORD-2026-0006", "item_code": "ITM-RAW-CELL", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "qty": 80, "rate": 3800.0, "amount": 304000.0}]}, {"po_id": "PUR-ORD-2026-0007", "supplier_id": "SUP-2026-0001", "order_date": "2026-06-22", "schedule_date": "2026-06-29", "workflow_stage": "Purchase Invoice", "status": "To Pay", "material_request_id": "MAT-MR-2026-0007", "purchase_receipt_id": "MAT-PR-2026-0007", "purchase_invoice_id": "ACC-PINV-2026-0007", "payment_entry_id": null, "net_total": 372000.0, "gst_amount": 66960.0, "total_amount": 438960.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "SemiCore Components India", "buyer_name": "Eshaan Menon", "items_summary": "SiC MOSFET Power Module (x60), 4-Layer Immersion Gold Control PCB (x50)", "line_items": [{"po_id": "PUR-ORD-2026-0007", "item_code": "ITM-RAW-MOSFET", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "qty": 60, "rate": 4200.0, "amount": 252000.0}, {"po_id": "PUR-ORD-2026-0007", "item_code": "ITM-RAW-PCB", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "qty": 50, "rate": 2400.0, "amount": 120000.0}]}, {"po_id": "PUR-ORD-2026-0008", "supplier_id": "SUP-2026-0002", "order_date": "2026-07-05", "schedule_date": "2026-07-11", "workflow_stage": "Purchase Invoice", "status": "To Pay", "material_request_id": "MAT-MR-2026-0008", "purchase_receipt_id": "MAT-PR-2026-0008", "purchase_invoice_id": "ACC-PINV-2026-0008", "payment_entry_id": null, "net_total": 375000.0, "gst_amount": 67500.0, "total_amount": 442500.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "Vayu Magnetics & Coils", "buyer_name": "Eshaan Menon", "items_summary": "IP65 Anodized Aluminium Chassis (x40), Toroidal Copper Inductor Coil (x50)", "line_items": [{"po_id": "PUR-ORD-2026-0008", "item_code": "ITM-RAW-COIL", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "qty": 50, "rate": 3100.0, "amount": 155000.0}, {"po_id": "PUR-ORD-2026-0008", "item_code": "ITM-RAW-CHAS", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "qty": 40, "rate": 5500.0, "amount": 220000.0}]}, {"po_id": "PUR-ORD-2026-0009", "supplier_id": "SUP-2026-0004", "order_date": "2026-07-14", "schedule_date": "2026-07-20", "workflow_stage": "Purchase Receipt", "status": "To Bill", "material_request_id": "MAT-MR-2026-0009", "purchase_receipt_id": "MAT-PR-2026-0009", "purchase_invoice_id": null, "payment_entry_id": null, "net_total": 289000.0, "gst_amount": 52020.0, "total_amount": 341020.0, "buyer_emp_id": "HR-EMP-0003", "supplier_name": "CircuitCraft EMS Pvt Ltd", "buyer_name": "Abhay Verma", "items_summary": "400A MCCB Industrial Breaker Unit (x10), 4-Layer Immersion Gold Control PCB (x60)", "line_items": [{"po_id": "PUR-ORD-2026-0009", "item_code": "ITM-RAW-PCB", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "qty": 60, "rate": 2400.0, "amount": 144000.0}, {"po_id": "PUR-ORD-2026-0009", "item_code": "ITM-RAW-BREAKER", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "qty": 10, "rate": 14500.0, "amount": 145000.0}]}, {"po_id": "PUR-ORD-2026-0010", "supplier_id": "SUP-2026-0005", "order_date": "2026-07-21", "schedule_date": "2026-07-28", "workflow_stage": "Purchase Receipt", "status": "To Bill", "material_request_id": "MAT-MR-2026-0010", "purchase_receipt_id": "MAT-PR-2026-0010", "purchase_invoice_id": null, "payment_entry_id": null, "net_total": 380000.0, "gst_amount": 68400.0, "total_amount": 448400.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "AluCast Enclosures Ltd", "buyer_name": "Eshaan Menon", "items_summary": "3.2V 280Ah Prismatic LiFePO4 Cell (x100)", "line_items": [{"po_id": "PUR-ORD-2026-0010", "item_code": "ITM-RAW-CELL", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "qty": 100, "rate": 3800.0, "amount": 380000.0}]}, {"po_id": "PUR-ORD-2026-0011", "supplier_id": "SUP-2026-0003", "order_date": "2026-07-27", "schedule_date": "2026-08-04", "workflow_stage": "Purchase Order", "status": "To Receive & Bill", "material_request_id": "MAT-MR-2026-0011", "purchase_receipt_id": null, "purchase_invoice_id": null, "payment_entry_id": null, "net_total": 349500.0, "gst_amount": 62910.0, "total_amount": 412410.0, "buyer_emp_id": "HR-EMP-0002", "supplier_name": "CellVolt Energy Cells LLP", "buyer_name": "Eshaan Menon", "items_summary": "Toroidal Copper Inductor Coil (x45), SiC MOSFET Power Module (x50)", "line_items": [{"po_id": "PUR-ORD-2026-0011", "item_code": "ITM-RAW-COIL", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "qty": 45, "rate": 3100.0, "amount": 139500.0}, {"po_id": "PUR-ORD-2026-0011", "item_code": "ITM-RAW-MOSFET", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "qty": 50, "rate": 4200.0, "amount": 210000.0}]}, {"po_id": "PUR-ORD-2026-0012", "supplier_id": "SUP-2026-0006", "order_date": "2026-08-01", "schedule_date": "2026-08-10", "workflow_stage": "Material Request", "status": "Draft", "material_request_id": "MAT-MR-2026-0012", "purchase_receipt_id": null, "purchase_invoice_id": null, "payment_entry_id": null, "net_total": 339000.0, "gst_amount": 61020.0, "total_amount": 400020.0, "buyer_emp_id": "HR-EMP-0003", "supplier_name": "SwitchGear Controls India", "buyer_name": "Abhay Verma", "items_summary": "400A MCCB Industrial Breaker Unit (x12), IP65 Anodized Aluminium Chassis (x30)", "line_items": [{"po_id": "PUR-ORD-2026-0012", "item_code": "ITM-RAW-CHAS", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "qty": 30, "rate": 5500.0, "amount": 165000.0}, {"po_id": "PUR-ORD-2026-0012", "item_code": "ITM-RAW-BREAKER", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "qty": 12, "rate": 14500.0, "amount": 174000.0}]}], "stock_entries": [{"stock_entry_id": "STE-2026-0024", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 5, "valuation_rate": 92000.0, "remarks": "WO-2026-0012 Batch-2 LT Switchgear replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "400A Three-Phase LT Switchgear Panel", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0023", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 30, "valuation_rate": 6800.0, "remarks": "WO-2026-0011 Batch-2 DC Surge Box replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "1000V DC Surge Protection Box", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0022", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 5, "valuation_rate": 140000.0, "remarks": "WO-2026-0010 Batch-2 25kVA Converter replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "25kVA Industrial Power Converter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0021", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 30, "valuation_rate": 16500.0, "remarks": "WO-2026-0009 Batch-2 Smart BMS replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "48V 200A Smart LiFePO4 BMS", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0020", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 10, "valuation_rate": 88000.0, "remarks": "WO-2026-0008 Batch-2 10kW Inverter replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "10kW Three-Phase Grid Inverter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0019", "posting_date": "2026-06-20", "purpose": "Manufacture", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 12, "valuation_rate": 52000.0, "remarks": "WO-2026-0007 Batch-2 5kW Inverter replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "5kW Hybrid Solar Inverter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0018", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "qty": -12, "valuation_rate": 14500.0, "remarks": "Batch-2 BOM issue for switchgear replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "400A MCCB Industrial Breaker Unit", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0017", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "qty": -80, "valuation_rate": 3800.0, "remarks": "Batch-2 BOM issue for BMS harness assembly", "owner_emp_id": "HR-EMP-0003", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0016", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "qty": -40, "valuation_rate": 5500.0, "remarks": "Batch-2 BOM issue for housings", "owner_emp_id": "HR-EMP-0003", "item_name": "IP65 Anodized Aluminium Chassis", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0015", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "qty": -50, "valuation_rate": 3100.0, "remarks": "Batch-2 BOM issue for magnetic cores", "owner_emp_id": "HR-EMP-0003", "item_name": "Toroidal Copper Inductor Coil", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0014", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "qty": -60, "valuation_rate": 2400.0, "remarks": "Batch-2 BOM issue for control logic boards", "owner_emp_id": "HR-EMP-0003", "item_name": "4-Layer Immersion Gold Control PCB", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0013", "posting_date": "2026-06-20", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "qty": -70, "valuation_rate": 4200.0, "remarks": "Batch-2 BOM issue for Q2 replenishment", "owner_emp_id": "HR-EMP-0003", "item_name": "SiC MOSFET Power Module", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0012", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 6, "valuation_rate": 92000.0, "remarks": "WO-2026-0006 Batch-1 LT Switchgear tested", "owner_emp_id": "HR-EMP-0003", "item_name": "400A Three-Phase LT Switchgear Panel", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0011", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 55, "valuation_rate": 6800.0, "remarks": "WO-2026-0005 Batch-1 DC Surge Box batch complete", "owner_emp_id": "HR-EMP-0003", "item_name": "1000V DC Surge Protection Box", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0010", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 8, "valuation_rate": 140000.0, "remarks": "WO-2026-0004 Batch-1 25kVA Converter QC passed", "owner_emp_id": "HR-EMP-0003", "item_name": "25kVA Industrial Power Converter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0009", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 50, "valuation_rate": 16500.0, "remarks": "WO-2026-0003 Batch-1 Smart BMS SMT & burn-in complete", "owner_emp_id": "HR-EMP-0003", "item_name": "48V 200A Smart LiFePO4 BMS", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0008", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 15, "valuation_rate": 88000.0, "remarks": "WO-2026-0002 Batch-1 10kW Inverter assembly complete", "owner_emp_id": "HR-EMP-0003", "item_name": "10kW Three-Phase Grid Inverter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0007", "posting_date": "2026-05-05", "purpose": "Manufacture", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "qty": 24, "valuation_rate": 52000.0, "remarks": "WO-2026-0001 Batch-1 5kW Inverter assembly complete", "owner_emp_id": "HR-EMP-0003", "item_name": "5kW Hybrid Solar Inverter", "warehouse_name": "Whitefield Finished Goods Hub", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0006", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "qty": -14, "valuation_rate": 14500.0, "remarks": "Batch-1 BOM issue for LT panels & converters", "owner_emp_id": "HR-EMP-0003", "item_name": "400A MCCB Industrial Breaker Unit", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0005", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "qty": -100, "valuation_rate": 3800.0, "remarks": "Batch-1 BOM issue for BMS test & pack validation", "owner_emp_id": "HR-EMP-0003", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0004", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "qty": -55, "valuation_rate": 5500.0, "remarks": "Batch-1 BOM issue for IP65 enclosures & SPD boxes", "owner_emp_id": "HR-EMP-0003", "item_name": "IP65 Anodized Aluminium Chassis", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0003", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "qty": -75, "valuation_rate": 3100.0, "remarks": "Batch-1 BOM issue for choke & transformer assembly", "owner_emp_id": "HR-EMP-0003", "item_name": "Toroidal Copper Inductor Coil", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0002", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "qty": -60, "valuation_rate": 2400.0, "remarks": "Batch-1 BOM issue for BMS & Inverter control boards", "owner_emp_id": "HR-EMP-0003", "item_name": "4-Layer Immersion Gold Control PCB", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}, {"stock_entry_id": "STE-2026-0001", "posting_date": "2026-05-05", "purpose": "Material Issue for Manufacture", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "qty": -90, "valuation_rate": 4200.0, "remarks": "Batch-1 BOM issue for Inverter & Converter lines", "owner_emp_id": "HR-EMP-0003", "item_name": "SiC MOSFET Power Module", "warehouse_name": "Peenya Raw Material Store", "owner_name": "Abhay Verma"}], "stock_ledger_entries": [{"sle_id": "SLE-2026-0059", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-07-28", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0009", "actual_qty": -5, "qty_after_transaction": 11, "valuation_rate": 88000.0, "stock_value": 968000.0, "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0058", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-07-28", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0010", "actual_qty": 100, "qty_after_transaction": 160, "valuation_rate": 3800.0, "stock_value": 608000.0, "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0057", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-07-22", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0008", "actual_qty": -4, "qty_after_transaction": 18, "valuation_rate": 52000.0, "stock_value": 936000.0, "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0056", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-07-22", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0008", "actual_qty": -10, "qty_after_transaction": 42, "valuation_rate": 16500.0, "stock_value": 693000.0, "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0055", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-07-20", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0009", "actual_qty": 60, "qty_after_transaction": 150, "valuation_rate": 2400.0, "stock_value": 360000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0054", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-07-20", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0009", "actual_qty": 10, "qty_after_transaction": 26, "valuation_rate": 14500.0, "stock_value": 377000.0, "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0053", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-07-14", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0007", "actual_qty": -8, "qty_after_transaction": 55, "valuation_rate": 6800.0, "stock_value": 374000.0, "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0052", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-07-14", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0007", "actual_qty": -4, "qty_after_transaction": 6, "valuation_rate": 140000.0, "stock_value": 840000.0, "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0051", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-07-11", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0008", "actual_qty": 50, "qty_after_transaction": 95, "valuation_rate": 3100.0, "stock_value": 294500.0, "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0050", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-07-11", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0008", "actual_qty": 40, "qty_after_transaction": 75, "valuation_rate": 5500.0, "stock_value": 412500.0, "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0049", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-29", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0007", "actual_qty": 50, "qty_after_transaction": 90, "valuation_rate": 2400.0, "stock_value": 216000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0048", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-29", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0007", "actual_qty": 60, "qty_after_transaction": 120, "valuation_rate": 4200.0, "stock_value": 504000.0, "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0047", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-26", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0006", "actual_qty": -3, "qty_after_transaction": 6, "valuation_rate": 92000.0, "stock_value": 552000.0, "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0046", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-26", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0006", "actual_qty": -4, "qty_after_transaction": 16, "valuation_rate": 88000.0, "stock_value": 1408000.0, "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0045", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0024", "actual_qty": 5, "qty_after_transaction": 9, "valuation_rate": 92000.0, "stock_value": 828000.0, "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0044", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0023", "actual_qty": 30, "qty_after_transaction": 63, "valuation_rate": 6800.0, "stock_value": 428400.0, "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0043", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0022", "actual_qty": 5, "qty_after_transaction": 10, "valuation_rate": 140000.0, "stock_value": 1400000.0, "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0042", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0021", "actual_qty": 30, "qty_after_transaction": 52, "valuation_rate": 16500.0, "stock_value": 858000.0, "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0041", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0020", "actual_qty": 10, "qty_after_transaction": 20, "valuation_rate": 88000.0, "stock_value": 1760000.0, "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0040", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-20", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0019", "actual_qty": 12, "qty_after_transaction": 22, "valuation_rate": 52000.0, "stock_value": 1144000.0, "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0039", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0018", "actual_qty": -12, "qty_after_transaction": 16, "valuation_rate": 14500.0, "stock_value": 232000.0, "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0038", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0017", "actual_qty": -80, "qty_after_transaction": 60, "valuation_rate": 3800.0, "stock_value": 228000.0, "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0037", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0016", "actual_qty": -40, "qty_after_transaction": 35, "valuation_rate": 5500.0, "stock_value": 192500.0, "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0036", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0015", "actual_qty": -50, "qty_after_transaction": 45, "valuation_rate": 3100.0, "stock_value": 139500.0, "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0035", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0014", "actual_qty": -60, "qty_after_transaction": 40, "valuation_rate": 2400.0, "stock_value": 96000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0034", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-20", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0013", "actual_qty": -70, "qty_after_transaction": 60, "valuation_rate": 4200.0, "stock_value": 252000.0, "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0033", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-19", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0005", "actual_qty": -20, "qty_after_transaction": 22, "valuation_rate": 16500.0, "stock_value": 363000.0, "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0032", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-18", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0006", "actual_qty": 80, "qty_after_transaction": 140, "valuation_rate": 3800.0, "stock_value": 532000.0, "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0031", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-18", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0006", "actual_qty": 18, "qty_after_transaction": 28, "valuation_rate": 14500.0, "stock_value": 406000.0, "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0030", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-11", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0004", "actual_qty": -12, "qty_after_transaction": 33, "valuation_rate": 6800.0, "stock_value": 224400.0, "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0029", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-06-11", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0004", "actual_qty": -8, "qty_after_transaction": 10, "valuation_rate": 52000.0, "stock_value": 520000.0, "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0028", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-10", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0005", "actual_qty": 70, "qty_after_transaction": 100, "valuation_rate": 2400.0, "stock_value": 240000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0027", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-06-10", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0005", "actual_qty": 50, "qty_after_transaction": 75, "valuation_rate": 5500.0, "stock_value": 412500.0, "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0026", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-24", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0003", "actual_qty": -2, "qty_after_transaction": 4, "valuation_rate": 92000.0, "stock_value": 368000.0, "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0025", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-24", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0003", "actual_qty": -3, "qty_after_transaction": 5, "valuation_rate": 140000.0, "stock_value": 700000.0, "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0024", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-24", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0004", "actual_qty": 80, "qty_after_transaction": 130, "valuation_rate": 4200.0, "stock_value": 546000.0, "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0023", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-24", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0004", "actual_qty": 60, "qty_after_transaction": 95, "valuation_rate": 3100.0, "stock_value": 294500.0, "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0022", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-18", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0002", "actual_qty": -10, "qty_after_transaction": 45, "valuation_rate": 6800.0, "stock_value": 306000.0, "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0021", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-18", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0002", "actual_qty": -5, "qty_after_transaction": 10, "valuation_rate": 88000.0, "stock_value": 880000.0, "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0020", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-14", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0001", "actual_qty": -6, "qty_after_transaction": 18, "valuation_rate": 52000.0, "stock_value": 936000.0, "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0019", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-14", "voucher_type": "Delivery Note", "voucher_no": "MAT-DN-2026-0001", "actual_qty": -8, "qty_after_transaction": 42, "valuation_rate": 16500.0, "stock_value": 693000.0, "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0018", "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0012", "actual_qty": 6, "qty_after_transaction": 6, "valuation_rate": 92000.0, "stock_value": 552000.0, "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0017", "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0011", "actual_qty": 55, "qty_after_transaction": 55, "valuation_rate": 6800.0, "stock_value": 374000.0, "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0016", "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0010", "actual_qty": 8, "qty_after_transaction": 8, "valuation_rate": 140000.0, "stock_value": 1120000.0, "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0015", "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0009", "actual_qty": 50, "qty_after_transaction": 50, "valuation_rate": 16500.0, "stock_value": 825000.0, "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0014", "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0008", "actual_qty": 15, "qty_after_transaction": 15, "valuation_rate": 88000.0, "stock_value": 1320000.0, "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0013", "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "posting_date": "2026-05-05", "voucher_type": "Manufacture", "voucher_no": "STE-2026-0007", "actual_qty": 24, "qty_after_transaction": 24, "valuation_rate": 52000.0, "stock_value": 1248000.0, "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "warehouse_name": "Whitefield Finished Goods Hub"}, {"sle_id": "SLE-2026-0012", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0006", "actual_qty": -14, "qty_after_transaction": 10, "valuation_rate": 14500.0, "stock_value": 145000.0, "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0011", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0005", "actual_qty": -100, "qty_after_transaction": 60, "valuation_rate": 3800.0, "stock_value": 228000.0, "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0010", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0004", "actual_qty": -55, "qty_after_transaction": 25, "valuation_rate": 5500.0, "stock_value": 137500.0, "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0009", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0003", "actual_qty": -75, "qty_after_transaction": 35, "valuation_rate": 3100.0, "stock_value": 108500.0, "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0008", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0002", "actual_qty": -60, "qty_after_transaction": 30, "valuation_rate": 2400.0, "stock_value": 72000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0007", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Material Issue for Manufacture", "voucher_no": "STE-2026-0001", "actual_qty": -90, "qty_after_transaction": 50, "valuation_rate": 4200.0, "stock_value": 210000.0, "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0006", "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0003", "actual_qty": 160, "qty_after_transaction": 160, "valuation_rate": 3800.0, "stock_value": 608000.0, "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0005", "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-05", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0003", "actual_qty": 24, "qty_after_transaction": 24, "valuation_rate": 14500.0, "stock_value": 348000.0, "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0004", "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-04", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0002", "actual_qty": 110, "qty_after_transaction": 110, "valuation_rate": 3100.0, "stock_value": 341000.0, "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0003", "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-04", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0002", "actual_qty": 80, "qty_after_transaction": 80, "valuation_rate": 5500.0, "stock_value": 440000.0, "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0002", "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-03", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0001", "actual_qty": 90, "qty_after_transaction": 90, "valuation_rate": 2400.0, "stock_value": 216000.0, "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}, {"sle_id": "SLE-2026-0001", "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "posting_date": "2026-05-03", "voucher_type": "Purchase Receipt", "voucher_no": "MAT-PR-2026-0001", "actual_qty": 140, "qty_after_transaction": 140, "valuation_rate": 4200.0, "stock_value": 588000.0, "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "warehouse_name": "Peenya Raw Material Store"}], "stock_ledger": [{"id": 3, "item_code": "ITM-INV-10KW", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 11, "reserved_qty": 0, "available_qty": 11, "stock_value": 968000.0, "last_updated": "2026-07-28 18:26:34", "item_name": "10kW Three-Phase Grid Inverter", "item_group": "Finished Goods", "valuation_rate": 88000.0, "selling_rate": 128000.0, "reorder_level": 5, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 4, "item_code": "ITM-INV-5KW", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 18, "reserved_qty": 7, "available_qty": 11, "stock_value": 936000.0, "last_updated": "2026-07-22 18:26:34", "item_name": "5kW Hybrid Solar Inverter", "item_group": "Finished Goods", "valuation_rate": 52000.0, "selling_rate": 78000.0, "reorder_level": 8, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 2, "item_code": "ITM-CNV-25KVA", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 6, "reserved_qty": 0, "available_qty": 6, "stock_value": 840000.0, "last_updated": "2026-07-14 18:26:34", "item_name": "25kVA Industrial Power Converter", "item_group": "Finished Goods", "valuation_rate": 140000.0, "selling_rate": 198000.0, "reorder_level": 4, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 1, "item_code": "ITM-BMS-48V", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 42, "reserved_qty": 6, "available_qty": 36, "stock_value": 693000.0, "last_updated": "2026-07-22 18:26:34", "item_name": "48V 200A Smart LiFePO4 BMS", "item_group": "Finished Goods", "valuation_rate": 16500.0, "selling_rate": 25500.0, "reorder_level": 15, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 5, "item_code": "ITM-PNL-LT400", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 6, "reserved_qty": 2, "available_qty": 4, "stock_value": 552000.0, "last_updated": "2026-06-26 18:26:34", "item_name": "400A Three-Phase LT Switchgear Panel", "item_group": "Finished Goods", "valuation_rate": 92000.0, "selling_rate": 138000.0, "reorder_level": 3, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 6, "item_code": "ITM-SPD-1000V", "warehouse_id": "WH-WHITEFIELD-FG", "actual_qty": 55, "reserved_qty": 14, "available_qty": 41, "stock_value": 374000.0, "last_updated": "2026-07-14 18:26:34", "item_name": "1000V DC Surge Protection Box", "item_group": "Finished Goods", "valuation_rate": 6800.0, "selling_rate": 11200.0, "reorder_level": 20, "warehouse_name": "Whitefield Finished Goods Hub", "warehouse_type": "Finished Goods"}, {"id": 8, "item_code": "ITM-RAW-CELL", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 160, "reserved_qty": 0, "available_qty": 160, "stock_value": 608000.0, "last_updated": "2026-07-28 18:26:34", "item_name": "3.2V 280Ah Prismatic LiFePO4 Cell", "item_group": "Raw Materials", "valuation_rate": 3800.0, "selling_rate": 0.0, "reorder_level": 50, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}, {"id": 11, "item_code": "ITM-RAW-MOSFET", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 120, "reserved_qty": 0, "available_qty": 120, "stock_value": 504000.0, "last_updated": "2026-06-29 18:26:34", "item_name": "SiC MOSFET Power Module", "item_group": "Raw Materials", "valuation_rate": 4200.0, "selling_rate": 0.0, "reorder_level": 40, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}, {"id": 9, "item_code": "ITM-RAW-CHAS", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 75, "reserved_qty": 0, "available_qty": 75, "stock_value": 412500.0, "last_updated": "2026-07-11 18:26:34", "item_name": "IP65 Anodized Aluminium Chassis", "item_group": "Raw Materials", "valuation_rate": 5500.0, "selling_rate": 0.0, "reorder_level": 25, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}, {"id": 7, "item_code": "ITM-RAW-BREAKER", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 26, "reserved_qty": 0, "available_qty": 26, "stock_value": 377000.0, "last_updated": "2026-07-20 18:26:34", "item_name": "400A MCCB Industrial Breaker Unit", "item_group": "Raw Materials", "valuation_rate": 14500.0, "selling_rate": 0.0, "reorder_level": 12, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}, {"id": 12, "item_code": "ITM-RAW-PCB", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 150, "reserved_qty": 0, "available_qty": 150, "stock_value": 360000.0, "last_updated": "2026-07-20 18:26:34", "item_name": "4-Layer Immersion Gold Control PCB", "item_group": "Raw Materials", "valuation_rate": 2400.0, "selling_rate": 0.0, "reorder_level": 40, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}, {"id": 10, "item_code": "ITM-RAW-COIL", "warehouse_id": "WH-PEENYA-RAW", "actual_qty": 95, "reserved_qty": 0, "available_qty": 95, "stock_value": 294500.0, "last_updated": "2026-07-11 18:26:34", "item_name": "Toroidal Copper Inductor Coil", "item_group": "Raw Materials", "valuation_rate": 3100.0, "selling_rate": 0.0, "reorder_level": 35, "warehouse_name": "Peenya Raw Material Store", "warehouse_type": "Raw Material"}], "kpis": {"total_sales_revenue": 9096384.0, "collected_revenue": 5296312.0, "pending_receivables": 3800072.0, "total_procurement_spend": 7287090.0, "po_paid": 4803780.0, "total_inventory_value": 6919000.0, "active_so_count": 12, "active_po_count": 12, "stock_entry_count": 24, "sle_count": 59, "po_raw_only_valid": true, "customer_count": 8, "supplier_count": 6, "sku_count": 12}, "monthly_sales": [{"month": "2026-05", "order_count": 3, "revenue_lakhs": 27.07}, {"month": "2026-06", "order_count": 3, "revenue_lakhs": 25.89}, {"month": "2026-07", "order_count": 5, "revenue_lakhs": 38.0}], "supplier_spend": [{"supplier_name": "CellVolt Energy Cells LLP", "spend_lakhs": 15.4}, {"supplier_name": "SemiCore Components India", "spend_lakhs": 13.88}, {"supplier_name": "Vayu Magnetics & Coils", "spend_lakhs": 13.64}, {"supplier_name": "SwitchGear Controls India", "spend_lakhs": 10.67}, {"supplier_name": "AluCast Enclosures Ltd", "spend_lakhs": 9.71}, {"supplier_name": "CircuitCraft EMS Pvt Ltd", "spend_lakhs": 9.57}], "db_path": "D:\\university\\sem 5\\EBS\\miniproject\\ebs miniproject\\voltedge_ebs.db"};
+        let salesChartInstance = null;
+        let purchaseChartInstance = null;
+
+        const o2cStages = ['Quotation', 'Sales Order', 'Delivery Note', 'Sales Invoice', 'Payment Received'];
+        const p2pStages = ['Material Request', 'Purchase Order', 'Purchase Receipt', 'Purchase Invoice', 'Payment Settled'];
+
+        const SCHEMA_TABLES = [
+            { name: 'tabEmployee', pk: 'name (PK)', cols: ['employee_name', 'custom_srn UNIQUE', 'designation', 'department', 'company_email', 'docstatus'] },
+            { name: 'tabPayment Terms Template', pk: 'name (PK)', cols: ['template_name', 'credit_days INT', 'description', 'docstatus'] },
+            { name: 'tabCustomer', pk: 'name (PK)', cols: ['customer_name', 'customer_group', 'territory', 'tax_id (GSTIN)', 'credit_limit', 'payment_terms FK'] },
+            { name: 'tabSupplier', pk: 'name (PK)', cols: ['supplier_name', 'supplier_group', 'country', 'tax_id (GSTIN)', 'custom_buyer_id FK'] },
+            { name: 'tabItem', pk: 'name (PK)', cols: ['item_code UNIQUE', 'item_name', 'item_group (FG|RM)', 'valuation_rate', 'standard_rate', 'safety_stock'] },
+            { name: 'tabWarehouse', pk: 'name (PK)', cols: ['warehouse_name', 'warehouse_type', 'city', 'company', 'custom_manager_id FK'] },
+            { name: 'tabSales Order', pk: 'name (PK)', cols: ['customer FK', 'transaction_date', 'workflow_state', 'custom_quotation_id', 'custom_delivery_note_id', 'custom_sales_invoice_id', 'custom_payment_entry_id', 'grand_total'] },
+            { name: 'tabSales Order Item', pk: 'name (PK)', cols: ['parent FK -> Sales Order', 'parenttype', 'parentfield', 'item_code FK', 'qty', 'rate', 'amount'] },
+            { name: 'tabPurchase Order', pk: 'name (PK)', cols: ['supplier FK', 'transaction_date', 'workflow_state', 'custom_material_request_id', 'custom_purchase_receipt_id', 'custom_purchase_invoice_id', 'custom_payment_entry_id', 'grand_total'] },
+            { name: 'tabPurchase Order Item', pk: 'name (PK)', cols: ['parent FK -> Purchase Order', 'item_code FK (ITM-RAW-*)', 'qty', 'rate', 'amount'] },
+            { name: 'tabStock Entry', pk: 'name (PK)', cols: ['posting_date', 'stock_entry_type', 'custom_item_code FK', 'to_warehouse FK', 'fg_completed_qty', 'valuation_rate'] },
+            { name: 'tabStock Ledger Entry', pk: 'name (PK)', cols: ['item_code FK', 'warehouse FK', 'posting_date', 'voucher_type', 'voucher_no', 'actual_qty', 'qty_after_transaction', 'stock_value'] },
+            { name: 'tabBin', pk: 'name (PK)', cols: ['item_code FK', 'warehouse FK', 'actual_qty (SUM)', 'reserved_qty', 'projected_qty', 'stock_value'] }
+        ];
+
+        function fmtINR(num) {
+            return '₹' + Number(num || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        }
+
+        function fmtLakhs(num) {
+            return '₹' + (Number(num || 0) / 100000).toFixed(2) + 'L';
+        }
+
+        function showToast(msg, isError = false) {
+            const box = document.getElementById('toastBanner');
+            const txt = document.getElementById('toastMessage');
+            box.className = isError ? 'toast error' : 'toast';
+            txt.textContent = msg;
+            box.classList.remove('hidden');
+        }
+
+        function switchTab(tabId) {
+            ['tab1', 'tab2', 'tab3', 'tab4', 'tab5'].forEach(id => {
+                document.getElementById(id).classList.toggle('hidden', id !== tabId);
+                document.getElementById('btn-' + id).classList.toggle('active', id === tabId);
+            });
+            if (tabId === 'tab1') {
+                setTimeout(renderCharts, 50);
+            }
+        }
+
+        function populateChainSelector() {
+            const ctype = document.getElementById('chainTypeSelect').value;
+            const sel = document.getElementById('chainDocSelect');
+            sel.innerHTML = '';
+            const rows = ctype === 'SO' ? appData.sales_orders : appData.purchase_orders;
+            rows.forEach(r => {
+                const id = ctype === 'SO' ? r.so_id : r.po_id;
+                const party = ctype === 'SO' ? r.customer_name : r.supplier_name;
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = `${id} — ${party} (${r.workflow_stage})`;
+                sel.appendChild(opt);
+            });
+            renderChainTracer();
+        }
+
+        function renderChainTracer() {
+            const ctype = document.getElementById('chainTypeSelect').value;
+            const selectedId = document.getElementById('chainDocSelect').value;
+            const rows = ctype === 'SO' ? appData.sales_orders : appData.purchase_orders;
+            const rec = rows.find(r => (ctype === 'SO' ? r.so_id : r.po_id) === selectedId) || rows[0];
+            if (!rec) return;
+
+            const stages = ctype === 'SO' ? o2cStages : p2pStages;
+            const activeIdx = stages.indexOf(rec.workflow_stage);
+
+            const docs = ctype === 'SO'
+                ? [
+                    { label: '1. Quotation', docId: rec.quotation_id || 'QTN-Draft' },
+                    { label: '2. Sales Order', docId: rec.so_id },
+                    { label: '3. Delivery Note', docId: rec.delivery_note_id },
+                    { label: '4. Sales Invoice', docId: rec.sales_invoice_id },
+                    { label: '5. Payment Entry', docId: rec.payment_entry_id }
+                ]
+                : [
+                    { label: '1. Material Request', docId: rec.material_request_id || 'MR-Draft' },
+                    { label: '2. Purchase Order', docId: rec.po_id },
+                    { label: '3. Purchase Receipt', docId: rec.purchase_receipt_id },
+                    { label: '4. Purchase Invoice', docId: rec.purchase_invoice_id },
+                    { label: '5. Payment Settled', docId: rec.payment_entry_id }
+                ];
+
+            document.getElementById('chainSummaryMeta').innerHTML = `
+                <span><strong>Party:</strong> ${ctype === 'SO' ? rec.customer_name : rec.supplier_name}</span>
+                <span><strong>Order Date:</strong> ${rec.order_date}</span>
+                <span><strong>Stage:</strong> ${rec.workflow_stage}</span>
+                <span><strong>Total:</strong> Net ${fmtINR(rec.net_total)} + GST ${fmtINR(rec.gst_amount)} = <strong>${fmtINR(rec.total_amount)}</strong></span>
+            `;
+
+            document.getElementById('chainStepsGrid').innerHTML = docs.map((d, idx) => {
+                let cls = 'chain-step';
+                let statusTxt = 'Pending';
+                if (idx < activeIdx || (idx === activeIdx && activeIdx === 4)) {
+                    cls += ' completed';
+                    statusTxt = 'Submitted (docstatus=1)';
+                } else if (idx === activeIdx) {
+                    cls += ' current';
+                    statusTxt = 'Current Stage';
+                }
+                return `
+                    <div class="${cls}">
+                        <div style="font-size:12px; font-weight:700; color:#374151;">${d.label}</div>
+                        <div class="mono" style="font-size:12.5px; font-weight:700; margin:4px 0; color:#111827;">${d.docId || '— Not Created —'}</div>
+                        <div style="font-size:11.5px; color:#4B5563;">${statusTxt}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const linesHtml = (rec.line_items || []).map(l =>
+                `<span class="mono" style="margin-right:16px; display:inline-block;">${l.item_code} (${l.item_name}) × <strong>${l.qty}</strong> @ ${fmtINR(l.rate)}</span>`
+            ).join('');
+            document.getElementById('chainItemsDetail').innerHTML = `<strong>Line Items:</strong> ${linesHtml || rec.items_summary}`;
+        }
+
+        async function advanceSelectedChain() {
+            const ctype = document.getElementById('chainTypeSelect').value;
+            const id = document.getElementById('chainDocSelect').value;
+            const rows = ctype === 'SO' ? appData.sales_orders : appData.purchase_orders;
+            const rec = rows.find(r => (ctype === 'SO' ? r.so_id : r.po_id) === id);
+            if (!rec) return;
+            const stages = ctype === 'SO' ? o2cStages : p2pStages;
+            const idx = stages.indexOf(rec.workflow_stage);
+            if (idx >= stages.length - 1) {
+                showToast(`${id} is already at the final stage (${rec.workflow_stage}).`);
+                return;
+            }
+            const nextStage = stages[idx + 1];
+            const res = await fetch('/api/update_record', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    record_type: ctype,
+                    record_id: id,
+                    workflow_stage: nextStage,
+                    total_amount: rec.total_amount
+                })
+            });
+            const data = await res.json();
+            if (data.ok) {
+                appData = data.payload;
+                renderAll();
+                document.getElementById('chainTypeSelect').value = ctype;
+                populateChainSelector();
+                document.getElementById('chainDocSelect').value = id;
+                renderChainTracer();
+                showToast(`Updated ${id} to ${nextStage} and recalculated SQL Stock Ledger.`);
+            }
+        }
+
+        function renderFallbackBars(containerId, items, labelKey, valKey, unit, fillHex) {
+            const el = document.getElementById(containerId);
+            const maxVal = Math.max(...items.map(x => Number(x[valKey] || 0)), 1);
+            el.innerHTML = '<div style="padding-top:8px;">' + items.map(x => {
+                const pct = Math.round((Number(x[valKey]) / maxVal) * 100);
+                return `
+                    <div class="fallback-bar-row">
+                        <div style="width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${x[labelKey]}</div>
+                        <div class="fallback-bar-track"><div class="fallback-bar-fill" style="width:${pct}%; background:${fillHex};"></div></div>
+                        <div style="width:72px; text-align:right; font-weight:700;">₹${Number(x[valKey]).toFixed(2)}${unit}</div>
+                    </div>
+                `;
+            }).join('') + '</div>';
+        }
+
+        function renderCharts() {
+            if (typeof Chart === 'undefined') {
+                renderFallbackBars('salesChartWrap', appData.monthly_sales, 'month', 'revenue_lakhs', 'L', '#1E3A8A');
+                renderFallbackBars('purchaseChartWrap', appData.supplier_spend, 'supplier_name', 'spend_lakhs', 'L', '#0F766E');
+                return;
+            }
+
+            const salesLabels = appData.monthly_sales.map(m => m.month);
+            const salesData = appData.monthly_sales.map(m => m.revenue_lakhs);
+
+            if (salesChartInstance) salesChartInstance.destroy();
+            salesChartInstance = new Chart(document.getElementById('salesTrendChart'), {
+                type: 'bar',
+                data: {
+                    labels: salesLabels,
+                    datasets: [{
+                        label: 'O2C Revenue (₹ Lakhs)',
+                        data: salesData,
+                        backgroundColor: '#1E3A8A',
+                        borderRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            const supplierLabels = appData.supplier_spend.map(s => s.supplier_name);
+            const supplierDataLakhs = appData.supplier_spend.map(s => s.spend_lakhs);
+
+            if (purchaseChartInstance) purchaseChartInstance.destroy();
+            purchaseChartInstance = new Chart(document.getElementById('purchaseDistChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: supplierLabels,
+                    datasets: [{
+                        data: supplierDataLakhs,
+                        backgroundColor: ['#1E3A8A', '#0F766E', '#3B82F6', '#14B8A6', '#64748B', '#94A3B8'],
+                        borderWidth: 1,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ₹${ctx.parsed.toFixed(2)} Lakh` } }
+                    }
+                }
+            });
+        }
+
+        function renderAll() {
+            const k = appData.kpis;
+            document.getElementById('kpiRevenue').textContent = fmtLakhs(k.total_sales_revenue);
+            document.getElementById('kpiRevenueSub').textContent = `Collected: ${fmtLakhs(k.collected_revenue)} · Pending: ${fmtLakhs(k.pending_receivables)}`;
+            document.getElementById('kpiProcurement').textContent = fmtLakhs(k.total_procurement_spend);
+            document.getElementById('kpiProcurementSub').textContent = `Paid: ${fmtLakhs(k.po_paid)} · 100% Raw Materials`;
+            document.getElementById('kpiInventory').textContent = fmtLakhs(k.total_inventory_value);
+            document.getElementById('kpiInventorySub').textContent = `${k.sku_count} SKUs (6 FG + 6 RM) across 2 main stores`;
+            document.getElementById('kpiLedgerCount').textContent = `${k.sle_count} SLE`;
+            document.getElementById('kpiIntegritySub').textContent = k.po_raw_only_valid
+                ? `Valid: 0 FG POs · ${k.stock_entry_count} Mfg Stock Entries`
+                : 'Integrity Alert';
+
+            document.getElementById('teamCards').innerHTML = appData.employees.map(emp => `
+                <div class="team-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                        <strong style="font-size:13px; color:#111827;">${emp.employee_name}</strong>
+                        <span class="badge mono">${emp.srn}</span>
+                    </div>
+                    <div style="font-size:12px; color:#1E3A8A; margin-top:4px; font-weight:600;">${emp.designation}</div>
+                    <div style="font-size:11.5px; color:#4B5563;">${emp.department} · ${emp.employee_id}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('soTableBody').innerHTML = appData.sales_orders.map(so => `
+                <tr>
+                    <td class="mono text-navy">${so.so_id}</td>
+                    <td>${so.customer_name}</td>
+                    <td style="font-size:12px; color:#4B5563;">${so.order_date}<br/>Del: ${so.delivery_date}</td>
+                    <td style="font-size:12px;">${so.items_summary}</td>
+                    <td class="mono" style="font-size:11.5px; color:#4B5563;">
+                        ${so.quotation_id || '—'} → ${so.delivery_note_id || '—'} → ${so.sales_invoice_id || '—'} → ${so.payment_entry_id || '—'}
+                    </td>
+                    <td>
+                        <span class="badge ${so.workflow_stage === 'Payment Received' ? 'badge-teal' : 'badge-navy'}">${so.workflow_stage}</span>
+                        <div style="font-size:11px; color:#6B7280; margin-top:2px;">${so.status}</div>
+                    </td>
+                    <td><strong>${fmtINR(so.total_amount)}</strong><div style="font-size:11px; color:#6B7280;">GST: ${fmtINR(so.gst_amount)}</div></td>
+                    <td>
+                        <button onclick="openEditModal('SO', '${so.so_id}', '${so.workflow_stage}', '${so.status}', ${so.total_amount})" class="btn btn-sm">Edit Stage</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('poTableBody').innerHTML = appData.purchase_orders.map(po => `
+                <tr>
+                    <td class="mono text-teal">${po.po_id}</td>
+                    <td>${po.supplier_name}</td>
+                    <td style="font-size:12px; color:#4B5563;">${po.order_date}<br/>Due: ${po.schedule_date}</td>
+                    <td style="font-size:12px;">${po.items_summary}</td>
+                    <td class="mono" style="font-size:11.5px; color:#4B5563;">
+                        ${po.material_request_id || '—'} → ${po.purchase_receipt_id || '—'} → ${po.purchase_invoice_id || '—'} → ${po.payment_entry_id || '—'}
+                    </td>
+                    <td>
+                        <span class="badge ${po.workflow_stage === 'Payment Settled' ? 'badge-teal' : 'badge-amber'}">${po.workflow_stage}</span>
+                        <div style="font-size:11px; color:#6B7280; margin-top:2px;">${po.status}</div>
+                    </td>
+                    <td><strong>${fmtINR(po.total_amount)}</strong><div style="font-size:11px; color:#6B7280;">GST: ${fmtINR(po.gst_amount)}</div></td>
+                    <td>
+                        <button onclick="openEditModal('PO', '${po.po_id}', '${po.workflow_stage}', '${po.status}', ${po.total_amount})" class="btn btn-sm">Edit Stage</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('itemTableBody').innerHTML = appData.items.map(it => `
+                <tr>
+                    <td class="mono"><strong>${it.item_code}</strong></td>
+                    <td>${it.item_name}</td>
+                    <td><span class="badge ${it.item_group === 'Raw Materials' ? 'badge-teal' : 'badge-navy'}">${it.item_group}</span></td>
+                    <td>${it.uom}</td>
+                    <td>${fmtINR(it.valuation_rate)}</td>
+                    <td>${it.selling_rate > 0 ? fmtINR(it.selling_rate) : '— (Internal)'}</td>
+                    <td>${it.reorder_level}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('custTableBody').innerHTML = appData.customers.map(c => `
+                <tr>
+                    <td class="mono">${c.customer_id}</td>
+                    <td><strong>${c.customer_name}</strong></td>
+                    <td>${c.territory}</td>
+                    <td class="mono" style="font-size:11.5px;">${c.gstin}</td>
+                    <td>${fmtLakhs(c.credit_limit)}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('supTableBody').innerHTML = appData.suppliers.map(s => `
+                <tr>
+                    <td class="mono">${s.supplier_id}</td>
+                    <td><strong>${s.supplier_name}</strong></td>
+                    <td>${s.supplier_group}</td>
+                    <td class="mono" style="font-size:11.5px;">${s.gstin}</td>
+                    <td>${s.term_name || s.default_payment_term}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('whTableBody').innerHTML = appData.warehouses.map(w => `
+                <tr>
+                    <td class="mono">${w.warehouse_id}</td>
+                    <td><strong>${w.warehouse_name}</strong></td>
+                    <td>${w.warehouse_type}</td>
+                    <td>${w.city}</td>
+                    <td>${w.manager_name || w.manager_id}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('misSalesBox').innerHTML = `
+                <div class="mis-row"><span>Gross Order-to-Cash Booked (excl. draft Quotation):</span><strong>${fmtINR(k.total_sales_revenue)}</strong></div>
+                <div class="mis-row"><span>Realized Cash Inflow (Payment Received):</span><span class="text-teal">${fmtINR(k.collected_revenue)}</span></div>
+                <div class="mis-row" style="border-bottom:none;"><span>Accounts Receivable Open:</span><span class="text-amber">${fmtINR(k.pending_receivables)}</span></div>
+            `;
+            document.getElementById('misProcBox').innerHTML = `
+                <div class="mis-row"><span>Total Raw Material Purchase Value (12 POs):</span><strong>${fmtINR(k.total_procurement_spend)}</strong></div>
+                <div class="mis-row"><span>Settled Vendor Payouts (Payment Settled):</span><span class="text-teal">${fmtINR(k.po_paid)}</span></div>
+                <div class="mis-row" style="border-bottom:none;"><span>Purchase Policy Check (0 Finished Goods on POs):</span><span class="text-teal">100% Compliant</span></div>
+            `;
+
+            document.getElementById('stockTableBody').innerHTML = appData.stock_ledger.map(sl => `
+                <tr>
+                    <td class="mono"><strong>${sl.item_code}</strong></td>
+                    <td>${sl.item_name}</td>
+                    <td>${sl.item_group}</td>
+                    <td class="mono">${sl.warehouse_id}</td>
+                    <td><strong>${sl.actual_qty}</strong></td>
+                    <td>${sl.reserved_qty}</td>
+                    <td class="${sl.available_qty >= sl.reorder_level ? 'text-teal' : 'text-red'}">${sl.available_qty}</td>
+                    <td>${sl.reorder_level}</td>
+                    <td><strong>${fmtINR(sl.stock_value)}</strong></td>
+                </tr>
+            `).join('');
+
+            document.getElementById('steTableBody').innerHTML = appData.stock_entries.map(se => `
+                <tr>
+                    <td class="mono">${se.stock_entry_id}</td>
+                    <td>${se.posting_date}</td>
+                    <td>${se.purpose}</td>
+                    <td class="mono">${se.item_code}</td>
+                    <td class="${se.qty >= 0 ? 'text-teal' : 'text-amber'}">${se.qty >= 0 ? '+' + se.qty : se.qty}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('sleTableBody').innerHTML = appData.stock_ledger_entries.map(sle => `
+                <tr>
+                    <td class="mono">${sle.sle_id}</td>
+                    <td>${sle.posting_date}</td>
+                    <td class="mono">${sle.voucher_no}</td>
+                    <td class="mono">${sle.item_code}</td>
+                    <td class="${sle.actual_qty >= 0 ? 'text-teal' : 'text-amber'}">${sle.actual_qty >= 0 ? '+' + sle.actual_qty : sle.actual_qty}</td>
+                    <td><strong>${sle.qty_after_transaction}</strong></td>
+                </tr>
+            `).join('');
+
+            document.getElementById('schemaCardsGrid').innerHTML = SCHEMA_TABLES.map(t => `
+                <div class="schema-card">
+                    <div class="schema-card-head">
+                        <span>${t.name}</span>
+                        <span style="font-size:11px; color:#0F766E;">${t.pk}</span>
+                    </div>
+                    <ul class="schema-list">
+                        ${t.cols.map(c => `<li>• ${c}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+
+            populateChainSelector();
+            renderCharts();
+        }
+
+        function openEditModal(type, id, currentStage, currentStatus, currentAmount) {
+            document.getElementById('modalRecordType').value = type;
+            document.getElementById('modalRecordId').value = id;
+            document.getElementById('modalAmount').value = currentAmount;
+            document.getElementById('modalStatus').value = currentStatus;
+
+            const stageSelect = document.getElementById('modalWorkflowStage');
+            stageSelect.innerHTML = '';
+            const stages = type === 'SO' ? o2cStages : p2pStages;
+            stages.forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = st;
+                if (st === currentStage) opt.selected = true;
+                stageSelect.appendChild(opt);
+            });
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        async function submitEditModal() {
+            const payload = {
+                record_type: document.getElementById('modalRecordType').value,
+                record_id: document.getElementById('modalRecordId').value,
+                workflow_stage: document.getElementById('modalWorkflowStage').value,
+                status: document.getElementById('modalStatus').value,
+                total_amount: document.getElementById('modalAmount').value
+            };
+            const res = await fetch('/api/update_record', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            closeEditModal();
+            if (data.ok) {
+                appData = data.payload;
+                renderAll();
+                showToast(`Saved ${payload.record_id} (${payload.workflow_stage}) and updated Stock Ledger.`);
+            } else {
+                showToast(data.error || 'Update failed', true);
+            }
+        }
+
+        function openCreateModal(type) {
+            document.getElementById('createType').value = type;
+            document.getElementById('createModalTitle').textContent = type === 'SO'
+                ? 'New Customer Sales Order (Finished Goods)'
+                : 'New Supplier Purchase Order (Raw Materials Only)';
+
+            const partySel = document.getElementById('createPartyId');
+            partySel.innerHTML = '';
+            if (type === 'SO') {
+                document.getElementById('createPartyLabel').textContent = 'Customer (tabCustomer)';
+                appData.customers.forEach(c => {
+                    const o = document.createElement('option');
+                    o.value = c.customer_id;
+                    o.textContent = `${c.customer_name} (${c.customer_id})`;
+                    partySel.appendChild(o);
+                });
+            } else {
+                document.getElementById('createPartyLabel').textContent = 'Supplier (tabSupplier)';
+                appData.suppliers.forEach(s => {
+                    const o = document.createElement('option');
+                    o.value = s.supplier_id;
+                    o.textContent = `${s.supplier_name} (${s.supplier_id})`;
+                    partySel.appendChild(o);
+                });
+            }
+
+            const itemSel = document.getElementById('createItemCode');
+            itemSel.innerHTML = '';
+            const eligibleItems = appData.items.filter(it =>
+                type === 'PO' ? it.item_group === 'Raw Materials' : it.item_group === 'Finished Goods'
+            );
+            document.getElementById('createItemLabel').textContent = type === 'PO'
+                ? 'Raw Material SKU (Finished Goods Blocked)'
+                : 'Finished Good SKU';
+            eligibleItems.forEach(it => {
+                const o = document.createElement('option');
+                o.value = it.item_code;
+                o.textContent = `${it.item_code} — ${it.item_name}`;
+                itemSel.appendChild(o);
+            });
+
+            const stageSel = document.getElementById('createStage');
+            stageSel.innerHTML = '';
+            (type === 'SO' ? o2cStages : p2pStages).forEach(st => {
+                const o = document.createElement('option');
+                o.value = st;
+                o.textContent = st;
+                if ((type === 'SO' && st === 'Sales Order') || (type === 'PO' && st === 'Purchase Order')) o.selected = true;
+                stageSel.appendChild(o);
+            });
+
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
+
+        async function submitCreateModal() {
+            const payload = {
+                record_type: document.getElementById('createType').value,
+                party_id: document.getElementById('createPartyId').value,
+                item_code: document.getElementById('createItemCode').value,
+                qty: parseInt(document.getElementById('createQty').value || '1', 10),
+                workflow_stage: document.getElementById('createStage').value
+            };
+            const res = await fetch('/api/create_order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            closeCreateModal();
+            if (data.ok) {
+                appData = data.payload;
+                renderAll();
+                showToast(`Created new ${payload.record_type} for ${payload.item_code} (qty ${payload.qty}) & recalculated Stock Ledger.`);
+            } else {
+                showToast(data.error || 'Creation failed', true);
+            }
+        }
+
+        async function resetDatabase() {
+            const res = await fetch('/api/reset_db', { method: 'POST', body: '{}' });
+            const data = await res.json();
+            if (data.ok) {
+                appData = data.payload;
+                renderAll();
+                showToast('Reset database back to clean VoltEdge Power Systems seeded state.');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', renderAll);
+    </script>
+</body>
+</html>

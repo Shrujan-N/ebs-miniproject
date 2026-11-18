@@ -1,0 +1,123 @@
+# =============================================================================
+# VoltEdge Power Systems Pvt. Ltd. — Authentic ERPNext v16 (Frappe v16) Stack
+# Released: 12 January 2026 | Database: MariaDB 10.6+ (InnoDB)
+# =============================================================================
+# Quick Start (requires Docker Desktop):
+#   cd erpnext_v16_docker
+#   docker compose up -d
+# Once `create-site` finishes (~2-3 mins), open http://localhost:8080
+# Login: Administrator / admin | Push seed CSVs via `python backend/erpnext_sync.py --push`
+# =============================================================================
+
+services:
+  db:
+    image: mariadb:10.6
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MARIADB_ROOT_PASSWORD: admin
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  redis-cache:
+    image: redis:6.2-alpine
+
+  redis-queue:
+    image: redis:6.2-alpine
+
+  configurator:
+    image: frappe/erpnext:v16.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_started
+      redis-queue:
+        condition: service_started
+    entrypoint: ["bash", "-c"]
+    command:
+      - >
+        ls -1 apps > sites/apps.txt;
+        bench set-config -g db_host db;
+        bench set-config -gp db_port 3306;
+        bench set-config -g redis_cache "redis://redis-cache:6379";
+        bench set-config -g redis_queue "redis://redis-queue:6379";
+        bench set-config -g redis_socketio "redis://redis-queue:6379";
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  create-site:
+    image: frappe/erpnext:v16.0.0
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+    entrypoint: ["bash", "-c"]
+    command:
+      - >
+        if [ ! -d sites/voltedge.localhost ]; then
+          bench new-site voltedge.localhost --no-mariadb-socket --mariadb-user-host-login-scope='%' --db-root-password=admin --admin-password=admin --install-app erpnext;
+        fi;
+        bench --site voltedge.localhost set-config developer_mode 1;
+        bench use voltedge.localhost;
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  backend:
+    image: frappe/erpnext:v16.0.0
+    depends_on:
+      create-site:
+        condition: service_completed_successfully
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  frontend:
+    image: frappe/erpnext:v16.0.0
+    command: ["nginx-entrypoint.sh"]
+    depends_on:
+      - backend
+      - websocket
+    environment:
+      BACKEND: backend:8000
+      SOCKETIO: websocket:9000
+      FRAPPE_SITE_NAME_HEADER: voltedge.localhost
+    ports:
+      - "8080:8080"
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  websocket:
+    image: frappe/erpnext:v16.0.0
+    command: ["node", "/home/frappe/frappe-bench/apps/frappe/socketio.js"]
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  queue-short:
+    image: frappe/erpnext:v16.0.0
+    command: ["bench", "worker", "--queue", "short,default"]
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  queue-long:
+    image: frappe/erpnext:v16.0.0
+    command: ["bench", "worker", "--queue", "long"]
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  scheduler:
+    image: frappe/erpnext:v16.0.0
+    command: ["bench", "schedule"]
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+volumes:
+  db-data:
+  sites:

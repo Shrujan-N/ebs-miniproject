@@ -1,168 +1,177 @@
--- ============================================================================
--- UE24CS343AB8 - Enterprise Business Systems (EBS) Mini Project
--- Company: VoltEdge Energy Systems Pvt. Ltd. (Bengaluru)
--- Module: Relational Database Schema (ERPNext-compatible structure)
--- Owner: Srujan (Database, Backend & Dashboard)
--- ============================================================================
+-- =============================================================================
+-- VoltEdge Power Systems Pvt. Ltd. — Local SQLite Schema (Offline Prototype Mirror)
+-- Models ERPNext v16 MariaDB entities locally for zero-dependency execution.
+-- Authentic MariaDB `tab*` DDL is provided in `backend/erpnext_mariadb_schema.sql`.
+-- =============================================================================
 
 PRAGMA foreign_keys = ON;
 
-DROP TABLE IF EXISTS stock_ledger;
-DROP TABLE IF EXISTS purchase_order_item;
-DROP TABLE IF EXISTS purchase_order;
-DROP TABLE IF EXISTS sales_order_item;
-DROP TABLE IF EXISTS sales_order;
-DROP TABLE IF EXISTS warehouse;
-DROP TABLE IF EXISTS item;
-DROP TABLE IF EXISTS supplier;
-DROP TABLE IF EXISTS customer;
-DROP TABLE IF EXISTS payment_term;
-DROP TABLE IF EXISTS employee;
-
--- 1. MASTER ENTITY: Employee (Includes Team Members & SRNs)
-CREATE TABLE employee (
-    employee_id VARCHAR(20) PRIMARY KEY,
-    employee_name VARCHAR(100) NOT NULL,
-    srn VARCHAR(20) NOT NULL UNIQUE,
-    designation VARCHAR(80) NOT NULL,
-    department VARCHAR(60) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    status VARCHAR(20) DEFAULT 'Active'
+CREATE TABLE IF NOT EXISTS employee (
+    employee_id TEXT PRIMARY KEY,
+    employee_name TEXT NOT NULL,
+    srn TEXT NOT NULL UNIQUE,
+    designation TEXT NOT NULL,
+    department TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'Active'
 );
 
--- 2. MASTER ENTITY: Payment Terms Template
-CREATE TABLE payment_term (
-    term_id VARCHAR(20) PRIMARY KEY,
-    term_name VARCHAR(60) NOT NULL UNIQUE,
-    credit_days INTEGER NOT NULL DEFAULT 0,
-    advance_pct REAL NOT NULL DEFAULT 0.0,
-    description VARCHAR(200)
+CREATE TABLE IF NOT EXISTS payment_term (
+    payment_term_id TEXT PRIMARY KEY,
+    term_name TEXT NOT NULL,
+    credit_days INTEGER NOT NULL,
+    description TEXT
 );
 
--- 3. MASTER ENTITY: Customer
-CREATE TABLE customer (
-    customer_id VARCHAR(20) PRIMARY KEY,
-    customer_name VARCHAR(120) NOT NULL,
-    customer_group VARCHAR(60) NOT NULL,
-    territory VARCHAR(60) NOT NULL,
-    gstin VARCHAR(20) NOT NULL,
-    contact_email VARCHAR(100),
-    account_manager_id VARCHAR(20) NOT NULL,
-    srn_tag VARCHAR(60) NOT NULL,
+CREATE TABLE IF NOT EXISTS customer (
+    customer_id TEXT PRIMARY KEY,
+    customer_name TEXT NOT NULL,
+    customer_group TEXT NOT NULL,
+    territory TEXT NOT NULL,
+    gstin TEXT NOT NULL,
+    credit_limit REAL NOT NULL DEFAULT 0,
+    default_payment_term TEXT,
+    account_manager_id TEXT,
+    FOREIGN KEY (default_payment_term) REFERENCES payment_term(payment_term_id),
     FOREIGN KEY (account_manager_id) REFERENCES employee(employee_id)
 );
 
--- 4. MASTER ENTITY: Supplier
-CREATE TABLE supplier (
-    supplier_id VARCHAR(20) PRIMARY KEY,
-    supplier_name VARCHAR(120) NOT NULL,
-    supplier_group VARCHAR(60) NOT NULL,
-    city VARCHAR(60) NOT NULL,
-    gstin VARCHAR(20) NOT NULL,
-    lead_time_days INTEGER NOT NULL DEFAULT 7,
-    procurement_officer_id VARCHAR(20) NOT NULL,
-    srn_tag VARCHAR(60) NOT NULL,
-    FOREIGN KEY (procurement_officer_id) REFERENCES employee(employee_id)
+CREATE TABLE IF NOT EXISTS supplier (
+    supplier_id TEXT PRIMARY KEY,
+    supplier_name TEXT NOT NULL,
+    supplier_group TEXT NOT NULL,
+    country TEXT NOT NULL DEFAULT 'India',
+    gstin TEXT NOT NULL,
+    default_payment_term TEXT,
+    buyer_id TEXT,
+    FOREIGN KEY (default_payment_term) REFERENCES payment_term(payment_term_id),
+    FOREIGN KEY (buyer_id) REFERENCES employee(employee_id)
 );
 
--- 5. MASTER ENTITY: Item / Product
-CREATE TABLE item (
-    item_code VARCHAR(25) PRIMARY KEY,
-    item_name VARCHAR(120) NOT NULL,
-    item_group VARCHAR(60) NOT NULL,
-    uom VARCHAR(20) NOT NULL DEFAULT 'Nos',
-    standard_selling_rate REAL NOT NULL,
+CREATE TABLE IF NOT EXISTS item (
+    item_code TEXT PRIMARY KEY,
+    item_name TEXT NOT NULL,
+    item_group TEXT NOT NULL,
+    uom TEXT NOT NULL DEFAULT 'Nos',
     valuation_rate REAL NOT NULL,
-    safety_stock INTEGER NOT NULL DEFAULT 10,
-    created_by_srn VARCHAR(60) NOT NULL
+    selling_rate REAL NOT NULL,
+    reorder_level INTEGER NOT NULL DEFAULT 5
 );
 
--- 6. MASTER ENTITY: Warehouse
-CREATE TABLE warehouse (
-    warehouse_id VARCHAR(25) PRIMARY KEY,
-    warehouse_name VARCHAR(100) NOT NULL,
-    warehouse_type VARCHAR(50) NOT NULL,
-    location VARCHAR(80) NOT NULL,
-    capacity_units INTEGER NOT NULL,
-    incharge_id VARCHAR(20) NOT NULL,
-    FOREIGN KEY (incharge_id) REFERENCES employee(employee_id)
+CREATE TABLE IF NOT EXISTS warehouse (
+    warehouse_id TEXT PRIMARY KEY,
+    warehouse_name TEXT NOT NULL,
+    warehouse_type TEXT NOT NULL,
+    city TEXT NOT NULL,
+    manager_id TEXT,
+    FOREIGN KEY (manager_id) REFERENCES employee(employee_id)
 );
 
--- ============================================================================
--- TRANSACTION TABLES (Order-to-Cash & Procure-to-Pay Cycles)
--- ============================================================================
-
--- Transaction Table 1: Sales Order (Order-to-Cash Header)
-CREATE TABLE sales_order (
-    so_id VARCHAR(25) PRIMARY KEY,
-    customer_id VARCHAR(20) NOT NULL,
-    employee_id VARCHAR(20) NOT NULL,
-    term_id VARCHAR(20) NOT NULL,
-    order_date DATE NOT NULL,
-    delivery_date DATE NOT NULL,
-    workflow_stage VARCHAR(40) NOT NULL, -- Quotation, Sales Order, Delivery Note, Sales Invoice, Payment Received
-    status VARCHAR(30) NOT NULL,         -- Completed, To Bill, To Deliver, Draft
+-- Linked Order-to-Cash (O2C) chain: Quotation -> Sales Order -> Delivery Note -> Sales Invoice -> Payment Entry
+CREATE TABLE IF NOT EXISTS sales_order (
+    so_id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL,
+    order_date TEXT NOT NULL,
+    delivery_date TEXT NOT NULL,
+    workflow_stage TEXT NOT NULL,
+    status TEXT NOT NULL,
+    quotation_id TEXT,
+    delivery_note_id TEXT,
+    sales_invoice_id TEXT,
+    payment_entry_id TEXT,
+    net_total REAL NOT NULL DEFAULT 0,
+    gst_amount REAL NOT NULL DEFAULT 0,
     total_amount REAL NOT NULL,
-    srn_reference VARCHAR(80) NOT NULL,
+    owner_emp_id TEXT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
-    FOREIGN KEY (term_id) REFERENCES payment_term(term_id)
+    FOREIGN KEY (owner_emp_id) REFERENCES employee(employee_id)
 );
 
--- Sales Order Line Items
-CREATE TABLE sales_order_item (
-    so_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    so_id VARCHAR(25) NOT NULL,
-    item_code VARCHAR(25) NOT NULL,
-    warehouse_id VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS sales_order_item (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    so_id TEXT NOT NULL,
+    item_code TEXT NOT NULL,
     qty INTEGER NOT NULL,
     rate REAL NOT NULL,
     amount REAL NOT NULL,
     FOREIGN KEY (so_id) REFERENCES sales_order(so_id) ON DELETE CASCADE,
-    FOREIGN KEY (item_code) REFERENCES item(item_code),
-    FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
+    FOREIGN KEY (item_code) REFERENCES item(item_code)
 );
 
--- Transaction Table 2: Purchase Order (Procure-to-Pay Header)
-CREATE TABLE purchase_order (
-    po_id VARCHAR(25) PRIMARY KEY,
-    supplier_id VARCHAR(20) NOT NULL,
-    employee_id VARCHAR(20) NOT NULL,
-    term_id VARCHAR(20) NOT NULL,
-    order_date DATE NOT NULL,
-    expected_date DATE NOT NULL,
-    workflow_stage VARCHAR(40) NOT NULL, -- Material Request, Purchase Order, Goods Receipt, Supplier Invoice, Payment Sent
-    status VARCHAR(30) NOT NULL,         -- Completed, To Receive, To Bill, Submitted
+-- Linked Procure-to-Pay (P2P) chain: Material Request -> Purchase Order -> Purchase Receipt -> Purchase Invoice -> Payment Entry
+CREATE TABLE IF NOT EXISTS purchase_order (
+    po_id TEXT PRIMARY KEY,
+    supplier_id TEXT NOT NULL,
+    order_date TEXT NOT NULL,
+    schedule_date TEXT NOT NULL,
+    workflow_stage TEXT NOT NULL,
+    status TEXT NOT NULL,
+    material_request_id TEXT,
+    purchase_receipt_id TEXT,
+    purchase_invoice_id TEXT,
+    payment_entry_id TEXT,
+    net_total REAL NOT NULL DEFAULT 0,
+    gst_amount REAL NOT NULL DEFAULT 0,
     total_amount REAL NOT NULL,
-    srn_reference VARCHAR(80) NOT NULL,
+    buyer_emp_id TEXT NOT NULL,
     FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id),
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
-    FOREIGN KEY (term_id) REFERENCES payment_term(term_id)
+    FOREIGN KEY (buyer_emp_id) REFERENCES employee(employee_id)
 );
 
--- Purchase Order Line Items
-CREATE TABLE purchase_order_item (
-    po_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    po_id VARCHAR(25) NOT NULL,
-    item_code VARCHAR(25) NOT NULL,
-    warehouse_id VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS purchase_order_item (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    po_id TEXT NOT NULL,
+    item_code TEXT NOT NULL,
     qty INTEGER NOT NULL,
     rate REAL NOT NULL,
     amount REAL NOT NULL,
     FOREIGN KEY (po_id) REFERENCES purchase_order(po_id) ON DELETE CASCADE,
+    FOREIGN KEY (item_code) REFERENCES item(item_code)
+);
+
+-- Manufacturing / Opening Stock Entries (Feeds Stock Ledger Calculation)
+CREATE TABLE IF NOT EXISTS stock_entry (
+    stock_entry_id TEXT PRIMARY KEY,
+    posting_date TEXT NOT NULL,
+    purpose TEXT NOT NULL,
+    item_code TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    qty INTEGER NOT NULL,
+    valuation_rate REAL NOT NULL,
+    remarks TEXT,
+    owner_emp_id TEXT NOT NULL,
+    FOREIGN KEY (item_code) REFERENCES item(item_code),
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id),
+    FOREIGN KEY (owner_emp_id) REFERENCES employee(employee_id)
+);
+
+-- Immutable Event Log generated mathematically from Stock Entry, Purchase Receipt, and Delivery Note
+CREATE TABLE IF NOT EXISTS stock_ledger_entry (
+    sle_id TEXT PRIMARY KEY,
+    item_code TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    posting_date TEXT NOT NULL,
+    voucher_type TEXT NOT NULL,
+    voucher_no TEXT NOT NULL,
+    actual_qty INTEGER NOT NULL,
+    qty_after_transaction INTEGER NOT NULL,
+    valuation_rate REAL NOT NULL,
+    stock_value REAL NOT NULL,
     FOREIGN KEY (item_code) REFERENCES item(item_code),
     FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
 );
 
--- Warehouse Stock Ledger (For Inventory Valuation Report & KPI)
-CREATE TABLE stock_ledger (
-    entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    item_code VARCHAR(25) NOT NULL,
-    warehouse_id VARCHAR(25) NOT NULL,
+-- Summary Bin View Table (Computed via recalculate_stock_ledger, never hand-typed)
+CREATE TABLE IF NOT EXISTS stock_ledger (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_code TEXT NOT NULL,
+    warehouse_id TEXT NOT NULL,
+    actual_qty INTEGER NOT NULL,
+    reserved_qty INTEGER NOT NULL DEFAULT 0,
     available_qty INTEGER NOT NULL,
-    valuation_rate REAL NOT NULL,
     stock_value REAL NOT NULL,
-    last_updated DATE NOT NULL,
+    last_updated TEXT NOT NULL,
+    UNIQUE(item_code, warehouse_id),
     FOREIGN KEY (item_code) REFERENCES item(item_code),
     FOREIGN KEY (warehouse_id) REFERENCES warehouse(warehouse_id)
 );
